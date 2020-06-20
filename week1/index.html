@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>week1 - todolist</title>
+    <link rel="stylesheet" href="./css/index.css" >
+  </head>
+  <body>
+    <div class="todo">
+      <div class="add-item">
+        <input class="new-todo" id="new-todo">
+        <button class="add">add</button>
+      </div>
+      <div class="list-main">
+        <div class="list">
+          <h3>TODO</h3>
+          <div class="todo-list"></div>
+        </div>
+        <div class="list">
+          <h3>DONE</h3>
+          <div class="done-list"></div>
+        </div>
+      </div>
+      <div class="footer"><span class="tip">有<span id="count">0</span>筆任務待完成</span><a id="removeAll" href="#">clear</a></div>
+    </div>
+    <script type="text/javascript" src="./js/index.js"></script>
+  </body>
+</html>

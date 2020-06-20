@@ -1,0 +1,25 @@
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title week1 - todolist
+        link(rel="stylesheet" href="./css/index.css")
+    body
+        .todo
+            .add-item
+                input#new-todo.new-todo
+                button.add add
+            .list-main
+                .list
+                    h3 TODO
+                    .todo-list
+                .list
+                    h3 DONE
+                    .done-list
+            .footer
+                span.tip 有
+                    span#count 0
+                    | 筆任務待完成
+                a#removeAll(href="#") clear
+        script(type="text/javascript" src="./js/index.js")
+        

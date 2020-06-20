@@ -1,0 +1,107 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css)
+*
+	margin: 0
+	padding: 0
+	list-style: none
+body
+	display: flex
+	width: 100vw
+	height: 100vh
+	align-items: start
+	justify-content: center
+.todo
+	width: 500px
+	display: flex
+	border: 1px solid #aaa
+	padding: 0 1%
+	margin: 5% 0
+	flex-direction: column
+	align-items: center
+	justify-content: center
+	background: #fff
+	color: #333
+	.add-item
+		display: flex
+		border: 1px solid #aaa
+		border-radius: 50px 50px 50px 50px
+		width: 90%
+		margin: 2% 0
+		.new-todo, .add
+			border: none
+			font-size: 16px
+			padding: 15px 20px
+			outline: none
+		.new-todo
+			width: 80%
+			color: #888
+			border-radius: 50px 0 0 50px
+		.add
+			width: 20%
+			background: #6060bb
+			color: #ddd
+			border-radius: 0 50px 50px 0
+			
+			text-transform: uppercase
+			&:hover
+				background: #5050aa
+				color: #fff
+	.list-main
+		display: flex
+		width: 100%
+		.list
+			width: 50%
+			border: 1px solid #aaa
+			display: flex
+			flex-direction: column
+			h3
+				text-align: center
+			.item
+				margin: 5px
+				font-size: 16px
+				input.hide
+					display: none
+				label
+					margin-left: 5px
+					width: 90%
+				.fa.fa-check
+					color: green
+				button
+					padding: 2px 2%
+					margin-right: 5px
+					float: right
+					border: 0
+					background: #fff
+					color: #ff1f3b
+					outline: none
+					&:hover
+						background: #ddd
+		.list h3
+			border-bottom: 1px solid #aaa
+		.list:first-child h3
+			color: #a03c32
+		.list:last-child h3
+			color: #3ca032
+		span
+			display: block
+			text-align: center
+			height: 100%
+			color: #999
+			padding: 2% 0
+	.footer
+		display: block-inline
+		border: 1px solid #eee
+		background-color: #eee
+		width: 96%
+		margin: 2% 0 0 0
+		padding: 2%
+		// text-align: right
+		.tip
+			span
+				color: #f03
+				padding: 1%
+				font-weight: 700
+		a
+			float: right
+			text-decoration: none
+			
+		
