@@ -2,18 +2,6 @@ let todoItems = [];
 window.onload = () => {
 	document.querySelector('.add').addEventListener('click', addTodo);
 	document.querySelector('#removeAll').addEventListener('click', clearAllTodo);
-<<<<<<< HEAD
-	document.querySelectorAll('.list').forEach((list) => { list.addEventListener('click', actionFn); });
-	todoItems.push({
-			id: Math.floor(new Date().getTime()),
-			title: 'new Task',
-			completed: false
-		}, {
-			id: Math.floor(new Date().getTime()),
-			title: 'new Task2',
-			completed: false
-		});
-=======
 	document.querySelectorAll('.list').forEach((list) => { list.addEventListener('click', actionFn)});
 	todoItems.push({
 		id: Math.floor(new Date().getTime()),
@@ -24,7 +12,6 @@ window.onload = () => {
 		title: 'new Task2',
 		completed: false
 	});
->>>>>>> gh-pages
 	renderView();
 }
 
@@ -64,11 +51,7 @@ const renderView = () => {
 			</div>`;
 		}	
 	})
-<<<<<<< HEAD
-	let noTask = `<span> No Any Task!</span>`;
-=======
 	let noTask = `<span>No Any Task!</span>`;
->>>>>>> gh-pages
 	document.querySelector('.todo-list').innerHTML = noFinishItems ||  noTask;
 	document.querySelector('.done-list').innerHTML = finishItems || noTask;
 	document.querySelector('#count').innerHTML = todoItems.filter((el) => !el.completed).length;
@@ -89,11 +72,6 @@ const actionFn = (e) => {
 	}
 }
 
-<<<<<<< HEAD
-const trashTodo = (id) => { renderView(todoItems.splice(id, 1)); };
-const checkTodo = (id) => { renderView(todoItems[id].completed = !todoItems[id].completed); };
-=======
 const trashTodo = (id) => { renderView( todoItems.splice(id, 1) ); }
 const checkTodo = (id) => { renderView( todoItems[id].completed = !todoItems[id].completed ); }
->>>>>>> gh-pages
 const clearAllTodo = () => { renderView( todoItems = [] ); };
