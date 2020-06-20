@@ -3,6 +3,16 @@ window.onload = () => {
 	document.querySelector('.add').addEventListener('click', addTodo);
 	document.querySelector('#removeAll').addEventListener('click', clearAllTodo);
 	document.querySelectorAll('.list').forEach((list) => { list.addEventListener('click', actionFn); });
+	todoItems.push({
+			id: Math.floor(new Date().getTime()),
+			title: 'new Task',
+			completed: false
+		}, {
+			id: Math.floor(new Date().getTime()),
+			title: 'new Task2',
+			completed: false
+		});
+	renderView();
 }
 
 const addTodo = () => {
