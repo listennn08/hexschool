@@ -36,7 +36,7 @@ const renderView = () => {
 		if (!item.completed) {
 			noFinishItems +=  `<div class='item' data-id=${i}>
 				<input type="checkbox" class="todo-item-chk[]" data-action="check">
-				<label for='todo-item-chk[]'>${item.title}</label>
+				<label for='todo-item-chk[]' data-action="check">${item.title}</label>
 				<button type="button" class="trash-btn" data-action="trash">
 					<i class="fa fa-trash"></i>
 				</button>
@@ -44,7 +44,7 @@ const renderView = () => {
 		} else {
 			finishItems += `<div class='item' data-id=${i}>
 				<input type="checkbox" class="todo-item-chk[] hide" data-action="check" checked><i class="fa fa-check" data-action="check"></i>
-				<label for='todo-item-chk[]'>${item.title}</label>
+				<label for='todo-item-chk[]' data-action="check">${item.title}</label>
 				<button type="button" class="trash-btn" data-action="trash">
 					<i class="fa fa-trash"></i>
 				</button>
