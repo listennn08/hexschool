@@ -41,7 +41,7 @@ const renderView = () => {
 			</div>`;
 		}	
 	})
-	let noTask = `<span> No Any Task!</span>`
+	let noTask = `<span> No Any Task!</span>`;
 	document.querySelector('.todo-list').innerHTML = noFinishItems ||  noTask;
 	document.querySelector('.done-list').innerHTML = finishItems || noTask;
 	document.querySelector('#count').innerHTML = todoItems.filter((el) => !el.completed).length;
