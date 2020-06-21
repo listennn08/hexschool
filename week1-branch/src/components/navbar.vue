@@ -2,81 +2,88 @@
     #navbar
         .container
             .navbar-header
-                h2: a(href="/") App Name
+                h2: a(href="/") 電商
             .navbar
-                ul.navbar-list
-                    li: router-link(to="/") Home
-                    li: router-link(to="/about") About
-                    li: router-link(to="/allitem") list
+                .navbar-list
+                    //- router-link(to="/") Home
+                    router-link(to="/about") 關於我們
+                    router-link(to="/allitem") 產品列表
             .navbar-right
-                ul.navbar-list
-                    li: router-link(to="#") Login
+                .navbar-list
+                    router-link(to="#") 登入
 </template>
 <style lang="sass" scoped>
-$darkgrnblue:  #354649
-$hoverdarkgrnblue: #465c60
+$darkgrnblue:  #354649 // color
+$hoverdarkgrnblue: #465c60 // hover color
 $lightblgray: #6C7A89
 $lightbluegr: #A3C6C4
-$lightgray: #E0E7E9
+$lightgray: #E0E7E9 // background-color
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC:300,700,900&display=swap")
 *
     margin: 0
     padding: 0
     list-style: none
+    font-family: 'Noto Sans TC', sans-serif
 
 #navbar
     width: 100%
-    background-color: $darkgrnblue
+    background-color: $lightgray
     .container
         width: 100%
         height: 50px
         display: flex
-        .navbar-header, .navbar, .navbar-right
-            margin: auto
-            display: flex
+        margin: auto
         .navbar-header
             width: 18%
-            padding: .5% 1%
-            text-align: left
             font-size: 20px
+            margin-left: 2%
+            text-align: left
             a
-                color: $lightgray
+                color: $darkgrnblue
                 text-decoration: none
         .navbar, .navbar-right
+            display: flex
+            margin: auto
             .navbar-list
-                li
-                    display: inline
-                    font-weight: 700
-                    text-transform: uppercase
-
-                    transition: .5s
-                    a
-                        color: $lightgray
-                        text-decoration: none
+                font-weight: 700
+                text-transform: uppercase
+                transition: .5s
+                a
+                    text-decoration: none
+                    color: $darkgrnblue
+                    position: relative
+                    &::after
+                        content: ''
+                        position: absolute
+                        height: 0
+                        bottom: 0
+                        border-bottom: 1px solid $hoverdarkgrnblue
+                        transition: .3s
                     &:hover
-                        background-color: $hoverdarkgrnblue
-                    &:hover a
-                        color: #fff 
+                        color: $hoverdarkgrnblue
+
         .navbar
-            width: 26%
-            align-items: center
+            width: 60%
             justify-content: center
             .navbar-list
-                padding-left: 10%
-                li
-                    padding-right: 12%
-                &::after
-                    content: ''
+                width: 100%
+                a
+                    padding: 0 2%
+                    &::after
+                        left: 18%
+                        right: 82%
+                    &:hover::after
+                        right: 18%
         .navbar-right
-            align-items: center
-            justify-content: center
-            width: 25%
+            width: 18%
+            margin-right: 2%
+            justify-content: flex-end
             .navbar-list
-                li
-                    padding: 31% 25%
-                &::after
-                    content: ''
-
-            
-
-                    
+                a
+                    // padding: 20% 2%
+                    &::after
+                        left: 0%
+                        right: 100%
+                    &:hover::after
+                        right: 0%      
 </style>

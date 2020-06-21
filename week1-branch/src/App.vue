@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
     <navbar></navbar>
     <div class="main-view">
       <router-view/>
@@ -29,8 +25,11 @@ export default {
   padding: 0;
   list-style: none;
 }
+body {
+  height: 100%;
+}
 #app {
-  height: 100vh;
+  height: 100%;
   overflow-x: hidden;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -41,17 +40,14 @@ export default {
 
 #nav {
   width: 100%;
-  height: 6%;
   position: sticky;
 }
 .main-view {
-  height: 84%;
+  margin-top: 1%;
+  min-height: 98%;
 }
 #footer {
   width: 100%;
-  margin-top: 2%;
-  position: relative;
-  bottom: 0;
-  left: 0;
+  margin-top: 1%;
 }
 </style>

@@ -7,21 +7,25 @@
             a(href='#') View Source
 </template>
 <style lang="sass" scoped>
-
+    $darkgrnblue:  #354649 // color
+    $hoverdarkgrnblue: #465c60 // hover color
     $lightgray: #E0E7E9
     *
+        margin: 0
+        padding: 0
+        list-style: none
         text-decoration: none
     .footer
         width: 100%
     .container
-        height: 50px
         display: flex
-        align-items: center
+        // align-items: center
         justify-content: center
+        padding: 1%
         background-color: $lightgray
         a
             padding-left: .5%
-            color: #333
+            color: $darkgrnblue
             &:hover
-                color: #3030f0
+                color: $hoverdarkgrnblue
 </style>
