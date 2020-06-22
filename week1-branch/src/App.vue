@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <carrousel></carrousel>
     <navbar></navbar>
     <div class="main-view">
       <router-view/>
@@ -12,12 +13,29 @@
 <script>
 import navbar from './components/navbar.vue';
 import footerCus from './components/footer.vue';
+import carrousel from './components/carrousel.vue';
 export default {
   components: {
     navbar,
     footerCus,
+    carrousel,
+  },
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    handleScroll () {
+      if (window.scrollY > 305) {
+        if(!document.getElementById('navbar').classList.contains('sticky')) {
+          document.getElementById('navbar').classList.toggle('sticky');
+        }
+      } else {
+        document.getElementById('navbar').classList.remove('sticky');
+      }
+    }
   }
 }
+
 </script>
 <style lang="scss">
 * {
@@ -36,15 +54,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  position: relative;
 }
 
-#nav {
+.navbar {
   width: 100%;
-  position: sticky;
+  // margin-top: .1%;
+  top: 20%;
+  z-index: 1;
+  transition: margin-top .5s;
+}
+.navbar.sticky  {
+  position: fixed;
+  margin-top: 0;
+  top: 0;
 }
 .main-view {
   margin-top: 1%;
-  min-height: 98%;
+  min-height: 95%;
+  position: relative;
 }
 #footer {
   width: 100%;

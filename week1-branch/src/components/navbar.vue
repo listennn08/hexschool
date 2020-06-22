@@ -1,8 +1,8 @@
 <template lang="pug">
-    #navbar
+    #navbar.navbar
         .container
             .navbar-header
-                h2: a(href="/") 電商
+                h2: a(href="/") GAGU
             .navbar
                 .navbar-list
                     //- router-link(to="/") Home

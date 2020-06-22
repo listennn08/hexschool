@@ -27,7 +27,7 @@
         // align-items: center
         justify-content: center
         padding: 1%
-        background-color: $lightgray
+        background: $lightgray
         a
             padding-left: .5%
             color: $navyblue
