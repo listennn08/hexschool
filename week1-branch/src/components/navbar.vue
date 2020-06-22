@@ -13,11 +13,18 @@
                     router-link(to="#") 登入
 </template>
 <style lang="sass" scoped>
-$darkgrnblue:  #354649 // color
-$hoverdarkgrnblue: #465c60 // hover color
-$lightblgray: #6C7A89
-$lightbluegr: #A3C6C4
-$lightgray: #E0E7E9 // background-color
+// $darkgrnblue:  #354649 // color
+// $hoverdarkgrnblue: #465c60 // hover color
+// $lightblgray: #6C7A89
+// $lightbluegr: #A3C6C4
+// $lightgray: #E0E7E9 // background-color
+
+$navyblue: #333D51 
+$hnavyblue: #242b39
+$goldyellow: #D3AC2B 
+$darkgray: #CBD0D8 
+$lightgray: #F4F3EA
+
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC:300,700,900&display=swap")
 *
     margin: 0
@@ -39,7 +46,7 @@ $lightgray: #E0E7E9 // background-color
             margin-left: 2%
             text-align: left
             a
-                color: $darkgrnblue
+                color: $navyblue
                 text-decoration: none
         .navbar, .navbar-right
             display: flex
@@ -50,17 +57,17 @@ $lightgray: #E0E7E9 // background-color
                 transition: .5s
                 a
                     text-decoration: none
-                    color: $darkgrnblue
+                    color: $navyblue
                     position: relative
                     &::after
                         content: ''
                         position: absolute
                         height: 0
                         bottom: 0
-                        border-bottom: 1px solid $hoverdarkgrnblue
+                        border-bottom: 1px solid $hnavyblue
                         transition: .3s
                     &:hover
-                        color: $hoverdarkgrnblue
+                        color: $hnavyblue
 
         .navbar
             width: 60%

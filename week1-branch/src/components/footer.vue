@@ -7,9 +7,14 @@
             a(href='#') View Source
 </template>
 <style lang="sass" scoped>
-    $darkgrnblue:  #354649 // color
-    $hoverdarkgrnblue: #465c60 // hover color
-    $lightgray: #E0E7E9
+    // $darkgrnblue:  #354649 // color
+    // $hoverdarkgrnblue: #465c60 // hover color
+    // $lightgray: #E0E7E9
+    $navyblue: #333D51 
+    $hnavyblue: #242b39
+    $goldyellow: #D3AC2B 
+    $darkgray: #CBD0D8 
+    $lightgray: #F4F3EA
     *
         margin: 0
         padding: 0
@@ -25,7 +30,7 @@
         background-color: $lightgray
         a
             padding-left: .5%
-            color: $darkgrnblue
+            color: $navyblue
             &:hover
-                color: $hoverdarkgrnblue
+                color: $hnavyblue
 </style>
