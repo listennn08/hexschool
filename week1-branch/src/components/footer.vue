@@ -3,8 +3,10 @@
         .container
             p
             | &copy; 2020 |
-            i.fa.fa-value(aria-hidden='true') &nbsp;
-            a(href='#') View Source
+            a(href='#')
+                font-awesome-icon(:icon="['fab','instagram']")
+            a(href='#')
+                font-awesome-icon(:icon="['fab','facebook']")
 </template>
 <style lang="sass" scoped>
     // $darkgrnblue:  #354649 // color
