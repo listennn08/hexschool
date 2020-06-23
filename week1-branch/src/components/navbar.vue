@@ -7,6 +7,7 @@
                 .navbar-list
                     //- router-link(to="/") Home
                     router-link(to="/about") 關於我們
+                    router-link(to="/discount") 優惠活動
                     router-link(to="/allitem") 產品列表
             .navbar-right
                 .navbar-list
