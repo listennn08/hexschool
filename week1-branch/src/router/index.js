@@ -22,6 +22,11 @@ Vue.use(VueRouter)
     path: '/allItem',
     name: 'allItem',
     component: () => import('../views/product_list.vue')
+  },
+  {
+    path: '/discount',
+    name: 'discount',
+    component: () => import('../components/discount_panel.vue')
   }
 ]
 
