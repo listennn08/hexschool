@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     handleScroll () {
-      if (window.scrollY > 305) {
+      if (window.scrollY > 450) {
         if(!document.getElementById('navbar').classList.contains('sticky')) {
           document.getElementById('navbar').classList.toggle('sticky');
         }
@@ -59,23 +59,21 @@ body {
 
 .navbar {
   width: 100%;
-  // margin-top: .1%;
   top: 20%;
   z-index: 1;
-  transition: margin-top .5s;
 }
 .navbar.sticky  {
   position: fixed;
-  margin-top: 0;
   top: 0;
 }
 .main-view {
   margin-top: 1%;
   min-height: 95%;
-  position: relative;
+  max-height: 95%;
 }
 #footer {
   width: 100%;
   margin-top: 1%;
+
 }
 </style>
