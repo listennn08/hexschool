@@ -7,7 +7,7 @@
                 span.discount -30%
                 | 折扣倒數
                 span.day 1
-                |天
+                | 天
 </template>
 <style lang="sass" scoped>
     @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&display=swap)

@@ -27,6 +27,11 @@ Vue.use(VueRouter)
     path: '/discount',
     name: 'discount',
     component: () => import('../components/discount_panel.vue')
+  },
+  {
+    path: '/shopcart',
+    name: 'shopcart',
+    component: () => import('../views/shop_cart.vue')
   }
 ]
 
