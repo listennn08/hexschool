@@ -9,6 +9,7 @@
                     router-link(to="/about") 關於我們
                     router-link(to="/discount") 優惠活動
                     router-link(to="/allitem") 產品列表
+                    router-link(to="/shopcart") 購物車
             .navbar-right
                 .navbar-list
                     router-link(to="#") 登入
@@ -26,12 +27,12 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8 
 $lightgray: #F4F3EA
 
-@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC:300,700,900&display=swap")
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500;700;900&family=Raleway:wght@500;700&display=swap)
 *
     margin: 0
     padding: 0
     list-style: none
-    font-family: 'Noto Sans TC', sans-serif
+    font-family: 'Raleway', 'Noto Sans TC', sans-serif
 
 #navbar
     width: 100%
@@ -43,9 +44,10 @@ $lightgray: #F4F3EA
         margin: auto
         .navbar-header
             width: 18%
-            font-size: 20px
+            font-size: 26px
             margin-left: 2%
             text-align: left
+            vertical-align: middle
             a
                 color: $navyblue
                 text-decoration: none

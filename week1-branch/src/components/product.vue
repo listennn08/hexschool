@@ -42,8 +42,13 @@ export default {
 			buyNum: 1
         }
     },
-     methods: {
-         plusNum () {
+    mounted() {
+        document.querySelector('#product').addEventListener('click', function (e) {
+            e.stopPropagation();
+        })
+    },
+    methods: {
+        plusNum () {
 			this.buyNum++;
 		},
 		minusNum () {
@@ -52,7 +57,7 @@ export default {
         closeWindow() {
             document.querySelector('#product').classList.toggle('hide');
         }
-     }
+    }
 }
 </script>
 <style lang="sass" scoped>
