@@ -25,20 +25,21 @@ let shopitems = {
     api: {
         base: 'https://course-ec-api.hexschool.io/api/',
         uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
-        getAllData: '/ec/products',
+        getAllData: '/admin/ec/products',
         createData: '/admin/ec/product',
         update: '/admin/ec/product/',
         deleteData: '/admin/ec/product/',
     },
 	getData: function() {
-		let vm = this
+        let vm = this
+        vm.data = [];
 		axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
 			.then( (resp) => resp.data )
 			.then((data) => {
 				data.data.forEach((el) => {
-                    console.log(el)
-					this.data.push(new Item(el))
-				})
+					vm.data.push(new Item(el))
+                })
+                console.log(vm.data)
 			})
 			.catch((err) => {
 				console.error(err)
@@ -53,7 +54,7 @@ let shopitems = {
 			item += `
 				<div class="item" data-id=${ el.id }>
 					<div class="pic">
-						<img src="${ el.imageUrl }" alt="" srcset="">
+						<img src="${ el.imageUrl[0] }" alt="" srcset="">
 					</div>
 					<div class="detail">
                         <div class="cat">${ el.category }</div>
@@ -82,19 +83,19 @@ let shopitems = {
                 item.innerText = text.substring(0, 29) + '...';
             }
         })
-        document.querySelectorAll('.updatePage').forEach((item) => {
-            console.log('1')
-            item.addEventListener('click', vm.updateItem, false);
-        })
-        document.querySelectorAll('.delete').forEach((item) => {
-            item.addEventListener('click', vm.deleteItem);
-        })
+        // document.querySelectorAll('.updatePage').forEach((item) => {
+        //     item.addEventListener('click', vm.updateItem, false);
+        // })
+        // document.querySelectorAll('.delete').forEach((item) => {
+        //     item.addEventListener('click', vm.deleteItem);
+        // })
     },
     /* 更新商品 */
     updateItem (e) {
         let vm = shopitems;
         let index = e.target.dataset.index;
         let itemObj = vm.data[index];
+        console.log(itemObj)
         document.querySelector('#newDataPage #title').value = itemObj.title;
 		document.querySelector('#newDataPage #category').value = itemObj.category;
 		document.querySelector('#newDataPage #content').value = itemObj.content;
@@ -102,7 +103,7 @@ let shopitems = {
 		document.querySelector('#newDataPage #origin_price').value = itemObj.origin_price;
 		document.querySelector('#newDataPage #price').value = itemObj.price
 		document.querySelector('#newDataPage #imageUrl').value = itemObj.imageUrl;
-        document.querySelector('#newDataPage #enable').checked = itemObj.enable;
+        document.querySelector('#newDataPage #enabled').checked = itemObj.enabled;
         document.querySelector('#newDataPage').classList.toggle('hide');
         document.querySelector('#newDataPage #update').classList = ''
         document.querySelector('#newDataPage #update').dataset.id = itemObj.id;
@@ -110,22 +111,21 @@ let shopitems = {
         if(!document.querySelector('#newDataPage #create').classList.value) {
             document.querySelector('#newDataPage #create').classList.toggle('hide');
         }
-        
     },
     /* 刪除商品 */
-    deleteItem (e) {
-        let vm = shopitems;
-        console.log(vm)
-        let id = e.target.parentNode.dataset.id || e.target.parentNode.parentNode.dataset.id
-        axios.delete(`${ vm.api.base }${ vm.api.uuid }${ vm.api.deleteData }${ id }`)
-            .then((resp) => resp.message)
-            .then((msg) => {
-                console.log(msg)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
+    // deleteItem (e) {
+    //     let vm = shopitems;
+    //     console.log(vm)
+    //     let id = e.target.parentNode.dataset.id || e.target.parentNode.parentNode.dataset.id
+    //     axios.delete(`${ vm.api.base }${ vm.api.uuid }${ vm.api.deleteData }${ id }`)
+    //         .then((resp) => resp.message)
+    //         .then((msg) => {
+    //             console.log(msg)
+    //         })
+    //         .catch((error) => {
+    //             console.error(error)
+    //         })
+    // }
 }
 
 window.addEventListener('click', function(e) {
@@ -140,14 +140,14 @@ window.addEventListener('click', function(e) {
 document.querySelector('#newDataPage').addEventListener('click', function(e) {
     e.stopPropagation();
 })
-document.querySelector('#addField').addEventListener('click', function() {
-    document.querySelector('#newDataPage').classList.toggle('hide');
-    document.querySelector('#newDataPage .page-title span').innerHTML= '新增'
-    document.querySelector('#newDataPage #create').classList = ''
-    if(!document.querySelector('#newDataPage #update').classList.value) {
-        document.querySelector('#newDataPage #update').classList.toggle('hide');
-    }
-})
+// document.querySelector('#addField').addEventListener('click', function() {
+//     document.querySelector('#newDataPage').classList.toggle('hide');
+//     document.querySelector('#newDataPage .page-title span').innerHTML= '新增'
+//     document.querySelector('#newDataPage #create').classList = ''
+//     if(!document.querySelector('#newDataPage #update').classList.value) {
+//         document.querySelector('#newDataPage #update').classList.toggle('hide');
+//     }
+// })
 document.querySelector('#imageUrl').addEventListener('change', function() {
 	document.querySelector('#preview').src = document.querySelector('#imageUrl').value
 })
@@ -208,7 +208,7 @@ const createData = () => {
         imageUrl: [
             document.querySelector('#newDataPage #imageUrl').value
         ],
-        enable: document.querySelector('#newDataPage #enable').checked
+        enabled: document.querySelector('#newDataPage #enabled').checked
     }
     axios.post(`${ shopitems.api.base }${ shopitems.api.uuid }${ shopitems.api.createData}`, data)
         .then((resp) => resp)
@@ -223,7 +223,7 @@ const createData = () => {
 }
 
 const updateData = (id) => {
-    let data = {}
+    let patchData = {}
     let title = document.querySelector('#newDataPage #title').value;
 	let category = document.querySelector('#newDataPage #category').value;
 	let content = document.querySelector('#newDataPage #content').value;
@@ -232,18 +232,20 @@ const updateData = (id) => {
 	let price = document.querySelector('#newDataPage #price').value;
     let imageUrl = []
     imageUrl.push(document.querySelector('#newDataPage #imageUrl').value);
-    let enable = document.querySelector('#newDataPage #enable').checke;
-    if (title) data['title'] = title;
-    if (category) data['category'] = category;
-    if (content) data['content'] = content;
-    if (description) data['description'] = description;
-    if (origin_price) data['origin_price'] = origin_price;
-    if (price) data['price'] = price;
-    if (imageUrl) data['imageUrl'] = imageUrl;
-    axios.patch(`${ shopitems.api.base}${shopitems.api.uuid}${ shopitems.api.update}${id}`, data)
+    let enabled = document.querySelector('#newDataPage #enabled').checked;
+    if (title != '') patchData['title'] = title;
+    if (category != '') patchData['category'] = category;
+    if (content != '') patchData['content'] = content;
+    if (description != '') patchData['description'] = description;
+    if (origin_price != '') patchData['origin_price'] = origin_price;
+    if (price !='') patchData['price'] = price;
+    if (imageUrl) patchData['imageUrl'] = imageUrl;
+    if (enabled != '') patchData['enabled'] = enabled;
+    console.log('patch', patchData)
+    axios.patch(`${ shopitems.api.base}${shopitems.api.uuid}${ shopitems.api.update}${id}`, patchData)
         .then((resp) => resp)
         .then((data) => {
-            console.log(data);
+            console.log('resp',data.data);
             document.querySelector('#newDataPage').classList.toggle('hide');
         })
         .catch((error) => {
