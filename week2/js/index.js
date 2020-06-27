@@ -8,7 +8,7 @@ class Item {
         this.title = data.title;
         this.category = data.category;
         this.content = data.content;
-		this.description = data.discription || null;
+        this.description = data.discription || null;
         this.enabled = data.enabled;
         this.imageUrl = data.imageUrl;
         this.origin_price = data.origin_price;
@@ -30,62 +30,62 @@ let shopitems = {
         update: '/admin/ec/product/',
         deleteData: '/admin/ec/product/',
     },
-	getData: function() {
+    getData: function() {
         let vm = this
         vm.data = [];
-		axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
-			.then( (resp) => resp.data )
-			.then((data) => {
-				data.data.forEach((el) => {
-					vm.data.push(new Item(el))
+        axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
+            .then( (resp) => resp.data )
+            .then((data) => {
+                data.data.forEach((el) => {
+                    vm.data.push(new Item(el))
                 })
                 console.log(vm.data)
-			})
-			.catch((err) => {
-				console.error(err)
-			})
-			.finally(() => vm.renderView())
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+            .finally(() => vm.renderView())
     },
     /* 渲染畫面 */
-	renderView: function() {
+    renderView: function() {
         let vm = this;
-		let item = '';
-		this.data.forEach((el, index) => {
-			item += `
-				<div class="item" data-id=${ el.id }>
-					<div class="pic">
-						<img src="${ el.imageUrl[0] }" alt="" srcset="">
-					</div>
-					<div class="detail">
+        let item = '';
+        this.data.forEach((el, index) => {
+            item += `
+                <div class="item" data-id=${ el.id }>
+                    <div class="pic">
+                        <img src="${ el.imageUrl[0] }" alt="" srcset="">
+                    </div>
+                    <div class="detail">
                         <div class="cat">${ el.category }</div>
                         <div class="title">
                             ${ el.title }
                         </div>
-						<div class="descript">${ el.content }</div>
-					</div>
-					<div class="price-block">
-						<span class="price">NT$${ el.price }</span>
-						<span class="origin-price strike">NT$${ el.origin_price }</span>
+                        <div class="descript">${ el.content }</div>
+                    </div>
+                    <div class="price-block">
+                        <span class="price">NT$${ el.price }</span>
+                        <span class="origin-price strike">NT$${ el.origin_price }</span>
                     </div>
                     <div class="btn">
                         <button class="addCart">加入購物車</button>
                         <!--<button class="updatePage" data-index=${index}>更新</button>-->
                         <!--<button class="delete">刪除</button>-->
                     </div>
-				</div>
-			`
-		})
+                </div>
+            `
+        })
         document.querySelector('#item-list').innerHTML = item
         let descript = document.querySelectorAll('.descript');
         descript.forEach((item) => {
             let text = item.innerText;
-            if (text.length > 30) {
-                item.innerText = text.substring(0, 29) + '...';
+            if (text.length > 40) {
+                item.innerText = text.substring(0, 39) + '...';
             }
         })
-        // document.querySelectorAll('.updatePage').forEach((item) => {
-        //     item.addEventListener('click', vm.updateItem, false);
-        // })
+        document.querySelectorAll('.updatePage').forEach((item) => {
+            item.addEventListener('click', vm.updateItem, false);
+        })
         // document.querySelectorAll('.delete').forEach((item) => {
         //     item.addEventListener('click', vm.deleteItem);
         // })
@@ -97,12 +97,12 @@ let shopitems = {
         let itemObj = vm.data[index];
         console.log(itemObj)
         document.querySelector('#newDataPage #title').value = itemObj.title;
-		document.querySelector('#newDataPage #category').value = itemObj.category;
-		document.querySelector('#newDataPage #content').value = itemObj.content;
-		document.querySelector('#newDataPage #description').value = itemObj.description;
-		document.querySelector('#newDataPage #origin_price').value = itemObj.origin_price;
-		document.querySelector('#newDataPage #price').value = itemObj.price
-		document.querySelector('#newDataPage #imageUrl').value = itemObj.imageUrl;
+        document.querySelector('#newDataPage #category').value = itemObj.category;
+        document.querySelector('#newDataPage #content').value = itemObj.content;
+        document.querySelector('#newDataPage #description').value = itemObj.description;
+        document.querySelector('#newDataPage #origin_price').value = itemObj.origin_price;
+        document.querySelector('#newDataPage #price').value = itemObj.price
+        document.querySelector('#newDataPage #imageUrl').value = itemObj.imageUrl;
         document.querySelector('#newDataPage #enabled').checked = itemObj.enabled;
         document.querySelector('#newDataPage').classList.toggle('hide');
         document.querySelector('#newDataPage #update').classList = ''
@@ -149,7 +149,7 @@ document.querySelector('#newDataPage').addEventListener('click', function(e) {
 //     }
 // })
 document.querySelector('#imageUrl').addEventListener('change', function() {
-	document.querySelector('#preview').src = document.querySelector('#imageUrl').value
+    document.querySelector('#preview').src = document.querySelector('#imageUrl').value
 })
 /* end */
 
