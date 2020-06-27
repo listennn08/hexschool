@@ -1,0 +1,189 @@
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500;700;900&family=Raleway:wght@500;700&display=swap)
+
+$navyblue: #333D51
+$hnavyblue: #242b39
+$goldyellow: #D3AC2B 
+$darkgray: #CBD0D8
+$darkgrayn: #46505e
+$lightgray: #F4F3EA
+*
+	margin: 0
+	padding: 0
+	list-style: none
+body
+	width: 1440px
+#product-list
+	margin: 5% 10%
+	width: 80%
+	display: flex
+	flex-wrap: wrap
+	&.sticky
+		margin-left: 20%
+	.container
+		max-width: 1200px
+		// margin-left: 20%
+		min-width: 900px
+		height: 100%
+		display: flex
+		flex-direction: row
+		flex-wrap: wrap
+		.btn-top
+			width: 100%
+			display: flex
+			justify-content: flex-start
+			position: relative
+			button
+				width: 10%
+				border: 1px solid $darkgray
+				background: $lightgray
+				margin: 0 2%
+				padding: 1%
+				border-radius: 5px
+				outline: none
+				&:hover
+					background: $navyblue
+					color: $lightgray
+			#newDataPage
+				z-index: 999
+				top: 50%
+				right: 20%
+				position: absolute
+				display: flex
+				flex-wrap: wrap
+				width: 400px
+				margin: 10px 20px
+				padding: 20px
+				border: 1px solid #ddd
+				background: #fff
+				&.hide
+					display: none
+				.page-title
+					width: 100%
+					span
+						display: inline-block
+						padding: 0 2px
+						background: linear-gradient(180deg, transparent 15px,rgba(51, 61, 81, .6))
+				.row
+					width: 50%
+					&:last-of-type
+						width: 100%
+					.img
+						width: 30%
+						#preview
+							width: 100%
+					#create.hide, #update.hide
+						display: none
+				label
+					display: inline-block
+					width: 100px
+				input
+					padding: 5px
+					border: 1px solid #aaa
+					border-radius: 5px
+					outline: none
+					&:focus
+						box-shadow: 0 0 5px #888
+				button
+					width: 20%
+					margin-top: 15%
+					float: right
+					padding: 5px
+					border: 1px solid #aaa
+					border-radius: 5px
+					outline: none
+		.list-title
+			display: block
+			width: 100%
+			text-align: center
+			text-shadow: 5px 5px 10px $goldyellow
+		.item-list
+			width: 95%
+			padding: 0 5%
+			min-width: 900px
+			height: 100%
+			display: flex
+			flex-direction: row
+			justify-content: center
+			flex-wrap: wrap
+			.item
+				width: 286px
+				height: 456px
+				margin: 15px
+				border: 2px solid $navyblue
+				border-radius: 15px
+				transform: translateY(0)
+				transition: .5s
+				&:hover
+					border: 2px solid $hnavyblue
+					box-shadow: 5px 5px 10px $goldyellow
+					// transform: translateY(-2%)
+				&:hover .txt h2
+					// border-bottom: 2px solid $hnavyblue
+				.pic
+					border-radius: 15px 15px 0 0
+					width: 100%
+					border-bottom: 2px solid $navyblue
+					box-sizing: border-box
+					img
+						display: block
+						border-radius: 13px 13px 0 0
+						width: 100%
+				.detail
+					.title
+						width: 60%
+						font-size: 18px
+						font-weight: 700
+						word-wrap: break-word
+						text-overflow: ellipsis
+						overflow: hidden
+						text-align: left
+						padding: 5px 10px
+					.cat
+						float: right
+						margin-top: 2%
+						margin-right: 2%
+						padding: 1% 2%
+						background: $goldyellow
+						border-radius: 10px
+						font-size: 12px
+					.descript
+						height: 50px
+						overflow: hidden
+						text-overflow: ellipsis
+						color: $darkgrayn
+						padding: 0 10px
+				.price-block
+					display: flex
+					align-items: center
+					justify-content: flex-start
+					padding: 5px
+					span
+						width: 25%
+						margin-right: 1%
+						font-family: 'Raleway', sans-serif
+						&.origin-price.strike
+							font-size: 12px
+							text-decoration: line-through
+							color: #888
+				.btn
+					display: flex
+					justify-content: flex-end
+					width: 96%
+					margin: 0 1% 2%
+					button
+						width: 30%
+						margin-top: auto
+						
+						padding: 1%
+						border: 1px solid $darkgray
+						background: $lightgray
+						border-radius: 5px
+						&:hover
+							background: $navyblue
+							color: $lightgray
+footer
+	width: 90%
+	background: $lightgray
+	color: $navyblue
+	padding: 1% 5%
+	text-align: center
