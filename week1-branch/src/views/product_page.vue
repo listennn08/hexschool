@@ -11,6 +11,7 @@ export default {
         categoryList,
         productList
     }
+
 }
 </script>
 <style lang="sass" scoped>

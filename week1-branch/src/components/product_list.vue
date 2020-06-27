@@ -26,6 +26,17 @@ export default {
             id: null
         }
     },
+    mounted() {
+        document.querySelector('#product-list').addEventListener('click', this.showDetail, false)
+    },
+    methods: {
+        showDetail(e) {
+            this.$nextTick(()=>{
+                this.id = parseInt(e.target.dataset.id || e.target.parentNode.dataset.id || e.target.parentNode.parentNode.dataset.id);
+            })
+            if (document.querySelector('#product')) document.querySelector('#product').classList.toggle('hide');
+        }
+    }
 }
 </script>
 <style lang="sass" scoped>
