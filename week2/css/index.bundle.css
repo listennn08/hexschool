@@ -5,7 +5,13 @@
   list-style: none; }
 
 body {
-  width: 1440px; }
+  width: 1440px;
+  height: 100vh;
+  overflow: hidden;
+  position: relative; }
+  @media (min-width: 1441px) and (max-width: 1920px) {
+    body {
+      width: 1920px; } }
 
 #product-list {
   margin: 5% 10%;
@@ -15,12 +21,14 @@ body {
   #product-list.sticky {
     margin-left: 20%; }
   #product-list .container {
-    max-width: 1200px;
-    min-width: 900px;
     height: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap; }
+    @media (min-width: 1441px) and (max-width: 1920px) {
+      #product-list .container {
+        width: 90%;
+        margin: 0 5%; } }
     #product-list .container .btn-top {
       width: 100%;
       display: flex;
@@ -176,5 +184,10 @@ footer {
   background: #F4F3EA;
   color: #333D51;
   padding: 1% 5%;
-  text-align: center; }
+  text-align: center;
+  position: absolute;
+  bottom: 8%; }
+  @media (min-width: 1441px) and (max-width: 1920px) {
+    footer {
+      bottom: 10%; } }
 

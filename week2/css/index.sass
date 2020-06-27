@@ -10,8 +10,16 @@ $lightgray: #F4F3EA
 	margin: 0
 	padding: 0
 	list-style: none
+@mixin pc
+	@media (min-width: 1441px) and (max-width: 1920px)
+		@content
 body
 	width: 1440px
+	+pc
+		width: 1920px
+	height: 100vh
+	overflow: hidden
+	position: relative
 #product-list
 	margin: 5% 10%
 	width: 80%
@@ -20,9 +28,9 @@ body
 	&.sticky
 		margin-left: 20%
 	.container
-		max-width: 1200px
-		// margin-left: 20%
-		min-width: 900px
+		+pc
+			width: 90%
+			margin: 0 5%
 		height: 100%
 		display: flex
 		flex-direction: row
@@ -187,3 +195,7 @@ footer
 	color: $navyblue
 	padding: 1% 5%
 	text-align: center
+	position: absolute
+	bottom: 8%
+	+pc
+		bottom: 10%
