@@ -21,7 +21,7 @@ Vue.use(VueRouter)
   {
     path: '/allItem',
     name: 'allItem',
-    component: () => import('../views/product_list.vue')
+    component: () => import('../views/product_page.vue')
   },
   {
     path: '/discount',
@@ -32,6 +32,11 @@ Vue.use(VueRouter)
     path: '/shopcart',
     name: 'shopcart',
     component: () => import('../views/shop_cart.vue')
+  },
+  {
+    path: '/paypage',
+    name: 'paypage',
+    component: () => import('../views/pay_page.vue')
   }
 ]
 

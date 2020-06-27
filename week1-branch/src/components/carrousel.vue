@@ -79,12 +79,7 @@ export default {
     .swiper-slide
         position: relative
         height: 396px
-        // padding: 2px
-        // background-color: $darkgray
         .slideImage
             width: 50%
             height: 100%
-            // position: absolute
-            // left: 20%
-            // right: 50%
 </style>

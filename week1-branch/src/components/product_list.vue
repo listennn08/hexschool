@@ -1,8 +1,8 @@
 <template lang="pug">
-    #product-list
+    #product-list.product-list
         .container
             -for(let i = 0; i< 15 ;i++)
-                .item(data-id=i @click="showDetail")
+                .item(data-id=i)
                     .pic
                         img(src="https://picsum.photos/300/300?random="+i)
                     .txt
@@ -25,6 +25,9 @@ export default {
         return {
             id: null
         }
+    },
+    mounted() {
+        document.querySelector('#product-list').addEventListener('click', this.showDetail, false)
     },
     methods: {
         showDetail(e) {
@@ -51,16 +54,21 @@ export default {
             transform: translateY(0%)
         100%
             transform: translateY(-20%)
-
+    @mixin largeScreen()
+        @media screen and (min-width: 1441px)
+            @content
     *
         padding: 0
         margin: 0
         list-style: none
     #product-list
-        .container
-            width: 45%
+        &.sticky
             margin-left: 20%
-            padding-left: 10%
+        .container
+            width: 100%
+            max-width: 1080px
+            // margin-left: 20%
+            padding-left: 5%
             min-width: 900px
             height: 100%
             display: flex
@@ -111,6 +119,9 @@ export default {
                 transition: .5s
                 text-decoration: none
                 background: $lightgray
+                +largeScreen
+                    right: 15%
+                    bottom: 3%
                 &:hover
                     box-shadow: 2px 2px 4px $goldyellow
                     animation: cartAnimate 2s infinite linear forwards
