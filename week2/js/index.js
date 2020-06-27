@@ -225,11 +225,11 @@ const createData = () => {
 const updateData = (id) => {
     let patchData = {}
     let title = document.querySelector('#newDataPage #title').value;
-	let category = document.querySelector('#newDataPage #category').value;
-	let content = document.querySelector('#newDataPage #content').value;
-	let description = document.querySelector('#newDataPage #description').value;
-	let origin_price = document.querySelector('#newDataPage #origin_price').value;
-	let price = document.querySelector('#newDataPage #price').value;
+    let category = document.querySelector('#newDataPage #category').value;
+    let content = document.querySelector('#newDataPage #content').value;
+    let description = document.querySelector('#newDataPage #description').value;
+    let origin_price = document.querySelector('#newDataPage #origin_price').value;
+    let price = document.querySelector('#newDataPage #price').value;
     let imageUrl = []
     imageUrl.push(document.querySelector('#newDataPage #imageUrl').value);
     let enabled = document.querySelector('#newDataPage #enabled').checked;
