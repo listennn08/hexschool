@@ -25,7 +25,7 @@ let shopitems = {
     api: {
         base: 'https://course-ec-api.hexschool.io/api/',
         uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
-        getAllData: '/admin/ec/products',
+        getAllData: '/ec/products',
         createData: '/admin/ec/product',
         update: '/admin/ec/product/',
         deleteData: '/admin/ec/product/',
@@ -36,6 +36,7 @@ let shopitems = {
 			.then( (resp) => resp.data )
 			.then((data) => {
 				data.data.forEach((el) => {
+                    console.log(el)
 					this.data.push(new Item(el))
 				})
 			})
@@ -66,9 +67,9 @@ let shopitems = {
 						<span class="origin-price strike">NT$${ el.origin_price }</span>
                     </div>
                     <div class="btn">
-                        <!--<button class="addCart">加入購物車</button>-->
-                        <button class="updatePage" data-index=${index}>更新</button>
-                        <button class="delete">刪除</button>
+                        <button class="addCart">加入購物車</button>
+                        <!--<button class="updatePage" data-index=${index}>更新</button>-->
+                        <!--<button class="delete">刪除</button>-->
                     </div>
 				</div>
 			`
