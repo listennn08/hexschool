@@ -18,7 +18,7 @@ class Item {
 }
 
 
-let token = 'TDfKnFfn2By6EGVp8c7mRAeFIt8DlwpnzkBjMeje2vY9nMFiCjYyqqYcgsrT'
+let token = 'TDfKnFfn2By6EGVp8c7mRAeFIt8DlwpnzkBjMeje2vY9nMFiCjYyqqYcgsrT';
 axios.defaults.headers['Authorization'] = `Bearer ${ token }`;
 let shopitems = {
     data: [],
@@ -31,15 +31,15 @@ let shopitems = {
         deleteData: '/admin/ec/product/',
     },
     getData: function() {
-        let vm = this
+        let vm = this;
         vm.data = [];
         axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
             .then( (resp) => resp.data )
             .then((data) => {
                 data.data.forEach((el) => {
-                    vm.data.push(new Item(el))
+                    vm.data.push(new Item(el));
                 })
-                console.log(vm.data)
+                // console.log(vm.data)
             })
             .catch((err) => {
                 console.error(err)
@@ -73,9 +73,9 @@ let shopitems = {
                         <!--<button class="delete">刪除</button>-->
                     </div>
                 </div>
-            `
+            `;
         })
-        document.querySelector('#item-list').innerHTML = item
+        document.querySelector('#item-list').innerHTML = item;
         let descript = document.querySelectorAll('.descript');
         descript.forEach((item) => {
             let text = item.innerText;
@@ -101,11 +101,11 @@ let shopitems = {
         document.querySelector('#newDataPage #content').value = itemObj.content;
         document.querySelector('#newDataPage #description').value = itemObj.description;
         document.querySelector('#newDataPage #origin_price').value = itemObj.origin_price;
-        document.querySelector('#newDataPage #price').value = itemObj.price
+        document.querySelector('#newDataPage #price').value = itemObj.price;
         document.querySelector('#newDataPage #imageUrl').value = itemObj.imageUrl;
         document.querySelector('#newDataPage #enabled').checked = itemObj.enabled;
         document.querySelector('#newDataPage').classList.toggle('hide');
-        document.querySelector('#newDataPage #update').classList = ''
+        document.querySelector('#newDataPage #update').classList = '';
         document.querySelector('#newDataPage #update').dataset.id = itemObj.id;
         document.querySelector('#newDataPage .page-title span').innerHTML= '更新'
         if(!document.querySelector('#newDataPage #create').classList.value) {
@@ -143,19 +143,19 @@ document.querySelector('#newDataPage').addEventListener('click', function(e) {
 // document.querySelector('#addField').addEventListener('click', function() {
 //     document.querySelector('#newDataPage').classList.toggle('hide');
 //     document.querySelector('#newDataPage .page-title span').innerHTML= '新增'
-//     document.querySelector('#newDataPage #create').classList = ''
+//     document.querySelector('#newDataPage #create').classList = '';
 //     if(!document.querySelector('#newDataPage #update').classList.value) {
 //         document.querySelector('#newDataPage #update').classList.toggle('hide');
 //     }
 // })
 document.querySelector('#imageUrl').addEventListener('change', function() {
-    document.querySelector('#preview').src = document.querySelector('#imageUrl').value
+    document.querySelector('#preview').src = document.querySelector('#imageUrl').value;
 })
 /* end */
 
 document.querySelector('#newDataPage').addEventListener('click', function(e) {
     let action = e.target.dataset.action;
-    let id = e.target.dataset.id 
+    let id = e.target.dataset.id;
     switch (action) {
         case 'create':
             createData();
@@ -167,7 +167,6 @@ document.querySelector('#newDataPage').addEventListener('click', function(e) {
 })
 document.querySelectorAll('#newDataPage .required').forEach((item) => {
     item.addEventListener('blur', function(e) {
-        console.log(e)
         if (e.target.value) {
             removeWarning(e.target);
         } else {
@@ -186,7 +185,6 @@ const createData = () => {
         document.querySelector('#newDataPage #category').focus();
         addWarning(document.querySelector('#newDataPage #category'));
         return false;
-
     }
     if (!document.querySelector('#newDataPage #content').value) {
         document.querySelector('#newDataPage #content').focus();
@@ -223,14 +221,14 @@ const createData = () => {
 }
 
 const updateData = (id) => {
-    let patchData = {}
+    let patchData = {};
     let title = document.querySelector('#newDataPage #title').value;
     let category = document.querySelector('#newDataPage #category').value;
     let content = document.querySelector('#newDataPage #content').value;
     let description = document.querySelector('#newDataPage #description').value;
     let origin_price = document.querySelector('#newDataPage #origin_price').value;
     let price = document.querySelector('#newDataPage #price').value;
-    let imageUrl = []
+    let imageUrl = [];
     imageUrl.push(document.querySelector('#newDataPage #imageUrl').value);
     let enabled = document.querySelector('#newDataPage #enabled').checked;
     if (title != '') patchData['title'] = title;
