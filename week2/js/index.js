@@ -8,7 +8,7 @@ let shopitems = {
     api: {
         base: 'https://course-ec-api.hexschool.io/api/',
         uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
-        getAllData: '/admin/ec/products',
+        getAllData: '/ec/products',
         createData: '/admin/ec/product',
         update: '/admin/ec/product/',
         deleteData: '/admin/ec/product/',
