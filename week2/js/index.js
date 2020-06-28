@@ -17,7 +17,7 @@ let shopitems = {
         let vm = this;
         axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
             .then( (resp) => {
-                vm.products = resp.data;
+                vm.products = resp.data.data;
                 vm.renderView()
             })
             .catch((err) => {
