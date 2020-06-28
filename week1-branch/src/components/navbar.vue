@@ -12,7 +12,7 @@
                     router-link(to="/shopcart") 購物車
             .navbar-right
                 .navbar-list
-                    router-link(to="#") 登入
+                    router-link(to="/login") 登入
 </template>
 <style lang="sass" scoped>
 // $darkgrnblue:  #354649 // color
