@@ -24,6 +24,7 @@ export default {
         justify-content: center
         .category
             width: 20%
+            margin: 0 2%
             display: inline-block
             top: 0
             margin-top: 3%
@@ -34,6 +35,6 @@ export default {
                 left: 5%
                 margin-top: 5%
         .product-list
-            width: 70%
+            width: 80%
             display: inline-block
 </style>

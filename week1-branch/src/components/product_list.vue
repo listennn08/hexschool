@@ -1,13 +1,29 @@
 <template lang="pug">
     #product-list.product-list
         .container
-            -for(let i = 0; i< 15 ;i++)
-                .item(data-id=i)
+            .item-list
+                .item(
+                    v-for="(el, index) in productItems"
+                    :data-id="el.id"
+                    :key="index"
+                )
                     .pic
-                        img(src="https://picsum.photos/300/300?random="+i)
-                    .txt
-                        h2 I am title
-                        p TEST
+                        img(
+                            :src="el.imageUrl[0]"
+                            alt=""
+                            srcset=""
+                        )
+                    .detail
+                        .cat {{ el.category }}
+                        .title {{ el.title }}
+                        .descript {{ hideMoreText(el.content) }}
+                    .price-block
+                        span.price(v-if="el.price") NT$${{ el.price }}
+                        span(
+                            :class=" el.price ? 'origin-price strike' : 'origin-price'"
+                        ) NT$ {{ el.origin_price }}
+                    .btn
+                        button.addCart 加入購物車
             template(v-if="id")
                 product(:id="id")
             router-link(to="/shopcart").shop-cart
@@ -16,20 +32,40 @@
 </template>
 <script>
 import product from './product.vue'
-
 export default {
     components: {
         product
     },
     data() {
         return {
-            id: null
+            id: null,
+            productItems: [],
+            api: {
+                base: 'https://course-ec-api.hexschool.io/api/',
+                uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
+                getAllData: '/ec/products',
+            },
         }
     },
+    created() {
+        this.getData();
+    },
     mounted() {
-        document.querySelector('#product-list').addEventListener('click', this.showDetail, false)
+        document.querySelector('#product-list').addEventListener('click', this.showDetail, false);
     },
     methods: {
+        getData() {
+            this.$http.get(`${ this.api.base }${ this.api.uuid }${ this.api.getAllData }`)
+                .then( (resp) => {
+                    this.productItems = resp.data.data;
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        },
+        hideMoreText(text) {
+            return (text.length > 40) ? text.substring(0, 39) + '...' : text;
+        },
         showDetail(e) {
             this.$nextTick(()=>{
                 this.id = parseInt(e.target.dataset.id || e.target.parentNode.dataset.id || e.target.parentNode.parentNode.dataset.id);
@@ -68,15 +104,24 @@ export default {
             width: 100%
             max-width: 1080px
             // margin-left: 20%
-            padding-left: 5%
+            // padding-left: 5%
             min-width: 900px
             height: 100%
             display: flex
             flex-direction: row
             flex-wrap: wrap
+        .item-list
+            width: 100%
+            // padding: 0 5%
+            // min-width: 900px
+            // height: 100%
+            display: flex
+            flex-direction: row
+            justify-content: center
+            flex-wrap: wrap
             .item
-                width: 246px
-                height: 396px
+                width: 286px
+                height: 456px
                 margin: 15px
                 border: 2px solid $navyblue
                 border-radius: 15px
@@ -93,45 +138,93 @@ export default {
                     width: 100%
                     border-bottom: 2px solid $navyblue
                     box-sizing: border-box
+                    display: flex
+                    align-items: center
+                    justify-content: center
                     img
                         display: block
                         border-radius: 13px 13px 0 0
-                        width: 100%
-                .txt h2
-                    text-align: left
-                    padding: 5px 15px
-                    // border-bottom: 2px solid $navyblue
-                .txt p
-                    color: $darkgrayn
+                        width: 80%
+                .detail
+                    .title
+                        width: 60%
+                        font-size: 18px
+                        font-weight: 700
+                        word-wrap: break-word
+                        text-overflow: ellipsis
+                        overflow: hidden
+                        text-align: left
+                        padding: 5px 10px
+                    .cat
+                        float: right
+                        margin-top: 2%
+                        margin-right: 2%
+                        padding: 1% 2%
+                        background: $goldyellow
+                        border-radius: 10px
+                        font-size: 12px
+                    .descript
+                        text-align: left
+                        height: 80px
+                        overflow: hidden
+                        text-overflow: ellipsis
+                        color: $darkgrayn
+                        padding: 0 10px
+                .price-block
+                    display: flex
+                    align-items: center
+                    justify-content: flex-start
                     padding: 5px
-            .shop-cart
-                width: 40px
-                height: 40px
-                padding: 10px
-                font-size: 20px
-                border: 2px solid $darkgray
-                border-radius: 50%
-                position: fixed
-                right: 5%
-                bottom: 5%
-                color: $navyblue
-                text-align: center
-                transition: .5s
-                text-decoration: none
-                background: $lightgray
-                +largeScreen
-                    right: 15%
-                    bottom: 3%
-                &:hover
-                    box-shadow: 2px 2px 4px $goldyellow
-                    animation: cartAnimate 2s infinite linear forwards
-                    text-decoration: underline
-                .img
-                    width: 100%
-                    position: relative
-                .txt
-                    font-size: 6px
-                    overflow-wrap: nowrap
+                    span
+                        width: 25%
+                        margin-right: 1%
+                        font-family: 'Raleway', sans-serif
+                        &.origin-price.strike
+                            font-size: 12px
+                            text-decoration: line-through
+                            color: #888
+                .btn
+                    display: flex
+                    justify-content: flex-end
+                    width: 90%
+                    margin: 5%
+                    button
+                        width: 30%
+                        padding: 1%
+                        border: 1px solid $darkgray
+                        background: $lightgray
+                        border-radius: 5px
+                        &:hover
+                            background: $navyblue
+                            color: $lightgray
+        .shop-cart
+            width: 40px
+            height: 40px
+            padding: 10px
+            font-size: 20px
+            border: 2px solid $darkgray
+            border-radius: 50%
+            position: fixed
+            right: 5%
+            bottom: 5%
+            color: $navyblue
+            text-align: center
+            transition: .5s
+            text-decoration: none
+            background: $lightgray
+            +largeScreen
+                right: 15%
+                bottom: 3%
+            &:hover
+                box-shadow: 2px 2px 4px $goldyellow
+                animation: cartAnimate 2s infinite linear forwards
+                text-decoration: underline
+            .img
+                width: 100%
+                position: relative
+            .txt
+                font-size: 6px
+                overflow-wrap: nowrap
     #product
         position: fixed
         top: 10%
@@ -140,5 +233,4 @@ export default {
         transform: translateX(-50%)
         box-shadow: 2px 2px 5px $lightgray
         z-index: 999
-
 </style>
