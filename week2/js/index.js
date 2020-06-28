@@ -2,26 +2,9 @@ import '../css/index.sass';
 
 const axios = require('axios');
 
-class Item {
-    constructor(data) {
-        this.id = data.id;
-        this.title = data.title;
-        this.category = data.category;
-        this.content = data.content;
-        this.description = data.discription || null;
-        this.enabled = data.enabled;
-        this.imageUrl = data.imageUrl;
-        this.origin_price = data.origin_price;
-        this.price = data.price;
-        this.unit = data.unit;
-    }
-}
 
-
-let token = 'TDfKnFfn2By6EGVp8c7mRAeFIt8DlwpnzkBjMeje2vY9nMFiCjYyqqYcgsrT';
-axios.defaults.headers['Authorization'] = `Bearer ${ token }`;
 let shopitems = {
-    data: [],
+    products: [],
     api: {
         base: 'https://course-ec-api.hexschool.io/api/',
         uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
@@ -32,19 +15,14 @@ let shopitems = {
     },
     getData: function() {
         let vm = this;
-        vm.data = [];
         axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
-            .then( (resp) => resp.data )
-            .then((data) => {
-                data.data.forEach((el) => {
-                    vm.data.push(new Item(el));
-                })
-                // console.log(vm.data)
+            .then( (resp) => {
+                vm.products = resp.data;
+                vm.renderView()
             })
             .catch((err) => {
                 console.error(err)
             })
-            .finally(() => vm.renderView())
     },
     /* 渲染畫面 */
     renderView: function() {
@@ -95,7 +73,6 @@ let shopitems = {
         let vm = shopitems;
         let index = e.target.dataset.index;
         let itemObj = vm.data[index];
-        console.log(itemObj)
         document.querySelector('#newDataPage #title').value = itemObj.title;
         document.querySelector('#newDataPage #category').value = itemObj.category;
         document.querySelector('#newDataPage #content').value = itemObj.content;
