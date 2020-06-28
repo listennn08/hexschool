@@ -28,7 +28,7 @@ let shopitems = {
     renderView: function() {
         let vm = this;
         let item = '';
-        this.data.forEach((el, index) => {
+        this.products.forEach((el, index) => {
             item += `
                 <div class="item" data-id=${ el.id }>
                     <div class="pic">
