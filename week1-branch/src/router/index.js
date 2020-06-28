@@ -19,6 +19,11 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../components/login.vue')
+  },
+  {
     path: '/allItem',
     name: 'allItem',
     component: () => import('../views/product_page.vue')

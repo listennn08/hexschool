@@ -9,6 +9,10 @@ import { fas, faShoppingCart, faThumbtack } from '@fortawesome/free-solid-svg-ic
 import { far, faThumbsUp  } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import VueAxios from 'vue-axios';
+import axios from 'axios';
+Vue.use(VueAxios, axios);
+
 // dom.watch();
 library.add(fab, fas, far, faThumbsUp, faInstagram, faFacebookF, faShoppingCart, faThumbtack);
 
