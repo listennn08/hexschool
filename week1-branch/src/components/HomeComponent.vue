@@ -11,7 +11,7 @@
                 .column-2
                     img(:src="homeImg[2]", alt="")
                     img(:src="homeImg[3]", alt="")
-                    span.logo: a(href="/") GAGU
+                    span.logo: router-link(to="/") GAGU
                 span.column-3
                     img(:src="homeImg[4]", alt="")
                     img(:src="homeImg[5]", alt="")
