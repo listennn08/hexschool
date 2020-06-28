@@ -10,14 +10,14 @@ let shopitems = {
         uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
         getAllData: '/ec/products',
         createData: '/admin/ec/product',
-        update: '/admin/ec/product/',
+        updateData: '/admin/ec/product/',
         deleteData: '/admin/ec/product/',
     },
     getData: function() {
         let vm = this;
         axios.get(`${ vm.api.base }${ vm.api.uuid }${ vm.api.getAllData }`)
             .then( (resp) => {
-                vm.products = resp.data;
+                vm.products = resp.data.data;
                 vm.renderView()
             })
             .catch((err) => {
@@ -222,11 +222,11 @@ const updateData = (id) => {
         .then((data) => {
             console.log('resp',data.data);
             document.querySelector('#newDataPage').classList.toggle('hide');
+            shopitems.getData();
         })
         .catch((error) => {
             console.log(error);
         })
-        .finally(()=> shopitems.getData());
 }
 const addWarning = (item) => {
     let nodeCollection = [...item.parentNode.children];
