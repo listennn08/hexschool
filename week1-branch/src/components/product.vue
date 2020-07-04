@@ -26,9 +26,10 @@ export default {
     name: 'product',
     props: {
         id: {
-            type: Number,
+            type: String,
             required: true,
-        }
+        },
+        pageOpen: String
     },
     data() {
         return {
@@ -42,11 +43,6 @@ export default {
 			buyNum: 1
         }
     },
-    mounted() {
-        document.querySelector('#product').addEventListener('click', function (e) {
-            e.stopPropagation();
-        })
-    },
     methods: {
         plusNum () {
 			this.buyNum++;
@@ -55,7 +51,7 @@ export default {
 			if (this.buyNum > 1) this.buyNum--;
         },
         closeWindow() {
-            document.querySelector('#product').classList.toggle('hide');
+            this.$emit('update:pageOpen', !this.pageOpen)
         }
     }
 }

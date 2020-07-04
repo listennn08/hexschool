@@ -5,7 +5,9 @@
         :auto-update="true"
         :auto-destroy="true"
         :delete-instance-on-destroy="true"
-        :cleanup-styles-on-destroy="true")
+        :cleanup-styles-on-destroy="true"
+        @mouseover="stopSwiper"
+        @mouseout="playSwiper")
         swiper-slide(v-for="(img, index) in imgs" :key="index")
             img.slideImage(:src="img[0]")
             img.slideImage(:src="img[1]")
@@ -50,11 +52,8 @@ export default {
         }
     },
     mounted() {
-        // console.log('Current Swiper instance object', this.swiper)
         this.$refs.swiper.$swiper.slideTo(1);
         this.playSwiper();
-        document.querySelector('#swiper-wrapper').addEventListener('mouseover', this.stopSwiper);
-        document.querySelector('#swiper-wrapper').addEventListener('mouseout', this.playSwiper)
     },
     methods: {
         stopSwiper () {

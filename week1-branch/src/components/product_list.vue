@@ -6,6 +6,7 @@
                     v-for="(el, index) in productItems"
                     :data-id="el.id"
                     :key="index"
+                    @click="showDetail(el.id)"
                 )
                     .pic
                         img(
@@ -25,7 +26,10 @@
                     .btn
                         button.addCart 加入購物車
             template(v-if="id")
-                product(:id="id")
+                product(
+                    :id="id"
+                    :class="{hide: !pageOpen}"
+                    :pageOpen.sync="pageOpen")
             router-link(to="/shopcart").shop-cart
                 font-awesome-icon(icon="shopping-cart")
                 .txt 購物車
@@ -45,13 +49,11 @@ export default {
                 uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
                 getAllData: '/ec/products',
             },
+            pageOpen: false,
         }
     },
     created() {
         this.getData();
-    },
-    mounted() {
-        document.querySelector('#product-list').addEventListener('click', this.showDetail, false);
     },
     methods: {
         getData() {
@@ -66,11 +68,13 @@ export default {
         hideMoreText(text) {
             return (text.length > 40) ? text.substring(0, 39) + '...' : text;
         },
-        showDetail(e) {
+        showDetail(id) {
+            this.id = id
+            console.log(this.id)
             this.$nextTick(()=>{
-                this.id = parseInt(e.target.dataset.id || e.target.parentNode.dataset.id || e.target.parentNode.parentNode.dataset.id);
+                
             })
-            if (document.querySelector('#product')) document.querySelector('#product').classList.toggle('hide');
+            this.pageOpen = !this.pageOpen;
         }
     }
 }
