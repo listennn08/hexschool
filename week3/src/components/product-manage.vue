@@ -1,5 +1,5 @@
 <template lang="pug">
-    #item-manage
+    #item-manage.item-manage
         .nav
             .nav-title: h2 產品管理介面
         button.add(
@@ -61,7 +61,12 @@
                             button.del(@click="deleteProduct(index)")
                                 font-awesome-icon(:icon="['fas', 'trash-alt']")
                                 |刪除
-        productPage(:product="product" @newProduct="addProduct")
+        productPage(
+            :product="product" 
+            @newProduct="addProduct"
+            :class="{open: productPage.open}"
+            :productPage.sync="productPage.open"
+            )
 </template>
 <script>
 import productPage from './product-page.vue';
@@ -83,6 +88,9 @@ export default {
                 options: {
                     store: 0
                 }
+            },
+            productPage: {
+                open: false
             }
         };
     },
@@ -103,28 +111,6 @@ export default {
                     });
             });
     },
-    mounted() {
-        window.addEventListener('click', function (e) {
-            let c = e.target.dataset.action || e.target.parentNode.dataset.action;
-            switch (c) {
-                case 'add':
-                    break;
-                case 'update':
-                    break;
-                default:
-                    document
-                        .querySelector('#newDataPage')
-                        .classList
-                        .remove('open');
-                    break;
-            }
-        });
-        document
-            .querySelector('#newDataPage .container')
-            .addEventListener('click', function (e) {
-                e.stopPropagation();
-            });
-    },
     methods: {
         openPage(index) {
             if (index || index == 0) {
@@ -137,10 +123,7 @@ export default {
                     }
                 };
             }
-            document
-                .querySelector('#newDataPage')
-                .classList
-                .toggle('open');
+            this.productPage.open = !this.productPage.open;
         },
         addProduct(obj) {
             this.product = obj;
@@ -190,9 +173,8 @@ $lightgray: #F4F3EA
     padding: 0
     list-style: none
     box-sizing: border-box
-body
-    
-#item-manage
+
+.item-manage
     width: 95%
     margin: 0 2.5%
     position: relative
@@ -280,20 +262,11 @@ body
                     img
                         vertical-align: middle
                         width: 100%
-    #newDataPage
+    .newDataPage
         transform-origin: center
-        transition: 1s
+        transition: .5s
         transform: scale(0)
         &.open
             transform: scale(1)
-            animation: openPage .5s 1 ease-in-out forwards
-        &.hide
-            animation: openPage .5s 1 ease-in-out reverse forwards
-@keyframes openPage
-    from
-        background: rgba(0, 0, 0, 0)
-    99.9%
-        background: rgba(0, 0, 0, 0)
-    to
-        background: rgba(0, 0, 0, .4)
+            background: rgba(0, 0, 0, .4)
 </style>

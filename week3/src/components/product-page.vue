@@ -1,5 +1,5 @@
 <template lang="pug">
-    #newDataPage
+    #newDataPage.newDataPage(@click="togglePage")
         .container
             .row-100.row-title
                 .page-title
@@ -54,21 +54,21 @@
 export default {
     name: 'productPage',
     props: {
-        product: Object
+        product: Object,
+        productPage: Boolean,
     },
     methods: {
         emitProduct() {
             this.$emit('newProduct', this.product);
-            document
-                .querySelector('#newDataPage')
-                .classList
-                .remove('open');
+            this.$emit('update:productPage', !this.productPage);
         },
         cancel() {
-            document
-                .querySelector('#newDataPage')
-                .classList
-                .remove('open');
+            this.$emit('update:productPage', !this.productPage);
+        },
+        togglePage(e) {
+            if (e.target.className.includes('newDataPage')) {
+                this.$emit('update:productPage', !this.productPage);
+            }
         }
     }
 }
