@@ -273,7 +273,7 @@ body
                             color: $navyblue
                             background: $lightgray
                             padding: 2%
-                            i
+                            font-awesome-icon
                                 margin-right: 1%
                         .update
                             margin-right: 2%
