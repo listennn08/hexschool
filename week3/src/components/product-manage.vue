@@ -131,6 +131,7 @@ export default {
                 this.product = JSON.parse(JSON.stringify(this.products[index]));
             } else {
                 this.product = {
+                    imageUrl: [],
                     options: {
                         store: null
                     }
@@ -142,8 +143,7 @@ export default {
                 .toggle('open');
         },
         addProduct(obj) {
-            this.$set(this.product, obj);
-            console.log(this.product)
+            this.product = obj;
             if (this.product.id) {
                 this
                     .products
@@ -159,7 +159,7 @@ export default {
                     .push(this.product);
             }
             this.product = {
-                image: [],
+                imageUrl: [],
                 options: {
                     store: null
                 }
