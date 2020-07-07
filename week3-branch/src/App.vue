@@ -1,5 +1,5 @@
 <template lang="pug">
-    #psychological(@click="scrollBlock")
+    #psychological
         .vld-parent
             loading(:active.sync="loadingConfig.isLoading" 
             :can-cancel="false"
@@ -60,7 +60,6 @@
                 .btn
                     button(v-if="index != problemCategorys.length-1" @click="nextPage(index+1)") 下一頁
                     button(v-else @click="nextPage") 再測一次
-                    button(v-else @click="exit") 離開
 </template>
 
 <script>
@@ -114,22 +113,16 @@ export default {
         nextQuesion(quesionID, index) {
             if(document.querySelector(`[name="${quesionID}"]:checked`)) {
                 window.location.href = `#q${index+1}`;
-                this.hasChoice = true
+                this.hasChoice = true;
             } else {
-                this.hasChoice = false
+                this.hasChoice = false;
             }
-            
         },
         captureStr(str, delimiter='', direction='l') {
             let pivot = str.indexOf(delimiter);
             let start = (direction == 'r') ? pivot+1 : 0;
             let end = (direction == 'r') ? str.length : pivot;
             return (pivot > -1) ? str.substring(start, end) : str;
-        },
-        scrollBlock(e) {
-            e.target.addEventListener('scroll', function(event) {
-                event.preventDefault();
-            })
         },
         countResult() {
             this.resultCheck = [];
@@ -144,10 +137,9 @@ export default {
                         : this.findKey(this.degree, interval[Math.floor(interval.length / 2)]);
                 let checkObj = this.addCheckObject(intervalKey, scoreName);
                 this.resultCheck.push(checkObj);
-            })
+            });
             this.showResult = true;
             setTimeout(() => {this.nextPage(0);}, 200);
-            
         },
         findKey(o, v) {
             return Object.keys(o).find((k) => o[k] === v);
@@ -158,7 +150,7 @@ export default {
             return obj;
         },
         getCategoryTextZh(en) {
-            return this.traits.zh[this.traits.en.indexOf(en)]
+            return this.traits.zh[this.traits.en.indexOf(en)];
         },
         nextPage(i) {
             if (typeof i === 'number') {
@@ -166,10 +158,10 @@ export default {
             } else {
                 this._.forEach(this.problemCategorys, (item, index) => {
                     this.problemCategorys[index].score = [0, 0];
-                })
-                window.location.href='#start';
+                });
+                window.location.href = '#start';
             }
-        }, exit() {}
+        }
     }
 }
 </script>
