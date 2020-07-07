@@ -184,22 +184,6 @@ export default {
     $pinkred: #A98879
     $blue: #094F70
 
-    $pc-max: 1920px
-    $mac-max: 1440px
-    $pad-max: 1280px
-    $lpad-max: 960px
-    $phone-max: 768px
-    $sphone-max: 540px
-    $pc-min: calc($mac-max + 1px)
-    $mac-min: calc($pad-max + 1px)
-    $pad-min: calc($lpad-max + 1px)
-    $phone-min: calc($sphone-max + 1px)
-    
-    @mixin pc
-        @media 
-    @mixin mac
-        @media (max-width: 1440px)
-            @content
     * 
         margin: 0
         padding: 0
