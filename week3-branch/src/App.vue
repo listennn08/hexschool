@@ -352,4 +352,6 @@ export default {
             display: block
             text-align: center
             padding: 5% 1%
+        .highlight
+            border-radius: 15px
 </style>
