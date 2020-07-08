@@ -112,7 +112,6 @@ export default {
     },
     methods: {
         nextQuesion(quesionID, index) {
-            console.log(document.querySelector(`[name="${quesionID}"]:checked`));
             if (document.querySelector(`[name="${quesionID}"]:checked`)) {
                 window.location.href = `#q${index + 1}`;
                 this.hasChoice = true;
