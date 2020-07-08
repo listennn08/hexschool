@@ -1,34 +1,38 @@
 <template lang="pug">
     #psychological
         .vld-parent
-            loading(:active.sync="loadingConfig.isLoading" 
-            :can-cancel="false"
-            :opacity=1
-            :is-full-page="loadingConfig.fullPage")
+            loading(
+                :active.sync="loadingConfig.isLoading"
+                :can-cancel="false"
+                :opacity=1
+                :is-full-page="loadingConfig.fullPage"
+            )
         #start.start-page.fill-page
-            .title
-                .zh: h1 {{ title.zh }}
-                .en: h2 {{ title.en }}
-                p {{ description }}
+            h1.w-50.mt-auto {{ title.zh }}
+            h2.w-50 {{ title.en }}
+            p.w-50 {{ description }}
             .start-btn-block
                 a.start(href="#q1") 開始測驗
-        .fill-page.test-page(v-for="(problem, index) in problemList" :id="'q' + (index+1)" :key="index")
+        .fill-page.test-page(
+            v-for="(problem, index) in problemList"
+            :id="'q' + (index+1)"
+            :key="index"
+        )
             .number Q{{ index+1 }}
             .quesion: h1 {{ problem.problem }}
-            span.check(
-                v-for="(option) in problem.options" 
+            .check(
+                v-for="(option) in problem.options"
                 :key="option.id"
             )
                 input(
-                    type="radio" 
-                    :name="problem.id" 
+                    type="radio"
+                    :name="problem.id"
                     :value="option.fraction"
                     v-model="problemCategorys[Math.floor(index/2)].score[index%2]"
                 )
-                label {{ captureStr(option.description, "。") + "。" }}
+                label(:for="problem.id") {{ captureStr(option.description, "。") + "。" }}
                     small {{ "&nbsp;" + captureStr(option.description, "。", "r") }}
             .noChoiceMsg(:class="{hide: hasChoice}") 尚未選擇答案唷
-            //- a(:href="'#q' + (index+2)" v-if="index != 9") 下一題
             .btn
                 button(@click="nextQuesion(problem.id, index+1)" v-if="index != 9") 下一題
                 button(@click="countResult" v-else) 看結果
@@ -38,9 +42,8 @@
                 :key="category.category"
                 :id="category.category"
                 )
-                .category-title
-                    h1 {{ getCategoryTextZh(category.category) }}
-                    h2 {{ category.category }}
+                h1 {{ getCategoryTextZh(category.category) }}
+                h2 {{ category.category }}
                 .score {{ category.score.reduce((pre, cur) => pre + cur, 0) }}
                 .w-50
                     .detail {{ category.description.desc }}
@@ -61,30 +64,30 @@
                     button(v-if="index != problemCategorys.length-1" @click="nextPage(index+1)") 下一頁
                     button(v-else @click="nextPage") 再測一次
 </template>
-
 <script>
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+
 export default {
     name: 'psychological',
     components: {
-        Loading
+        Loading,
     },
     data() {
         return {
-                loadingConfig: {
-                    isLoading: false,
-                    fullPage: true
-                },
-                title: [],
-                description: '',
-                problemCategorys: [],
-                problemList: [],
-                degree: {},
-                traits: {},
-                hasChoice: true,
-                resultCheck: [],
-                showResult: false,
+            loadingConfig: {
+                isLoading: false,
+                fullPage: true,
+            },
+            title: [],
+            description: '',
+            problemCategorys: [],
+            problemList: [],
+            degree: {},
+            traits: {},
+            hasChoice: true,
+            resultCheck: [],
+            showResult: false,
         };
     },
     created() {
@@ -101,52 +104,58 @@ export default {
                         category: index,
                         description: item.description,
                         score: [0, 0],
-                    })
+                    });
                     item.problems.forEach((q) => this.problemList.push(q));
                 });
-            })
-            .then(()=> {
                 this.loadingConfig.isLoading = false;
             });
     },
     methods: {
         nextQuesion(quesionID, index) {
-            if(document.querySelector(`[name="${quesionID}"]:checked`)) {
-                window.location.href = `#q${index+1}`;
+            console.log(document.querySelector(`[name="${quesionID}"]:checked`));
+            if (document.querySelector(`[name="${quesionID}"]:checked`)) {
+                window.location.href = `#q${index + 1}`;
                 this.hasChoice = true;
             } else {
                 this.hasChoice = false;
             }
         },
-        captureStr(str, delimiter='', direction='l') {
-            let pivot = str.indexOf(delimiter);
-            let start = (direction == 'r') ? pivot+1 : 0;
-            let end = (direction == 'r') ? str.length : pivot;
+        captureStr(str, delimiter = '', direction = 'l') {
+            const pivot = str.indexOf(delimiter);
+            const start = (direction === 'r') ? pivot + 1 : 0;
+            const end = (direction === 'r') ? str.length : pivot;
             return (pivot > -1) ? str.substring(start, end) : str;
         },
         countResult() {
             this.resultCheck = [];
-            let intervalKey = Object.keys(this.degree);
-            let interval = Object.values(this.degree);
+            const intervalKey = Object.keys(this.degree);
+            const interval = Object.values(this.degree);
             this._.forEach(this.problemCategorys, (item) => {
-                let total = item.score.reduce((pre, cur) => pre + cur, 0);
-                let scoreName = (total >= Math.max(...interval))
+                const total = item.score.reduce((pre, cur) => pre + cur, 0);
+                const minExpression = (total <= Math.min(...interval))
+                    ? this.findKey(this.degree, Math.min(...interval))
+                    : this.findKey(this.degree, interval[Math.floor(interval.length / 2)]);
+                const scoreName = (total >= Math.max(...interval))
                     ? this.findKey(this.degree, Math.max(...interval))
-                    : (total <= Math.min(...interval))
-                        ? this.findKey(this.degree, Math.min(...interval))
-                        : this.findKey(this.degree, interval[Math.floor(interval.length / 2)]);
-                let checkObj = this.addCheckObject(intervalKey, scoreName);
+                    : minExpression;
+                const checkObj = this.addCheckObject(intervalKey, scoreName);
                 this.resultCheck.push(checkObj);
             });
             this.showResult = true;
-            setTimeout(() => {this.nextPage(0);}, 200);
+            setTimeout(() => { this.nextPage(0); }, 200);
         },
         findKey(o, v) {
             return Object.keys(o).find((k) => o[k] === v);
         },
         addCheckObject(keys, checked) {
-            let obj = {};
-            keys.forEach((key) => (key ===  checked) ? obj[key] = true : obj[key] = false);
+            const obj = {};
+            keys.forEach((key) => {
+                if (key === checked) {
+                    obj[key] = true;
+                } else {
+                    obj[key] = false;
+                }
+            });
             return obj;
         },
         getCategoryTextZh(en) {
@@ -161,9 +170,9 @@ export default {
                 });
                 window.location.href = '#start';
             }
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <style lang="sass">
@@ -176,7 +185,7 @@ export default {
     $pinkred: #A98879
     $blue: #094F70
 
-    * 
+    *
         margin: 0
         padding: 0
         list-style: none
@@ -191,11 +200,12 @@ export default {
         justify-content: center
         align-items: flex-start
     .test-page, .result-page
+        position: relative
         &:nth-of-type(even)
             background: #345966
             .number, button
                 background: rgba(#BD8035, .8)
-            .quesion, p, .check,.category-title, .description, .detail
+            .quesion, p, .check, h1, h2, .description, .detail
                 color: #eee
             .check
                 label
@@ -210,7 +220,7 @@ export default {
             background: linear-gradient(-45deg, $pinko, $yellow)
             .number, button
                 background: rgba($blue, .8)
-            .quesion, p, .check,.category-title, .description, .detail
+            .quesion, p, .check, h1, h2, .description, .detail
                 color: #333
             .check
                 label
@@ -239,7 +249,7 @@ export default {
             text-align: center
         .check
             display: inline-block
-            width: 15%   
+            width: 15%
             align-self: flex-start
             label
                 small
@@ -248,14 +258,21 @@ export default {
             input
                 margin-right: 1%
         .noChoiceMsg
-            display: block
-            width: 100% 
+            width: 100%
+            height: 1%
             text-align: center
             padding: 1%
-            color: rgba(#50dd50, .8)
+            color: rgba(red, .8)
             text-shadow: black 0.1em 0.1em 0.2em
+            position: absolute
+            top: 60%
+            bottom: 0
+            left: -1%
+            right: 0
+            opacity: 1
+            transition: opacity .2s
             &.hide
-                display: none
+                opacity: 0
         a
             text-decoration: none
         .btn
@@ -272,20 +289,20 @@ export default {
                 color: #eee
     .start-page
         background: linear-gradient(-45deg, $pinko, $yellow)
-
-    .title         
-        width: 80%
+        flex-direction: column
+        align-items: flex-start
+    .w-50
+        width: 50%
         color: #222
-        align-self: center
-        margin-top: auto 
-        .zh, p
-            font-family: 'Noto Sans TC', sans-serif
-        .en
-            font-family: 'Raleway', sans-serif
-        p
-            width: 90%
-            margin-top: 1%
-            font-weight: 500
+        margin-left: auto
+        margin-right: auto
+    h1
+        font-family: 'Noto Sans TC', sans-serif
+    h2
+        font-family: 'Raleway', sans-serif
+    p
+        margin-top: 1%
+        font-weight: 500
     @keyframes startButton
         0%, 100%
             transform: scale(1)
@@ -294,9 +311,8 @@ export default {
     .start-btn-block
         width: 100%
         display: flex
-        align-self: space-around
         justify-content: center
-        .start 
+        .start
             width: 5%
             margin-top: 2%
             padding: 1%
@@ -320,15 +336,15 @@ export default {
                 right: 50%
                 left: 50%
                 transition: .5s
-            &:hover::after 
+            &:hover::after
                     right: 20%
                     left: 20%
     .result-page
         align-items: center
-        .category-title, .score
+        h1, h2, .score
             width: 100%
             text-align: center
-        .category-title
+        h1
             margin-top: auto
         .score
             font-family: 'Raleway', sans-serif
@@ -341,7 +357,8 @@ export default {
             // margin: 0 25%
         .w-30
             width: 30%
-            padding: 1.5%
+            padding: 2%
+            box-sizing: border-box
         .detail
             margin-top: auto
         .description-title
