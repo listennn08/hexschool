@@ -3,40 +3,40 @@
         .container
             .row-100.row-title
                 .page-title
-                    span: h3 {{ !product.id ? '新增' : '更新'}}商品
+                    span: h3 {{ !tempProduct.id ? '新增' : '更新'}}商品
             .row
                 label(for='title') 名稱
-                input#title.required(type="text" v-model="product.title")
+                input#title.required(type="text" v-model="tempProduct.title")
             .row
                 label(for='category') 分類
-                input#category(type='text' v-model="product.category")
+                input#category(type='text' v-model="tempProduct.category")
             .row
                 label(for='content') 商品敘述
-                textarea#content(cols="25" rows="5" v-model="product.content")
+                textarea#content(cols="25" rows="5" v-model="tempProduct.content")
             .row
                 label(for='description') 商品說明
-                textarea#description(cols="25" rows="5" v-model="product.description")
+                textarea#description(cols="25" rows="5" v-model="tempProduct.description")
             .row
                 label(for='origin_price') 原價
-                input#origin_price(type='number' v-model="product.origin_price")
+                input#origin_price(type='number' v-model="tempProduct.origin_price")
             .row
                 label(for='price') 售價
-                input#price(type='number' v-model="product.price")
+                input#price(type='number' v-model="tempProduct.price")
             .row
                 label(for='imageUrl') 輸入圖片網址
-                input#imageUrl(type='text' v-model="product.imageUrl")
+                input#imageUrl(type='text' v-model="tempProduct.imageUrl")
                 .img
                     img#preview(:src='product.imageUrl' alt='')
             .row
                 label(for='price') 庫存
-                input#price(type='number' v-model="product.options.store" placeholder="0")
+                input#price(type='number' v-model="tempProduct.options.store" placeholder="0")
                 label(for='unit') 單位
-                input#price(type='text' v-model="product.unit")
-                input#enabled(type='checkbox' v-model="product.enabled")
+                input#price(type='text' v-model="tempProduct.unit")
+                input#enabled(type='checkbox' v-model="tempProduct.enabled")
                 label(for='enabled') 是否啟用
             .row-100
                 button#create(
-                    v-if="!product.id"
+                    v-if="!tempProduct.id"
                     data-action="create"
                     type="button"
                     @click="emitProduct"
@@ -57,28 +57,43 @@ export default {
         product: Object,
         productPage: Boolean,
     },
+    data() {
+        return {
+            tempProduct: {},
+        };
+    },
+    watch: {
+        product() {
+            this.tempProduct = {
+                ...this.product,
+                options: {
+                    store: this.product.options ? this.product.options.store : 0,
+                },
+            };
+        },
+    },
     methods: {
         emitProduct() {
             this.$emit('newProduct', this.product);
             this.$emit('update:productPage', !this.productPage);
         },
         cancel() {
-            setTimeout(() => { this.$emit('update:productPage', !this.productPage); }, 1000)
+            this.$emit('update:productPage', !this.productPage);
         },
         togglePage(e) {
             if (e.target.className.includes('newDataPage')) {
                 this.$emit('update:productPage', !this.productPage);
             }
-        }
-    }
-}
+        },
+    },
+};
 </script>
 <style lang="sass" scoped>
     @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500;700;900&family=Raleway:wght@500;700&display=swap)
 
     $navyblue: #333D51
     $hnavyblue: #242b39
-    $goldyellow: #D3AC2B 
+    $goldyellow: #D3AC2B
     $darkgray: #CBD0D8
     $darkgrayn: #46505e
     $lightgray: #F4F3EA
@@ -118,8 +133,6 @@ export default {
                     span
                         display: inline-block
                         padding: 0 2px
-                        
-                        // background: linear-gradient(180deg, transparent 15px,rgba(51, 61, 81, .6))
                         h3
                             font-family: 'Noto Sans TC', sans-serif
                             font-weight: 700
@@ -143,6 +156,7 @@ export default {
                 font-family: 'Noto Sans TC', sans-serif
                 font-weight: 700
                 color: $navyblue
+                text-align: left
                 &:not(:last-of-type)
                     display: block
             input:not([type=checkbox]), textarea
