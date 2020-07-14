@@ -55,6 +55,7 @@
                         |刪除
         //- template(v-if="productPage.open")
         productPage(
+            :pid="pid"
             :product="product"
             @newProduct="addProduct"
             :class="{open: productPage.open}"
@@ -82,11 +83,8 @@ export default {
                 isLoading: false,
                 fullPage: true,
             },
-            api: {
-                uuid: 'dd62b88f-6f23-42a4-8551-b1cb4552bb3e',
-                getAllData: '/ec/products',
-            },
             products: [],
+            pid: null,
             product: {
                 imageUrl: [],
                 options: {
@@ -106,27 +104,34 @@ export default {
             .then((resp) => {
                 this.products = resp.data.data;
                 this.pagination = resp.data.meta.pagination;
+            })
+            .then(() => {
+                this.products = this.products.map((el) => {
+                    this.getBackendDataDetail(el.id)
+                        .then((r) => {
+                            el.description = r.data.data.description;
+                        });
+                    return el;
+                });
                 loader.hide();
             });
     },
     methods: {
         openPage(index) {
             if (index || index === 0) {
+                this.pid = this.products[index].id;
                 this.product = JSON.parse(JSON.stringify(this.products[index]));
-                console.log(this.product);
-            } else {
-                this.product = {
-                    imageUrl: [],
-                    options: {
-                        store: null,
-                    },
+                this.product.options = {
+                    store: 0,
                 };
             }
             this.productPage.open = !this.productPage.open;
         },
         addProduct(obj) {
             this.product = obj;
-            if (this.product.id) {
+            const { id } = this.product;
+            const edit = this.products.some((el) => el.id === id);
+            if (edit) {
                 this
                     .products
                     .forEach((item, i) => {
@@ -135,7 +140,6 @@ export default {
                         }
                     });
             } else {
-                this.product.id = new Date().getTime();
                 this
                     .products
                     .push(this.product);

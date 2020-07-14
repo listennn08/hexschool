@@ -1,7 +1,14 @@
-import { get } from '../cookies';
+import * as docCookies from '../cookies';
 
 export default {
     name: 'http',
+    data() {
+        return {
+            api: {
+                uuid: docCookies.getItem('uuid'),
+            },
+        };
+    },
     methods: {
         get(url, auth = false) {
             if (auth) {
@@ -9,7 +16,7 @@ export default {
                     .$http
                     .get(url, {
                         headers: {
-                            Authorization: getItem('token'),
+                            Authorization: `Bearer ${docCookies.getItem('token')}`,
                         },
                     });
             }
@@ -23,7 +30,7 @@ export default {
                     .$http
                     .post(url, data, {
                         headers: {
-                            Authorization: getItem('token'),
+                            Authorization: `Bearer ${docCookies.getItem('token')}`,
                         },
                     });
             }
@@ -32,11 +39,12 @@ export default {
                 .post(url, data);
         },
         patch(url, data = {}, auth = false) {
+            console.log(`${url}\n`, data, auth);
             if (auth) {
                 return this
                     .patch(url, data, {
                         headers: {
-                            Authorization: getItem('token'),
+                            Authorization: `Bearer ${docCookies.getItem('token')}`,
                         },
                     });
             }
@@ -46,9 +54,9 @@ export default {
         del(url, auth = false) {
             if (auth) {
                 return this
-                    .patch(url, {
+                    .delete(url, {
                         headers: {
-                            Authorization: docCookies.getItem('token'),
+                            Authorization: `Bearer ${docCookies.getItem('token')}`,
                         },
                     });
             }

@@ -5,19 +5,26 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        msg: '',
+        msg: {
+            text: '',
+            type: false,
+        },
     },
     mutations: {
-        setMsg(state, msg) {
-            state.msg = msg;
+        setMsg(state, { msg, type }) {
+            state.msg.text = msg;
+            state.msg.type = type;
         },
         clearMsg(state) {
-            state.msg = '';
+            state.msg.text = '';
         },
     },
     actions: {
-        loginMsg({ commit }, msg) {
-            commit('setMsg', msg);
+        loginMsg({ commit }, { msg, type }) {
+            commit('setMsg', {
+                msg,
+                type,
+            });
         },
         clearMsg({ commit }) {
             commit('clearMsg');

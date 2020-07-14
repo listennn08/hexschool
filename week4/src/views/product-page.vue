@@ -3,7 +3,7 @@
         .container
             .row-100.row-title
                 .page-title
-                    span: h3 {{ !tempProduct.id ? '新增' : '更新'}}商品
+                    span: h3 {{ !productId.id ? '新增' : '更新'}}商品
             .row
                 label(for='title') 名稱
                 input#title.required(type="text" v-model="tempProduct.title")
@@ -39,42 +39,69 @@
                     v-if="!tempProduct.id"
                     data-action="create"
                     type="button"
-                    @click="emitProduct"
+                    @click.prevent="emitProduct"
                     ) 新增
                 button#update(
                     v-else
                     data-action="update"
                     type="button"
-                    @click="emitProduct") 更新
+                    @click.prevent="emitProduct") 更新
                 button#cancel(
                     @click="cancel"
                     type="button") 取消
 </template>
 <script>
+import utils from '../apis/utils';
+
 export default {
     name: 'productPage',
+    mixins: [utils],
     props: {
+        pid: String,
         product: Object,
         productPage: Boolean,
     },
     data() {
         return {
-            tempProduct: {},
+            tempProduct: {
+                imageUrl: [],
+                options: {
+                    store: 0,
+                },
+            },
         };
     },
-    watch: {
-        product() {
-            this.tempProduct = {
-                ...this.product,
-                options: {
-                    store: this.product.options ? this.product.options.store : 0,
-                },
-            };
-        },
+    created() {
+        // this.tempProduct = this.product;
+        // console.log(this.tempProduct);
+    },
+    mounted() {
+        this
+            .getBackendDataDetail(this.pid)
+            .then((resp) => {
+                this.tempProduct = resp.data.data;
+            });
     },
     methods: {
-        emitProduct() {
-            this.$emit('newProduct', this.product);
+        emitProduct(e) {
+            // this.$emit('newProduct', this.product);
+            const { action } = e.target.dataset;
+            if (action === 'create') {
+                this.tempProduct.options = JSON.stringify(this.tempProduct.options);
+                this
+                    .createData(this.tempProduct)
+                    .then((resp) => {
+                        this.$emit('newProduct', resp.data.data);
+                    });
+            } else if (action === 'update') {
+                this.tempProduct.options = JSON.stringify(this.tempProduct.options);
+                console.log(this.tempProduct);
+                this
+                    .updateData(this.tempProduct.id, this.tempProduct)
+                    .then((resp) => {
+                        this.$emit('newProduct', resp.data.data);
+                    });
+            }
             this.$emit('update:productPage', !this.productPage);
         },
         cancel() {

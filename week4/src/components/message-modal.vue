@@ -1,8 +1,8 @@
 <template lang="pug">
-    .banner(:class="{show: msg}")
-        .message
+    .banner(:class="{show: msg.text}")
+        .message(:class="msg.type ? 'green' : 'red'")
             font-awesome-icon(:icon="['fas', 'exclamation-circle']")
-            | {{ msg }}
+            | {{ msg.text }}
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -44,5 +44,8 @@ $lightgray: #F4F3EA
         border: 1px solid rgba($navyblue, .8)
         box-shadow: 5px 5px 10px rgba($navyblue, .8)
         background: #fff
-        color: rgba(red, .8)
+        &.red
+            color: rgba(red, .8)
+        &.green
+            color: rgba(green, .8)
 </style>

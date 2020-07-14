@@ -40,15 +40,15 @@ export default {
                 .then((resp) => {
                     document.cookie = `uuid=${resp.data.uuid}; expires=${new Date(resp.data.expire * 1000)}; path=/`;
                     document.cookie = `token=${resp.data.token}; expires=${new Date(resp.data.expire * 1000)}; path=/`;
-                    this.loginMsg('登入成功！');
+                    this.loginMsg({ msg: '登入成功！', type: true });
                     setTimeout(() => {
                         this.clearMsg();
                         window.location = 'product-manage';
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch(() => {
-                    this.loginMsg('登入失敗！');
-                    setTimeout(() => this.clearMsg(), 3000);
+                    this.loginMsg({ msg: '登入失敗！', type: false });
+                    setTimeout(() => this.clearMsg(), 1000);
                 });
         },
     },
