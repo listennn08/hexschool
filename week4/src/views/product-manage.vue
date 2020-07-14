@@ -67,9 +67,11 @@
 <script>
 import productPage from './product-page.vue';
 import pagination from '../components/pagination.vue';
+import utils from '../apis/utils';
 
 export default {
     name: 'product-manage',
+    mixins: [utils],
     components: {
         productPage,
         pagination,
@@ -100,8 +102,7 @@ export default {
     created() {
         const loader = this.$loading.show();
         this
-            .$http
-            .get(`${this.api.uuid}${this.api.getAllData}`)
+            .getBackendAllData()
             .then((resp) => {
                 this.products = resp.data.data;
                 this.pagination = resp.data.meta.pagination;

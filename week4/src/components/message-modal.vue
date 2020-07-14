@@ -1,12 +1,20 @@
 <template lang="pug">
-    .banner
+    .banner(:class="{show: msg}")
         .message
             font-awesome-icon(:icon="['fas', 'exclamation-circle']")
             | {{ msg }}
 </template>
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
-    props: ['msg'],
+    name: 'message',
+    computed: mapState({
+        msg: (state) => state.msg,
+    }),
+    methods: {
+        ...mapActions,
+    },
 };
 </script>
 <style lang="sass" scoped>

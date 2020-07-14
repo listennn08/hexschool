@@ -1,59 +1,59 @@
-import { docCookies } from '../cookies';
+import { get } from '../cookies';
 
 export default {
-    get(url, auth = false) {
-        if (auth) {
+    name: 'http',
+    methods: {
+        get(url, auth = false) {
+            if (auth) {
+                return this
+                    .$http
+                    .get(url, {
+                        headers: {
+                            Authorization: getItem('token'),
+                        },
+                    });
+            }
             return this
                 .$http
-                .get(url, {
-                    headers: {
-                        Authorization: docCookies.getItem('token'),
-                    },
-                });
-        }
-        return this
-            .$http
-            .get(url);
-    },
-
-    post(url, data, auth = false) {
-        if (auth) {
+                .get(url);
+        },
+        post(url, data = {}, auth = false) {
+            if (auth) {
+                return this
+                    .$http
+                    .post(url, data, {
+                        headers: {
+                            Authorization: getItem('token'),
+                        },
+                    });
+            }
             return this
                 .$http
-                .post(url, data, {
-                    headers: {
-                        Authorization: docCookies.getItem('token'),
-                    },
-                });
-        }
-        return this
-            .$http
-            .post(url, data);
-    },
-
-    path(url, data, auth = false) {
-        if (auth) {
+                .post(url, data);
+        },
+        patch(url, data = {}, auth = false) {
+            if (auth) {
+                return this
+                    .patch(url, data, {
+                        headers: {
+                            Authorization: getItem('token'),
+                        },
+                    });
+            }
             return this
-                .patch(url, data, {
-                    headers: {
-                        Authorization: docCookies.getItem('token'),
-                    },
-                });
-        }
-        return this
-            .patch(url, data);
-    },
-
-    del(url, auth = false) {
-        if (auth) {
+                .patch(url, data);
+        },
+        del(url, auth = false) {
+            if (auth) {
+                return this
+                    .patch(url, {
+                        headers: {
+                            Authorization: docCookies.getItem('token'),
+                        },
+                    });
+            }
             return this
-                .patch(url, {
-                    headers: {
-                        Authorization: docCookies.getItem('token'),
-                    },
-                });
-        }
-        return this
-            .delete(url);
+                .delete(url);
+        },
     },
 };

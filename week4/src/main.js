@@ -13,10 +13,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 axios.defaults.baseURL = 'https://course-ec-api.hexschool.io/api/';
 
 library.add(faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit);
+
 Vue.use(VueAxios, axios);
 Vue.use(VueConfirmDialog);
 Vue.use(Loading, {
@@ -31,9 +33,11 @@ Vue.use(Loading, {
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default);
+
 Vue.config.productionTip = false;
 
 new Vue({
     router,
+    store,
     render: (h) => h(App),
 }).$mount('#app');

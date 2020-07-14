@@ -7,26 +7,24 @@
             input#pwd(type="password" @keyup.enter="loginFn" required)
             .btn-block
                 button.login-btn(type="button" @click="loginFn") 登入
-        msg(:class="{show:msg != ''}" :msg.sync="msg")
 </template>
 <script>
+import { mapActions } from 'vuex';
 import msg from '../components/message-modal.vue';
-import { Login } from '../apis/utils.js';
+import utils from '../apis/utils';
 
 export default {
+    mixins: [utils],
     components: {
         msg,
     },
     data() {
         return {
-            api: {
-                base: 'https://course-ec-api.hexschool.io/api/',
-                login: 'auth/login',
-            },
             msg: '',
         };
     },
     methods: {
+        ...mapActions(['loginMsg', 'clearMsg']),
         loginFn() {
             const email = document.querySelector('#email').value;
             const password = document.querySelector('#pwd').value;
@@ -38,25 +36,19 @@ export default {
                 document.querySelector('#pwd').reportValidity();
                 return;
             }
-            // this.$http
-            //     .post(`${this.api.base}${this.api.login}`, {
-            //         email,
-            //         password,
-            //     })
-            Login({email, password})
+            this.Login({ email, password })
                 .then((resp) => {
                     document.cookie = `uuid=${resp.data.uuid}; expires=${new Date(resp.data.expire * 1000)}; path=/`;
                     document.cookie = `token=${resp.data.token}; expires=${new Date(resp.data.expire * 1000)}; path=/`;
-                    this.api.uuid = resp.data.uuid;
-                    this.api.token = resp.data.token;
-                    this.$http.defaults.headers.Authorization = `Bearer ${resp.data.token}`;
-                    this.msg = '登入成功！';
-                    setTimeout(() => { this.msg = ''; }, 3000);
-                    window.location = 'product-manage';
+                    this.loginMsg('登入成功！');
+                    setTimeout(() => {
+                        this.clearMsg();
+                        window.location = 'product-manage';
+                    }, 2000);
                 })
                 .catch(() => {
-                    this.msg = '登入失敗！';
-                    setTimeout(() => { this.msg = ''; }, 3000);
+                    this.loginMsg('登入失敗！');
+                    setTimeout(() => this.clearMsg(), 3000);
                 });
         },
     },
@@ -75,10 +67,10 @@ export default {
         margin: 0
         padding: 0
         list-style: none
-    body
-        overflow: hidden
+
     .wrap
-        width: 1440px
+        width: 100%
+        max-width: 1440px
         height: 100%
         padding: 5%
         font-family: 'Noto Sans TC', sans-serif
