@@ -32,13 +32,14 @@ export default new Vuex.Store({
         productPage: {
             open: false,
         },
-
+        loading: true,
     },
     getters: {
         pid: (state) => state.tempProduct.id,
         product: (state) => state.tempProduct,
         products: (state) => state.products,
         productPage: (state) => state.productPage,
+        loading: (state) => state.loading,
     },
     mutations: {
         SET_MSG(state, { msg, type }) {
@@ -86,6 +87,9 @@ export default new Vuex.Store({
         TOGGLE_PAGE(state) {
             Vue.set(state.productPage, 'open', !state.productPage.open);
         },
+        IS_LOADING(state, is) {
+            state.loading = is;
+        },
     },
     actions: {
         setMsg({ commit }, { msg, type }) {
@@ -120,6 +124,9 @@ export default new Vuex.Store({
         },
         togglePage({ commit }) {
             commit('TOGGLE_PAGE');
+        },
+        isLoading({ commit }) {
+            commit('IS_LOADING');
         },
     },
     modules: {},
