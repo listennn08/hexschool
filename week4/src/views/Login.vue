@@ -30,7 +30,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(['loginMsg', 'clearMsg']),
+        ...mapActions(['setMsg', 'clearMsg']),
         loginFn() {
             const email = document.querySelector('#email').value;
             const password = document.querySelector('#pwd').value;
