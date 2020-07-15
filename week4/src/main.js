@@ -5,7 +5,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit,
+    faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit, faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -13,7 +13,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-library.add(faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit);
+library.add(faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit, faSpinner);
 
 Vue.use(VueConfirmDialog);
 Vue.use(Loading, {

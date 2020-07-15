@@ -1,6 +1,8 @@
 <template lang="pug">
     #newDataPage.newDataPage(@click="toggle" )
-        .container(style="position:relative" ref="productPage")
+        .container(ref="productPage")
+            .loading(:class="{show: loading}")
+                font-awesome-icon.fa-3x.fa-spin(:icon="['fa', 'spinner']")
             .row-100.row-title
                 .page-title
                     span: h3 {{ !pid ? '新增' : '更新'}}商品
@@ -71,7 +73,7 @@ export default {
             },
         };
     },
-    computed: mapGetters(['pid', 'product', 'productPage']),
+    computed: mapGetters(['pid', 'product', 'productPage', 'loading']),
     watch: {
         'productPage.open': {
             handler() {
@@ -80,20 +82,11 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['setMsg', 'clearMsg', 'addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct', 'togglePage']),
+        ...mapActions([
+            'setMsg', 'clearMsg', 'addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct', 'togglePage', 'isLoading',
+        ]),
         loadProduct() {
-            const pageLoader = this.$loading.show({
-                container: this.$refs.productPage,
-                loader: 'bars',
-                color: 'blue',
-                width: 64,
-                height: 64,
-                backgroundColor: '#ffffff',
-                opacity: 1,
-                zIndex: 1000,
-                isFullPage: false,
-                canCancel: true,
-            });
+            this.isLoading(true);
             if (this.pid) {
                 getBackendDataDetail(this.pid)
                     .then((resp) => {
@@ -105,11 +98,11 @@ export default {
                         } else {
                             this.tempProduct.options = JSON.parse(this.tempProduct.options);
                         }
+                        this.isLoading(false);
                     });
             } else {
                 this.tempProduct = this.product;
             }
-            pageLoader.hide();
         },
         edit(e) {
             const { action } = e.target.dataset;
@@ -187,7 +180,7 @@ export default {
         list-style: none
         box-sizing: border-box
     #newDataPage
-        z-index: 555
+        z-index: 222
         position: fixed
         top: 0
         left: 0
@@ -197,6 +190,7 @@ export default {
         align-items: center
         justify-content: center
         .container
+            position: relative
             width: 100%
             display: flex
             flex-wrap: wrap
@@ -205,6 +199,14 @@ export default {
             width: 800px
             margin: 10px 20px
             padding: 0
+            .loading
+                position: absolute
+                top: 50%
+                right: 50%
+                opacity: 0
+                transition: 1s
+                &.show
+                    opacity: 1
             .row-100
                 width: 100%
                 padding: 1%
