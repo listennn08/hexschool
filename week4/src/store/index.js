@@ -52,7 +52,6 @@ export default new Vuex.Store({
             state.products = [...data];
         },
         ADD_PRODUCTS(state, data) {
-            console.log(data);
             Vue.set(state.products, state.products.length, { ...data });
         },
         EDIT_PRODUCT(state, { id, data }) {
