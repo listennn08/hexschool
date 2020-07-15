@@ -15,7 +15,7 @@ export default new Vuex.Store({
             type: false,
         },
         products: [],
-        product: {
+        tempProduct: {
             id: null,
             title: null,
             category: null,
@@ -29,9 +29,16 @@ export default new Vuex.Store({
                 store: null,
             },
         },
+        productPage: {
+            open: false,
+        },
+
     },
     getters: {
+        pid: (state) => state.tempProduct.id,
+        product: (state) => state.tempProduct,
         products: (state) => state.products,
+        productPage: (state) => state.productPage,
     },
     mutations: {
         SET_MSG(state, { msg, type }) {
@@ -45,7 +52,8 @@ export default new Vuex.Store({
             state.products = [...data];
         },
         ADD_PRODUCTS(state, data) {
-            Vue.set(state.products, state.products.length, data);
+            console.log(data);
+            Vue.set(state.products, state.products.length, { ...data });
         },
         EDIT_PRODUCT(state, { id, data }) {
             state.products.forEach((prod, index) => {
@@ -58,10 +66,10 @@ export default new Vuex.Store({
             state.products.splice(index, 1);
         },
         SET_TEMP_PRODUCT(state, data) {
-            state.product = { ...data };
+            state.tempProduct = { ...data };
         },
         CLEAR_TEMP_PRODUCT(state) {
-            state.product = {
+            Vue.set(state, 'tempProduct', {
                 id: null,
                 title: null,
                 category: null,
@@ -74,11 +82,14 @@ export default new Vuex.Store({
                 options: {
                     store: null,
                 },
-            };
+            });
+        },
+        TOGGLE_PAGE(state) {
+            Vue.set(state.productPage, 'open', !state.productPage.open);
         },
     },
     actions: {
-        loginMsg({ commit }, { msg, type }) {
+        setMsg({ commit }, { msg, type }) {
             commit('SET_MSG', {
                 msg,
                 type,
@@ -107,6 +118,9 @@ export default new Vuex.Store({
         },
         clearTempProduct({ commit }) {
             commit('CLEAR_TEMP_PRODUCT');
+        },
+        togglePage({ commit }) {
+            commit('TOGGLE_PAGE');
         },
     },
     modules: {},

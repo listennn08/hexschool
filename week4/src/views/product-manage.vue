@@ -9,6 +9,7 @@
             font-awesome-icon(:icon="['fas', 'plus']")
             |新增
         button.add.circle(
+            title="新增商品"
             data-action="add"
             @click="openPage()"
             :class="{show: addShow}"
@@ -48,7 +49,7 @@
                         :icon="item.enabled ? ['fas', 'check'] : ['fas', 'times']")
                 td.col {{ item.origin_price }}
                 td.col {{ item.price }}
-                td.col {{ item.options.store ? item.options.store : 0 }}
+                td.col {{ item.options ? item.options.store : 0 }}
                 td.col
                     button.update(
                         data-action="update"
@@ -61,7 +62,6 @@
                         |刪除
         productPage(
             :class="{open: productPage.open}"
-            :productPage.sync="productPage.open"
             )
         template(v-if="pagination.current_page")
             pagination(:pagination="pagination")
@@ -84,9 +84,6 @@ export default {
             loadingConfig: {
                 isLoading: false,
                 fullPage: true,
-            },
-            productPage: {
-                open: false,
             },
             pagination: {},
             windowTop: null,
@@ -116,7 +113,7 @@ export default {
         window.addEventListener('scroll', this.onScroll);
     },
     computed: {
-        ...mapGetters(['products']),
+        ...mapGetters(['products', 'productPage']),
     },
     watch: {
         'pagination.current_page': {
@@ -142,14 +139,14 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['setProducts', 'delProduct', 'setTempProduct', 'clearTempProduct']),
+        ...mapActions(['setProducts', 'delProduct', 'setTempProduct', 'clearTempProduct', 'togglePage']),
         openPage(index) {
             if (index || index === 0) {
                 this.setTempProduct(this.products[index]);
             } else {
                 this.clearTempProduct();
             }
-            this.productPage.open = !this.productPage.open;
+            this.togglePage();
         },
         deleteProduct(index) {
             this.$confirm({
@@ -235,7 +232,7 @@ $lightgray: #F4F3EA
         &.circle
             position: fixed
             box-shadow: 2px 2px 5px $navyblue
-            width: 2%
+            width: 36px
             border-radius: 50%
             bottom: 2%
             right: 2%

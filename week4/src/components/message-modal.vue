@@ -36,8 +36,9 @@ $lightgray: #F4F3EA
     right: 0
     transition: .5s
     transform: translateX(101%)
+    z-index: 888
     &.show
-        transform: translateX(95%)
+        transform: translateX(90%)
     .message
         width: 10%
         padding: 1%

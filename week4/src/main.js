@@ -17,11 +17,11 @@ library.add(faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit);
 
 Vue.use(VueConfirmDialog);
 Vue.use(Loading, {
-    color: 'blue',
-    loader: 'spinner',
+    color: '#D3AC2B',
+    loader: 'dots',
     width: 64,
     height: 64,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#888888',
     opacity: 0.8,
     zIndex: 999,
     isFullPage: true,

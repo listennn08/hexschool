@@ -1,5 +1,5 @@
 <template lang="pug">
-    #newDataPage.newDataPage(@click="togglePage" )
+    #newDataPage.newDataPage(@click="toggle" )
         .container(style="position:relative" ref="productPage")
             .row-100.row-title
                 .page-title
@@ -56,14 +56,11 @@
                     type="button") 取消
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { getBackendDataDetail, createData, updateData } from '../apis/utils';
 
 export default {
     name: 'productPage',
-    props: {
-        productPage: Boolean,
-    },
     data() {
         return {
             tempProduct: {
@@ -74,31 +71,28 @@ export default {
             },
         };
     },
-    computed: mapState({
-        pid: (state) => state.product.id,
-        product: (state) => state.product,
-    }),
+    computed: mapGetters(['pid', 'product', 'productPage']),
     watch: {
-        pid: {
+        'productPage.open': {
             handler() {
                 this.loadProduct();
             },
         },
     },
     methods: {
-        ...mapActions(['addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct']),
+        ...mapActions(['setMsg', 'clearMsg', 'addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct', 'togglePage']),
         loadProduct() {
-            const loader = this.$loading.show({
-                container: 'productPage',
-                loader: 'spinner',
+            const pageLoader = this.$loading.show({
+                container: this.$refs.productPage,
+                loader: 'bars',
                 color: 'blue',
                 width: 64,
                 height: 64,
                 backgroundColor: '#ffffff',
-                opacity: 0.8,
-                zIndex: 999,
-                isFullPage: 'false',
-                onCancel: 'true',
+                opacity: 1,
+                zIndex: 1000,
+                isFullPage: false,
+                canCancel: true,
             });
             if (this.pid) {
                 getBackendDataDetail(this.pid)
@@ -115,23 +109,29 @@ export default {
             } else {
                 this.tempProduct = this.product;
             }
-            loader.hide();
+            pageLoader.hide();
         },
         edit(e) {
-            // this.$emit('newProduct', this.product);
             const { action } = e.target.dataset;
             if (action === 'create') {
                 this.tempProduct.options = JSON.stringify(this.tempProduct.options);
                 createData(this.tempProduct)
                     .then((resp) => {
                         const newProd = resp.data.data;
-                        console.log(newProd);
-                        if (typeof newProd.options === 'string') {
-                            newProd.options = JSON.parse(newProd.options);
-                        }
+                        newProd.options = JSON.parse(newProd.options);
                         this.addProducts({
                             data: newProd,
                         });
+                        this.clearTempProduct();
+                        this.togglePage();
+                    })
+                    .catch(() => {
+                        this.tempProduct.options = JSON.parse(this.tempProduct.options);
+                        this.setMsg({
+                            msg: `上傳${this.tempProduct.title || ''}失敗`,
+                            type: false,
+                        });
+                        setTimeout(() => { this.clearMsg(); }, 1000);
                     });
             } else if (action === 'update') {
                 this.tempProduct.options = JSON.stringify(this.tempProduct.options);
@@ -145,19 +145,27 @@ export default {
                             id: prod.id,
                             data: prod,
                         });
+                        this.clearTempProduct();
+                        this.togglePage();
+                    })
+                    .catch(() => {
+                        this.tempProduct.options = JSON.parse(this.tempProduct.options);
+                        this.setMsg({
+                            msg: `更新${this.tempProduct.title}失敗`,
+                            type: false,
+                        });
+                        setTimeout(() => { this.clearMsg(); }, 1000);
                     });
             }
-            this.clearTempProduct();
-            this.$emit('update:productPage', !this.productPage);
         },
         cancel() {
             this.clearTempProduct();
-            this.$emit('update:productPage', !this.productPage);
+            this.togglePage();
         },
-        togglePage(e) {
+        toggle(e) {
             if (e.target.className.includes('newDataPage')) {
                 this.clearTempProduct();
-                this.$emit('update:productPage', !this.productPage);
+                this.togglePage();
             }
         },
     },
@@ -179,7 +187,7 @@ export default {
         list-style: none
         box-sizing: border-box
     #newDataPage
-        z-index: 900
+        z-index: 555
         position: fixed
         top: 0
         left: 0
@@ -252,4 +260,10 @@ export default {
                 border: 1px solid #aaa
                 border-radius: 5px
                 outline: none
+                color: $navyblue
+                background: $lightgray
+                transition: .5s
+                &:hover
+                    color: $lightgray
+                    background: $navyblue
 </style>
