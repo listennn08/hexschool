@@ -1,7 +1,5 @@
 import Vue from 'vue';
 
-import axios from 'axios';
-import VueAxios from 'vue-axios';
 import VueConfirmDialog from 'vue-confirm-dialog';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -15,11 +13,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-axios.defaults.baseURL = 'https://course-ec-api.hexschool.io/api/';
-
 library.add(faPlus, faTimes, faCheck, faTrashAlt, faExclamationCircle, faEdit);
 
-Vue.use(VueAxios, axios);
 Vue.use(VueConfirmDialog);
 Vue.use(Loading, {
     color: 'blue',
@@ -29,6 +24,7 @@ Vue.use(Loading, {
     backgroundColor: '#ffffff',
     opacity: 0.8,
     zIndex: 999,
+    isFullPage: true,
 });
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

@@ -11,10 +11,10 @@
 <script>
 import { mapActions } from 'vuex';
 import msg from '../components/message-modal.vue';
-import utils from '../apis/utils';
+import { setItem } from '../cookies';
+import { Login } from '../apis/utils';
 
 export default {
-    mixins: [utils],
     components: {
         msg,
     },
@@ -36,10 +36,10 @@ export default {
                 document.querySelector('#pwd').reportValidity();
                 return;
             }
-            this.Login({ email, password })
+            Login({ email, password })
                 .then((resp) => {
-                    document.cookie = `uuid=${resp.data.uuid}; expires=${new Date(resp.data.expire * 1000)}; path=/`;
-                    document.cookie = `token=${resp.data.token}; expires=${new Date(resp.data.expire * 1000)}; path=/`;
+                    setItem('uuid', resp.data.uuid, new Date(resp.data.expire * 1000), '/');
+                    setItem('token', resp.data.token, new Date(resp.data.expire * 1000), '/');
                     this.loginMsg({ msg: '登入成功！', type: true });
                     setTimeout(() => {
                         this.clearMsg();
@@ -67,20 +67,23 @@ export default {
         margin: 0
         padding: 0
         list-style: none
-
+    @mixin mac
+        @media (max-width: 1440px)
+            @content
     .wrap
-        width: 100%
-        max-width: 1440px
+        width: 90%
+        max-width: 1920px
+        +mac
+            max-width: 1440px
         height: 100%
         padding: 5%
         font-family: 'Noto Sans TC', sans-serif
         display: flex
         align-items: center
         justify-content: center
-        box-sizing: border-box
         .login
-            width: 25%
-            padding: 2%
+            width: 18%
+            padding: 2% 1%
             flex-wrap: wrap
             border: 2px solid $darkgrayn
             border-radius: 5%

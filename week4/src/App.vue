@@ -14,8 +14,13 @@ export default {
 };
 </script>
 <style lang="scss">
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
 body {
-    overflow: hidden;
+    overflow-x: hidden;
 }
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;

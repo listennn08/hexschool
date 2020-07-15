@@ -1,64 +1,67 @@
 <template lang="pug">
-    #newDataPage.newDataPage(@click="togglePage")
-        .container
+    #newDataPage.newDataPage(@click="togglePage" )
+        .container(style="position:relative" ref="productPage")
             .row-100.row-title
                 .page-title
-                    span: h3 {{ !productId.id ? '新增' : '更新'}}商品
+                    span: h3 {{ !pid ? '新增' : '更新'}}商品
             .row
-                label(for='title') 名稱
+                label(for="title") 名稱
                 input#title.required(type="text" v-model="tempProduct.title")
             .row
-                label(for='category') 分類
-                input#category(type='text' v-model="tempProduct.category")
+                label(for="ategory") 分類
+                input#category(type="text" v-model="tempProduct.category")
             .row
-                label(for='content') 商品敘述
+                label(for="content") 商品敘述
                 textarea#content(cols="25" rows="5" v-model="tempProduct.content")
             .row
-                label(for='description') 商品說明
+                label(for="description") 商品說明
                 textarea#description(cols="25" rows="5" v-model="tempProduct.description")
             .row
-                label(for='origin_price') 原價
-                input#origin_price(type='number' v-model="tempProduct.origin_price")
+                label(for="origin_price") 原價
+                input#origin_price(type="number" v-model="tempProduct.origin_price")
             .row
-                label(for='price') 售價
-                input#price(type='number' v-model="tempProduct.price")
+                label(for="price") 售價
+                input#price(type="number" v-model="tempProduct.price")
             .row
-                label(for='imageUrl') 輸入圖片網址
-                input#imageUrl(type='text' v-model="tempProduct.imageUrl")
+                label(for="imageUrl") 輸入圖片網址
+                input#imageUrl(type="text" v-model.lazy="tempProduct.imageUrl[0]")
+                //- input#uploadImg(type="file")
                 .img
-                    img#preview(:src='product.imageUrl' alt='')
+                    img#preview(:src="tempProduct.imageUrl[0]" alt="")
             .row
-                label(for='price') 庫存
-                input#price(type='number' v-model="tempProduct.options.store" placeholder="0")
-                label(for='unit') 單位
-                input#price(type='text' v-model="tempProduct.unit")
-                input#enabled(type='checkbox' v-model="tempProduct.enabled")
-                label(for='enabled') 是否啟用
+                label(for="price") 庫存
+                input#store(
+                    type="number"
+                    v-if="tempProduct.options"
+                    v-model="tempProduct.options.store"
+                    placeholder="0")
+                label(for="unit") 單位
+                input#price(type="text" v-model="tempProduct.unit")
+                input#enabled(type="checkbox" v-model="tempProduct.enabled")
+                label(for="enabled") 是否啟用
             .row-100
                 button#create(
                     v-if="!tempProduct.id"
                     data-action="create"
                     type="button"
-                    @click.prevent="emitProduct"
+                    @click.prevent="edit"
                     ) 新增
                 button#update(
                     v-else
                     data-action="update"
                     type="button"
-                    @click.prevent="emitProduct") 更新
+                    @click.prevent="edit") 更新
                 button#cancel(
                     @click="cancel"
                     type="button") 取消
 </template>
 <script>
-import utils from '../apis/utils';
+import { mapActions, mapState } from 'vuex';
+import { getBackendDataDetail, createData, updateData } from '../apis/utils';
 
 export default {
     name: 'productPage',
-    mixins: [utils],
     props: {
-        pid: String,
-        product: Object,
         productPage: Boolean,
     },
     data() {
@@ -71,44 +74,89 @@ export default {
             },
         };
     },
-    created() {
-        // this.tempProduct = this.product;
-        // console.log(this.tempProduct);
-    },
-    mounted() {
-        this
-            .getBackendDataDetail(this.pid)
-            .then((resp) => {
-                this.tempProduct = resp.data.data;
-            });
+    computed: mapState({
+        pid: (state) => state.product.id,
+        product: (state) => state.product,
+    }),
+    watch: {
+        pid: {
+            handler() {
+                this.loadProduct();
+            },
+        },
     },
     methods: {
-        emitProduct(e) {
+        ...mapActions(['addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct']),
+        loadProduct() {
+            const loader = this.$loading.show({
+                container: 'productPage',
+                loader: 'spinner',
+                color: 'blue',
+                width: 64,
+                height: 64,
+                backgroundColor: '#ffffff',
+                opacity: 0.8,
+                zIndex: 999,
+                isFullPage: 'false',
+                onCancel: 'true',
+            });
+            if (this.pid) {
+                getBackendDataDetail(this.pid)
+                    .then((resp) => {
+                        this.tempProduct = resp.data.data;
+                        if (!this.tempProduct.options) {
+                            this.tempProduct.options = {
+                                store: null,
+                            };
+                        } else {
+                            this.tempProduct.options = JSON.parse(this.tempProduct.options);
+                        }
+                    });
+            } else {
+                this.tempProduct = this.product;
+            }
+            loader.hide();
+        },
+        edit(e) {
             // this.$emit('newProduct', this.product);
             const { action } = e.target.dataset;
             if (action === 'create') {
                 this.tempProduct.options = JSON.stringify(this.tempProduct.options);
-                this
-                    .createData(this.tempProduct)
+                createData(this.tempProduct)
                     .then((resp) => {
-                        this.$emit('newProduct', resp.data.data);
+                        const newProd = resp.data.data;
+                        console.log(newProd);
+                        if (typeof newProd.options === 'string') {
+                            newProd.options = JSON.parse(newProd.options);
+                        }
+                        this.addProducts({
+                            data: newProd,
+                        });
                     });
             } else if (action === 'update') {
                 this.tempProduct.options = JSON.stringify(this.tempProduct.options);
-                console.log(this.tempProduct);
-                this
-                    .updateData(this.tempProduct.id, this.tempProduct)
+                updateData(this.tempProduct.id, this.tempProduct)
                     .then((resp) => {
-                        this.$emit('newProduct', resp.data.data);
+                        const prod = resp.data.data;
+                        if (typeof prod.options === 'string') {
+                            prod.options = JSON.parse(prod.options);
+                        }
+                        this.editProduct({
+                            id: prod.id,
+                            data: prod,
+                        });
                     });
             }
+            this.clearTempProduct();
             this.$emit('update:productPage', !this.productPage);
         },
         cancel() {
+            this.clearTempProduct();
             this.$emit('update:productPage', !this.productPage);
         },
         togglePage(e) {
             if (e.target.className.includes('newDataPage')) {
+                this.clearTempProduct();
                 this.$emit('update:productPage', !this.productPage);
             }
         },
@@ -131,7 +179,7 @@ export default {
         list-style: none
         box-sizing: border-box
     #newDataPage
-        z-index: 999
+        z-index: 900
         position: fixed
         top: 0
         left: 0

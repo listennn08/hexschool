@@ -29,15 +29,15 @@ $lightgray: #F4F3EA
     padding: 0
     list-style: none
 .banner
-    position: absolute
+    position: fixed
     margin-top: 2%
     width: 100%
     top: 0
-    right: -100%
+    right: 0
     transition: .5s
-    transform: translateX(0)
+    transform: translateX(101%)
     &.show
-        transform: translateX(-12%)
+        transform: translateX(95%)
     .message
         width: 10%
         padding: 1%

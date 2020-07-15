@@ -8,6 +8,12 @@
             )
             font-awesome-icon(:icon="['fas', 'plus']")
             |新增
+        button.add.circle(
+            data-action="add"
+            @click="openPage()"
+            :class="{show: addShow}"
+        )
+            font-awesome-icon(:icon="['fas', 'plus']")
         table
             tr.title
                 th.col 分類
@@ -42,7 +48,7 @@
                         :icon="item.enabled ? ['fas', 'check'] : ['fas', 'times']")
                 td.col {{ item.origin_price }}
                 td.col {{ item.price }}
-                td.col {{ item.options? item.options.store : 0 }}
+                td.col {{ item.options.store ? item.options.store : 0 }}
                 td.col
                     button.update(
                         data-action="update"
@@ -53,11 +59,7 @@
                     button.del(@click="deleteProduct(index)")
                         font-awesome-icon(:icon="['fas', 'trash-alt']")
                         |刪除
-        //- template(v-if="productPage.open")
         productPage(
-            :pid="pid"
-            :product="product"
-            @newProduct="addProduct"
             :class="{open: productPage.open}"
             :productPage.sync="productPage.open"
             )
@@ -66,13 +68,13 @@
         vue-confirm-dialog
 </template>
 <script>
+import { mapActions, /* mapState, */ mapGetters } from 'vuex';
 import productPage from './product-page.vue';
 import pagination from '../components/pagination.vue';
-import utils from '../apis/utils';
+import { getBackendAllData, getBackendDataDetail, deleteData } from '../apis/utils';
 
 export default {
     name: 'product-manage',
-    mixins: [utils],
     components: {
         productPage,
         pagination,
@@ -83,73 +85,71 @@ export default {
                 isLoading: false,
                 fullPage: true,
             },
-            products: [],
-            pid: null,
-            product: {
-                imageUrl: [],
-                options: {
-                    store: 0,
-                },
-            },
             productPage: {
                 open: false,
             },
             pagination: {},
+            windowTop: null,
+            addShow: false,
         };
     },
     created() {
         const loader = this.$loading.show();
-        this
-            .getBackendAllData()
+        getBackendAllData()
             .then((resp) => {
-                this.products = resp.data.data;
-                this.pagination = resp.data.meta.pagination;
-            })
-            .then(() => {
-                this.products = this.products.map((el) => {
-                    this.getBackendDataDetail(el.id)
+                const products = resp.data.data.map((el) => {
+                    el.options = el.options
+                        ? JSON.parse(el.options)
+                        : { store: null };
+                    getBackendDataDetail(el.id)
                         .then((r) => {
                             el.description = r.data.data.description;
                         });
                     return el;
                 });
+                this.setProducts(products);
                 loader.hide();
+                this.pagination = resp.data.meta.pagination;
             });
     },
+    mounted() {
+        window.addEventListener('scroll', this.onScroll);
+    },
+    computed: {
+        ...mapGetters(['products']),
+    },
+    watch: {
+        'pagination.current_page': {
+            handler() {
+                const { current_page: cur } = this.pagination;
+                const loader = this.$loading.show();
+                getBackendAllData(cur)
+                    .then((resp) => {
+                        const products = resp.data.data.map((el) => {
+                            el.options = el.options
+                                ? JSON.parse(el.options)
+                                : { store: null };
+                            getBackendDataDetail(el.id)
+                                .then((r) => {
+                                    el.description = r.data.data.description;
+                                });
+                            return el;
+                        });
+                        this.setProducts(products);
+                        loader.hide();
+                    });
+            },
+        },
+    },
     methods: {
+        ...mapActions(['setProducts', 'delProduct', 'setTempProduct', 'clearTempProduct']),
         openPage(index) {
             if (index || index === 0) {
-                this.pid = this.products[index].id;
-                this.product = JSON.parse(JSON.stringify(this.products[index]));
-                this.product.options = {
-                    store: 0,
-                };
+                this.setTempProduct(this.products[index]);
+            } else {
+                this.clearTempProduct();
             }
             this.productPage.open = !this.productPage.open;
-        },
-        addProduct(obj) {
-            this.product = obj;
-            const { id } = this.product;
-            const edit = this.products.some((el) => el.id === id);
-            if (edit) {
-                this
-                    .products
-                    .forEach((item, i) => {
-                        if (item.id === this.product.id) {
-                            this.$set(this.products, i, this.product);
-                        }
-                    });
-            } else {
-                this
-                    .products
-                    .push(this.product);
-            }
-            this.product = {
-                imageUrl: [],
-                options: {
-                    store: null,
-                },
-            };
         },
         deleteProduct(index) {
             this.$confirm({
@@ -161,12 +161,27 @@ export default {
                 },
                 callback: (confirm) => {
                     if (confirm) {
-                        this
-                            .products
-                            .splice(index, 1);
+                        deleteData(this.products[index].id)
+                            .then(() => {
+                                this.$confirm({
+                                    message: `已刪除 ${this.products[index].title}`,
+                                    button: {
+                                        no: 'OK',
+                                    },
+                                });
+                            });
+                        this.delProduct(index);
                     }
                 },
             });
+        },
+        onScroll() {
+            this.windowTop = window.top.scrollY; /* or: e.target.documentElement.scrollTop */
+            if (this.windowTop > 200) {
+                this.addShow = true;
+            } else {
+                this.addShow = false;
+            }
         },
     },
 };
@@ -185,22 +200,23 @@ $lightgray: #F4F3EA
     margin: 0
     padding: 0
     list-style: none
-    box-sizing: border-box
 
 .item-manage
     width: 95%
     margin: 0 2.5%
     position: relative
     .nav
-        width: 94%
+        width: 95%
         padding: 1%
         position: fixed
         top: 0
+        left: 2.5%
         background: $navyblue
         color: $lightgray
         font-family: 'Noto Sans TC', sans-serif
         font-weight: 700
         text-align: left
+        box-sizing: border-box
     .add
         float: right
         padding: .5%
@@ -211,6 +227,23 @@ $lightgray: #F4F3EA
         border-radius: 5px
         color: $navyblue
         background: $lightgray
+        transition: .5s
+        outline: none
+        &:hover
+            color: $lightgray
+            background: $navyblue
+        &.circle
+            position: fixed
+            box-shadow: 2px 2px 5px $navyblue
+            width: 2%
+            border-radius: 50%
+            bottom: 2%
+            right: 2%
+            transform: translate(210%, 0)
+            &.show
+                transform: translate(0, 0)
+            &:hover
+                transform: translate(0, -10%)
     table
         clear: right
         margin-top: 2%
@@ -258,7 +291,13 @@ $lightgray: #F4F3EA
                     border-radius: 5px
                     color: $navyblue
                     background: $lightgray
-                    padding: 2%
+                    margin: 1%
+                    padding: 5%
+                    outline: none
+                    transition: .5s
+                    &:hover
+                        color: $lightgray
+                        background: $navyblue
                     font-awesome-icon
                         margin-right: 1%
                     .update

@@ -1,40 +1,36 @@
-import http from './http';
+import store from '../store';
+import {
+    get, post, patch, del,
+} from './axios';
 
-export default {
-    name: 'utils',
-    mixins: [http],
-    data() {
-        return {
-            api: {
-                login: 'auth/login',
-                frontend: {
-                },
-                backend: {
-                    getAllData: '/admin/ec/products',
-                    editData: '/admin/ec/product/', /** update data, delete data */
-                    file: '/admin/storage',
-                },
-            },
-        };
+const api = {
+    uuid: store.state.loginInfo.uuid,
+    login: 'auth/login',
+    frontend: {
     },
-    methods: {
-        Login(data) {
-            return this.post(this.api.login, data);
-        },
-        getBackendAllData() {
-            return this.get(`${this.api.uuid}${this.api.backend.getAllData}`, true);
-        },
-        getBackendDataDetail(id) {
-            return this.get(`${this.api.uuid}${this.api.backend.editData}${id}`, true);
-        },
-        createData(data) {
-            return this.post(`${this.api.uuid}${this.api.backend.getAllData}`, data);
-        },
-        updateData(id, data) {
-            return this.patch(`${this.api.uuid}${this.api.backend.editData}${id}`, data, true);
-        },
-        deleteData(id) {
-            return this.del(`${this.api.uuid}${this.api.backend.editData}${id}`);
-        },
+    backend: {
+        createData: '/admin/ec/product',
+        getAllData: '/admin/ec/products',
+        editData: '/admin/ec/product/', /** update data, delete data */
+        file: '/admin/storage',
     },
 };
+
+export function Login(data) {
+    return post(api.login, data);
+}
+export function getBackendAllData(p = 1) {
+    return get(`${api.uuid}${api.backend.getAllData}?page=${p}`, true);
+}
+export function getBackendDataDetail(id) {
+    return get(`${api.uuid}${api.backend.editData}${id}`, true);
+}
+export function createData(data) {
+    return post(`${api.uuid}${api.backend.createData}`, data);
+}
+export function updateData(id, data) {
+    return patch(`${api.uuid}${api.backend.editData}${id}`, data, true);
+}
+export function deleteData(id) {
+    return del(`${api.uuid}${api.backend.editData}${id}`);
+}
