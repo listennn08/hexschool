@@ -3,7 +3,7 @@ import store from '../store';
 
 // axios.defaults.baseURL = 'https://course-ec-api.hexschool.io/api/';
 const Request = axios.create({
-    timeout: 10000,
+    timeout: 30000,
     baseURL: 'https://course-ec-api.hexschool.io/api/',
 });
 
