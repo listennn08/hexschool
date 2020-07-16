@@ -39,6 +39,7 @@ export default new Vuex.Store({
         products: (state) => state.products,
         productPage: (state) => state.productPage,
         loading: (state) => state.loading,
+        msg: (state) => state.msg,
     },
     mutations: {
         SET_USER_INFO(state, { uuid, token }) {

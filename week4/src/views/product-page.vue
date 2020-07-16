@@ -167,14 +167,12 @@ export default {
 </script>
 <style lang="sass" scoped>
     @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500;700;900&family=Raleway:wght@500;700&display=swap)
-
     $navyblue: #333D51
     $hnavyblue: #242b39
     $goldyellow: #D3AC2B
     $darkgray: #CBD0D8
     $darkgrayn: #46505e
     $lightgray: #F4F3EA
-
     *
         margin: 0
         padding: 0
