@@ -10,27 +10,36 @@
             label(for="pwd") 密碼
             input#pwd(type="password" @keyup.enter="loginFn" required)
             .btn-block
-                button.login-btn(type="button" @click="loginFn") 登入
+                button.login-btn(type="button" @click="loginFn")
+                    .text(:class="{hide: loading}") 登入
+                    font-awesome-icon.loading.fa-3x.fa-spin(
+                        :icon="['fa', 'spinner']"
+                        :class="{show: loading}"
+                    )
         .img
             img(src="../assets/login.jpg")
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { getItem, setItem } from '../cookies';
 import { Login } from '../apis/utils';
 
 export default {
+    computed: mapGetters(['loading']),
     methods: {
-        ...mapActions(['setUserInfo', 'setMsg', 'clearMsg']),
+        ...mapActions(['isLoading', 'setUserInfo', 'setMsg', 'clearMsg']),
         loginFn() {
+            this.isLoading(true);
             const email = document.querySelector('#email').value;
             const password = document.querySelector('#pwd').value;
             if (!email) {
                 document.querySelector('#email').reportValidity();
+                this.isLoading(false);
                 return;
             }
             if (!password) {
                 document.querySelector('#pwd').reportValidity();
+                this.isLoading(false);
                 return;
             }
             Login({ email, password })
@@ -42,6 +51,7 @@ export default {
                         token: getItem('token'),
                     });
                     this.setMsg({ msg: '登入成功！', type: true });
+                    this.isLoading(false);
                     setTimeout(() => {
                         this.clearMsg();
                         this.$router.push('product-manage');
@@ -121,10 +131,22 @@ export default {
                 outline: none
                 background: $lightgray
                 color: $navyblue
+                text-align: center
                 transition: 1s
                 &:hover
                     background: $navyblue
                     color: $lightgray
+                .text
+                    display: block
+                    &.hide
+                        display: none
+                .loading
+                    width: 100%
+                    text-align: center
+                    font-size: 18px
+                    display: none
+                    &.show
+                        display: block
         .img
             z-index: -999
             width: 50%
