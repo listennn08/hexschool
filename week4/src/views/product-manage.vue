@@ -13,6 +13,7 @@
             data-action="add"
             @click="openPage()"
             :class="{show: addShow}"
+            track-by='$index'
         )
             font-awesome-icon(:icon="['fas', 'plus']")
         table
@@ -29,12 +30,12 @@
                 th.col 編輯
             tr.item-list(
                 v-for="(item, index) in products"
-                :key="index"
+                :key="item.id"
                 :data-id="item.id"
                 :data-index="index"
             )
                 td.col
-                    .text {{item.category }}
+                    .text {{ item.category }}
                 td.col
                     img(:src="item.imageUrl")
                 td.col
@@ -57,11 +58,12 @@
                     )
                         font-awesome-icon(:icon="['fas', 'edit']")
                         |修改
-                    button.del(@click="deleteProduct(index)")
+                    button.del(@click="deleteProduct(index)" ref="delContainer")
                         font-awesome-icon(:icon="['fas', 'trash-alt']")
                         |刪除
         productPage(
             :class="{open: productPage.open}"
+            :addNewItem.sync="addNewItem"
             )
         template(v-if="pagination.current_page")
             pagination(:pagination="pagination")
@@ -88,26 +90,11 @@ export default {
             pagination: {},
             windowTop: null,
             addShow: false,
+            addNewItem: false,
         };
     },
     created() {
-        const loader = this.$loading.show();
-        getBackendAllData()
-            .then((resp) => {
-                const products = resp.data.data.map((el) => {
-                    el.options = el.options
-                        ? JSON.parse(el.options)
-                        : { store: null };
-                    getBackendDataDetail(el.id)
-                        .then((r) => {
-                            el.description = r.data.data.description;
-                        });
-                    return el;
-                });
-                this.setProducts(products);
-                loader.hide();
-                this.pagination = resp.data.meta.pagination;
-            });
+        this.getData();
     },
     mounted() {
         window.addEventListener('scroll', this.onScroll);
@@ -116,6 +103,9 @@ export default {
         ...mapGetters(['products', 'productPage']),
     },
     watch: {
+        product() {
+            this.getData();
+        },
         'pagination.current_page': {
             handler() {
                 const { current_page: cur } = this.pagination;
@@ -123,9 +113,12 @@ export default {
                 getBackendAllData(cur)
                     .then((resp) => {
                         const products = resp.data.data.map((el) => {
-                            el.options = el.options
-                                ? JSON.parse(el.options)
-                                : { store: null };
+                            const { options } = el;
+                            if (typeof options !== 'object') {
+                                el.options = el.options
+                                    ? JSON.parse(el.options)
+                                    : { store: null };
+                            }
                             getBackendDataDetail(el.id)
                                 .then((r) => {
                                     el.description = r.data.data.description;
@@ -137,9 +130,39 @@ export default {
                     });
             },
         },
+        addNewItem: {
+            handler() {
+                if (this.addNewItem) {
+                    this.getData();
+                    this.addNewItem = false;
+                }
+            },
+        },
     },
     methods: {
         ...mapActions(['setProducts', 'delProduct', 'setTempProduct', 'clearTempProduct', 'togglePage']),
+        getData() {
+            const loader = this.$loading.show();
+            getBackendAllData()
+                .then((resp) => {
+                    const products = resp.data.data.map((el) => {
+                        const { options } = el;
+                        if (typeof options !== 'object') {
+                            el.options = el.options
+                                ? JSON.parse(el.options)
+                                : { store: null };
+                        }
+                        getBackendDataDetail(el.id)
+                            .then((r) => {
+                                el.description = r.data.data.description;
+                            });
+                        return el;
+                    });
+                    this.setProducts(products);
+                    loader.hide();
+                    this.pagination = resp.data.meta.pagination;
+                });
+        },
         openPage(index) {
             if (index || index === 0) {
                 this.setTempProduct(this.products[index]);
@@ -149,25 +172,28 @@ export default {
             this.togglePage();
         },
         deleteProduct(index) {
+            const { title } = this.products[index];
             this.$confirm({
                 title: '刪除',
-                message: `確認刪除 ${this.products[index].title}？\r\n（刪除後無法復原）`,
+                message: `確認刪除 ${title}？\r\n（刪除後無法復原）`,
                 button: {
                     no: '取消',
                     yes: '刪除',
                 },
                 callback: (confirm) => {
+                    const loader = this.$loading.show();
                     if (confirm) {
                         deleteData(this.products[index].id)
                             .then(() => {
+                                this.delProduct(index);
+                                loader.hide();
                                 this.$confirm({
-                                    message: `已刪除 ${this.products[index].title}`,
+                                    message: `已刪除 ${title}`,
                                     button: {
                                         no: 'OK',
                                     },
                                 });
                             });
-                        this.delProduct(index);
                     }
                 },
             });

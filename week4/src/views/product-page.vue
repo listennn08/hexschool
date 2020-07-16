@@ -73,6 +73,9 @@ export default {
             },
         };
     },
+    props: {
+        addNewItem: Boolean,
+    },
     computed: mapGetters(['pid', 'product', 'productPage', 'loading']),
     watch: {
         'productPage.open': {
@@ -86,8 +89,8 @@ export default {
             'setMsg', 'clearMsg', 'addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct', 'togglePage', 'isLoading',
         ]),
         loadProduct() {
-            this.isLoading(true);
             if (this.pid) {
+                this.isLoading(true);
                 getBackendDataDetail(this.pid)
                     .then((resp) => {
                         this.tempProduct = resp.data.data;
@@ -107,15 +110,13 @@ export default {
         edit(e) {
             const { action } = e.target.dataset;
             if (action === 'create') {
+                this.isLoading(true);
                 this.tempProduct.options = JSON.stringify(this.tempProduct.options);
                 createData(this.tempProduct)
-                    .then((resp) => {
-                        const newProd = resp.data.data;
-                        newProd.options = JSON.parse(newProd.options);
-                        this.addProducts({
-                            data: newProd,
-                        });
+                    .then(() => {
+                        this.$emit('update:addNewItem', true);
                         this.clearTempProduct();
+                        this.isLoading(false);
                         this.togglePage();
                     })
                     .catch(() => {
@@ -204,7 +205,7 @@ export default {
                 top: 50%
                 right: 50%
                 opacity: 0
-                transition: 1s
+                // transition: 1s
                 &.show
                     opacity: 1
             .row-100

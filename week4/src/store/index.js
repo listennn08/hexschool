@@ -32,7 +32,7 @@ export default new Vuex.Store({
         productPage: {
             open: false,
         },
-        loading: true,
+        loading: false,
     },
     getters: {
         pid: (state) => state.tempProduct.id,
@@ -53,7 +53,8 @@ export default new Vuex.Store({
             state.products = [...data];
         },
         ADD_PRODUCTS(state, data) {
-            Vue.set(state.products, state.products.length, { ...data });
+            state.products.unshift(data);
+            Vue.set(state, 'products', state.products);
         },
         EDIT_PRODUCT(state, { id, data }) {
             state.products.forEach((prod, index) => {
@@ -125,8 +126,8 @@ export default new Vuex.Store({
         togglePage({ commit }) {
             commit('TOGGLE_PAGE');
         },
-        isLoading({ commit }) {
-            commit('IS_LOADING');
+        isLoading({ commit }, is) {
+            commit('IS_LOADING', is);
         },
     },
     modules: {},
