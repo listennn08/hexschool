@@ -4,7 +4,6 @@ import {
 } from './axios';
 
 const api = {
-    uuid: store.state.loginInfo.uuid,
     login: 'auth/login',
     frontend: {
     },
@@ -20,17 +19,17 @@ export function Login(data) {
     return post(api.login, data);
 }
 export function getBackendAllData(p = 1) {
-    return get(`${api.uuid}${api.backend.getAllData}?page=${p}`, true);
+    return get(`${store.state.loginInfo.uuid}${api.backend.getAllData}?page=${p}`, true);
 }
 export function getBackendDataDetail(id) {
-    return get(`${api.uuid}${api.backend.editData}${id}`, true);
+    return get(`${store.state.loginInfo.uuid}${api.backend.editData}${id}`, true);
 }
 export function createData(data) {
-    return post(`${api.uuid}${api.backend.createData}`, data);
+    return post(`${store.state.loginInfo.uuid}${api.backend.createData}`, data);
 }
 export function updateData(id, data) {
-    return patch(`${api.uuid}${api.backend.editData}${id}`, data, true);
+    return patch(`${store.state.loginInfo.uuid}${api.backend.editData}${id}`, data, true);
 }
 export function deleteData(id) {
-    return del(`${api.uuid}${api.backend.editData}${id}`);
+    return del(`${store.state.loginInfo.uuid}${api.backend.editData}${id}`);
 }

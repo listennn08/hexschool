@@ -1,14 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { getItem } from '../cookies';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
         loginInfo: {
-            uuid: getItem('uuid'),
-            token: getItem('token'),
+            uuid: null,
+            token: null,
         },
         msg: {
             text: '',
@@ -42,6 +41,10 @@ export default new Vuex.Store({
         loading: (state) => state.loading,
     },
     mutations: {
+        SET_USER_INFO(state, { uuid, token }) {
+            state.loginInfo.uuid = uuid;
+            state.loginInfo.token = token;
+        },
         SET_MSG(state, { msg, type }) {
             state.msg.text = msg;
             state.msg.type = type;
@@ -93,6 +96,12 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        setUserInfo({ commit }, { uuid, token }) {
+            commit('SET_USER_INFO', {
+                uuid,
+                token,
+            });
+        },
         setMsg({ commit }, { msg, type }) {
             commit('SET_MSG', {
                 msg,

@@ -17,7 +17,7 @@
 <script>
 import { mapActions } from 'vuex';
 import msg from '../components/message-modal.vue';
-import { setItem } from '../cookies';
+import { getItem, setItem } from '../cookies';
 import { Login } from '../apis/utils';
 
 export default {
@@ -30,7 +30,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(['setMsg', 'clearMsg']),
+        ...mapActions(['setUserInfo', 'setMsg', 'clearMsg']),
         loginFn() {
             const email = document.querySelector('#email').value;
             const password = document.querySelector('#pwd').value;
@@ -46,10 +46,14 @@ export default {
                 .then((resp) => {
                     setItem('uuid', resp.data.uuid, new Date(resp.data.expire * 1000), '/');
                     setItem('token', resp.data.token, new Date(resp.data.expire * 1000), '/');
+                    this.setUserInfo({
+                        uuid: getItem('uuid'),
+                        token: getItem('token'),
+                    });
                     this.setMsg({ msg: '登入成功！', type: true });
                     setTimeout(() => {
                         this.clearMsg();
-                        window.location = 'product-manage';
+                        this.$router.push('product-manage');
                     }, 1000);
                 })
                 .catch(() => {

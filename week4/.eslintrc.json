@@ -31,7 +31,8 @@
                     "state",
                     "el",
                     "request",
-                    "prod"
+                    "prod",
+                    "error"
                 ]
             }
         ]

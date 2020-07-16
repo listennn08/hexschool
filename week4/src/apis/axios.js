@@ -12,6 +12,20 @@ Request.interceptors.request.use((request) => {
     return request;
 });
 
+Request.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const status = error.response ? error.response.status : null;
+        if (status === 401) {
+            if (store.state.loginInfo.token) {
+                error.config.headers.Authorization = `Bearer ${store.state.loginInfo.token}`;
+                return Request.request(error.config);
+            }
+        }
+        return Promise.reject(error);
+    },
+);
+
 export function get(url) {
     return Request.get(url);
 }
