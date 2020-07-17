@@ -6,7 +6,7 @@
         .login
             h3 登入
             label(for="email") 信箱
-            input#email(type="account" required placeholder="example@example.com")
+            input#email(type="email" required placeholder="example@example.com")
             label(for="pwd") 密碼
             input#pwd(type="password" @keyup.enter="loginFn" required)
             .btn-block
