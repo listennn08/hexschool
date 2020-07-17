@@ -194,8 +194,6 @@ export default {
                                     },
                                 });
                             });
-                    } else {
-                        loader.hide();
                     }
                 },
             });
