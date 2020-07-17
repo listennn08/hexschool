@@ -181,8 +181,8 @@ export default {
                     yes: '刪除',
                 },
                 callback: (confirm) => {
-                    const loader = this.$loading.show();
                     if (confirm) {
+                        const loader = this.$loading.show();
                         deleteData(this.products[index].id)
                             .then(() => {
                                 this.delProduct(index);
