@@ -19,6 +19,10 @@ const routes = [
         name: 'shop_cart',
         component: () => import('../views/shop_cart.vue'),
     },
+    {
+        path: '/',
+        redirect: '/product-list',
+    },
 ];
 
 const router = new VueRouter({

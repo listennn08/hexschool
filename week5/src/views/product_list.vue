@@ -126,19 +126,21 @@ export default {
         showDetail(e) {
             const { id } = e.target.parentNode.parentNode.dataset
                 || e.target.parentNode.dataset;
-            this.toggleProductPage();
-            const loader = this.$loading.show({
-                container: this.$refs.product,
-                isFullPage: false,
-            });
-            getDataDetail(id)
-                .then((resp) => {
-                    this.setTempProduct({
-                        ...resp.data.data,
-                        quantity: 1,
-                    });
-                    loader.hide();
+            if (id) {
+                this.toggleProductPage();
+                const loader = this.$loading.show({
+                    container: this.$refs.product,
+                    isFullPage: false,
                 });
+                getDataDetail(id)
+                    .then((resp) => {
+                        this.setTempProduct({
+                            ...resp.data.data,
+                            quantity: 1,
+                        });
+                        loader.hide();
+                    });
+            }
         },
         getShopcartQuantity() {
             getCartQuantity()
