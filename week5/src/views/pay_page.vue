@@ -6,19 +6,24 @@
                 font-awesome-icon.titleIcon(:icon="['far', 'clipboard']")
                 | &nbsp; 購物清單
             .buy-item-preview
-                .preview-content(ref="preivew")
+                .preview-content(
+                    :class="{show: isCollapse}"
+                )
                     .buy-item(v-for="( item, index ) in products")
-                        div: img(:src="item.product.imageUrl")
+                        div: img(:src="item.product.imageUrl[0]")
                         div {{ item.product.title | hideText }}
                         div x{{ item.quantity }}
                         div {{ getItemTotal(index) | cash }}
-                    .buy-item(v-if="products.length > 10")
-                        button.collapse(@click="toggleCollapse()")
-                            font-awesome-icon(
-                                :icon="['fas', isCollapse?'angle-double-down':'angle-double-up']"
-                            )
-                    .total 總額
-                        span {{ countAll| cash }}
+                .buy-item(v-if="products.length > 4")
+                    button.collapse(
+                        :class="isCollapse? 'up' : 'down'"
+                        @click="toggleCollapse()"
+                        )
+                        font-awesome-icon(
+                            :icon="['fas', isCollapse?'angle-double-up':'angle-double-down']"
+                        )
+                .total 總額
+                    span {{ countAll | cash }}
             h4
                 font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
                 | &nbsp; 訂單資訊
@@ -143,6 +148,7 @@ export default {
                 remark: '',
             },
             isCollapse: false,
+            collapse: false,
         };
     },
     created() {
@@ -213,6 +219,20 @@ export default {
     $darkgray: #CBD0D8
     $darkgrayn: #46505e
     $lightgray: #F4F3EA
+    @keyframes collapseAnimation
+        0%
+            transform: translateY(0)
+        50%
+            transform: translateY(10%)
+        100%
+            transform: translateY(20%)
+    @keyframes collpaseList
+        0%
+            height: 280px
+        50%
+            height: 300px
+        100%
+            height: auto
     *
         margin: 0
         padding: 0
@@ -240,6 +260,12 @@ export default {
                     border-radius: 10px
                     font-weight: 700
             .preview-content
+                height: auto
+                max-height: 270px
+                overflow-y: hidden
+                &.show
+                    animation: collpaseList .5s 1 linear forwards
+                    max-height: 1080px
                 .buy-item
                     border-bottom: 1px solid $darkgray
                     margin-bottom: 1%
@@ -337,7 +363,15 @@ export default {
             .collapse
                 padding: 1% 2%
                 border: 0
-                background: #fff
+                background: transparent
+                outline: none
+                transform: translateY(0)
+                &.down
+                    animation: collapseAnimation 1s infinite linear forwards
+                &.up
+                    animation: collapseAnimation 1s infinite linear reverse forwards
+                &:hover
+                    animation-play-state: paused
             .warning
                 margin-left: 15%
                 display: block
