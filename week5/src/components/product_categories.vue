@@ -2,10 +2,11 @@
     #category.category
         .category-container
             ul.category-list
+                li: button(@click="setCategory('')") 全部商品
                 li: button(@click="setCategory('bed')") 床架／床墊
                 li: button(@click="setCategory('chair')") 椅子／沙發
                 li: button(@click="setCategory('case')") 櫃子／桌子
-                li: button(@click="setCategory('bed')") 地毯／窗簾
+                li: button(@click="setCategory('curtain')") 地毯／窗簾
 </template>
 <script>
 import { mapActions } from 'vuex';

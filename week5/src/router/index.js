@@ -15,15 +15,15 @@ const routes = [
         component: () => import('../views/product_page.vue'),
     },
     {
-        path: '/shop-cart',
+        path: '/shopcart',
         name: 'shop_cart',
         component: () => import('../views/shop_cart.vue'),
     },
 ];
 
 const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
+    mode: 'hash',
+    base: 'hexschool/week5/',
     routes,
 });
 

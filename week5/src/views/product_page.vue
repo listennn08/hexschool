@@ -4,6 +4,7 @@
         productList(:class="{sticky}")
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import categoryList from '../components/product_categories.vue';
 import productList from './product_list.vue';
 
@@ -12,22 +13,8 @@ export default {
         categoryList,
         productList,
     },
-    data() {
-        return {
-            sticky: false,
-        };
-    },
-    created() {
-        window.addEventListener('scroll', this.handleScroll);
-    },
-    methods: {
-        handleScroll() {
-            if (window.scrollY > 200) {
-                this.sticky = true;
-            } else {
-                this.sticky = false;
-            }
-        },
+    computed: {
+        ...mapGetters(['sticky']),
     },
 };
 </script>

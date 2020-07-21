@@ -1,0 +1,7 @@
+export const SET_MSG = 'SETMSG';
+export const CLEAR_MSG = 'CLEARMSG';
+export const SET_CATEGORY = 'SETCATEGORY';
+export const SET_PRODUCTS = 'SETPRODUCTS';
+export const SET_PAGINATION = 'SETPAGINATION';
+export const TOGGLE_STICKY = 'TOGGLESTICKY';
+export const TOGGLE_LOADING = 'TOGGLELOADING';

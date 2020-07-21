@@ -4,13 +4,14 @@
             button.removeAll(@click="deleteCartData()" ref="removeAllContainer") 刪除所有商品
             table
                 thead
-                    th 編號
-                    th 圖示
-                    th 產品名稱
-                    th 售價
-                    th 購買數量
-                    th 總價
-                    th 移除
+                    tr
+                        th 編號
+                        th 圖示
+                        th 產品名稱
+                        th 售價
+                        th 購買數量
+                        th 總價
+                        th 移除
                 tbody(ref="preivew")
                     tr(v-for="(item, index) in products" :key="item.product.id")
                         td(scoped="row") {{ index+1 }}
@@ -129,7 +130,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-    @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500;700;900&family=Raleway:wght@500;700&display=swap)
+    @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;500;700;900&family=Raleway:wght@500;700&family=Open+Sans:wght@400;600&display=swap)
     $navyblue: #333D51
     $hnavyblue: #242b39
     $goldyellow: #D3AC2B
@@ -198,7 +199,8 @@ export default {
             display: block
             width: 100%
         .price
-            font-family: 'Raleway', sans-serif
+            font-family: 'Open Sans', sans-serif
+            color: $navyblue
             .strike
                 margin-left: 3px
                 text-decoration: line-through
@@ -231,7 +233,7 @@ export default {
                     -webkit-appearance: none
                     margin: 0
         .item-total, .total
-            font-family: 'Raleway', sans-serif
+            font-family: 'Open Sans', sans-serif
         .total
             td
                 padding: 1% 0

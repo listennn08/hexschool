@@ -2,10 +2,9 @@
     #pay-page
         message
         .container
-            .preview-title
+            h4
                 font-awesome-icon.titleIcon(:icon="['far', 'clipboard']")
                 | &nbsp; 購物清單
-                button.collapse(@click)
             .buy-item-preview
                 .preview-content(ref="preivew")
                     .buy-item(v-for="( item, index ) in products")
@@ -13,9 +12,14 @@
                         div {{ item.product.title | hideText }}
                         div x{{ item.quantity }}
                         div {{ getItemTotal(index) | cash }}
+                    .buy-item(v-if="products.length > 10")
+                        button.collapse(@click="toggleCollapse()")
+                            font-awesome-icon(
+                                :icon="['fas', isCollapse?'angle-double-down':'angle-double-up']"
+                            )
                     .total 總額
                         span {{ countAll| cash }}
-            .buyer-title
+            h4
                 font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
                 | &nbsp; 訂單資訊
             .buyer-detail
@@ -113,17 +117,22 @@
                             ).warning {{ errors[0] }}
                         .check-block
                             button.back(type="button" @click="$router.go(-1)") 上一頁
-                            button.check 確認訂單
+                            button.check
+                                .txt(:class="{hide: loading}") 確認訂單
+                                font-awesome-icon.loading.fa-1x.fa-spin(
+                                    :icon="['fa', 'spinner']"
+                                    :class="{show: loading}"
+                                )
+            vue-confirm-dialog
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { getCart, createOrder } from '../apis/utils';
 
 export default {
     name: 'pay_page',
     data() {
         return {
-            products: [],
             payment: ['WebATM', 'ATM', 'Barcode', 'Credit', 'ApplePay', 'GooglePay'],
             form: {
                 name: '',
@@ -133,12 +142,14 @@ export default {
                 address: '',
                 remark: '',
             },
+            isCollapse: false,
         };
     },
     created() {
         this.getShopCartData();
     },
     computed: {
+        ...mapGetters(['products', 'loading']),
         countAll() {
             return this
                 .products
@@ -151,7 +162,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['setMsg']),
+        ...mapActions(['setProducts', 'toggleLoading']),
         getShopCartData() {
             const loader = this.$loading.show({
                 container: this.$refs.preivew,
@@ -159,7 +170,7 @@ export default {
             });
             getCart()
                 .then((resp) => {
-                    this.products = resp.data.data;
+                    this.setProducts(resp.data.data);
                     loader.hide();
                 });
         },
@@ -172,19 +183,30 @@ export default {
             return `$${val.toString().replace(/\d{1,3}(?=(\d{3})+$)/g, '$&,')}`;
         },
         submitForm() {
+            this.toggleLoading();
             createOrder(this.form)
                 .then(() => {
-                    this.setMsg({
-                        msg: '訂單已建立',
-                        type: true,
+                    this.toggleLoading();
+                    this.$confirm({
+                        message: '訂單已建立',
+                        button: {
+                            no: '繼續購物',
+                            yes: '去付款',
+                        },
+                        callback: (confirm) => this
+                            .$router
+                            .push(confirm ? '/' : '/product-list'),
                     });
                 });
+        },
+        toggleCollapse() {
+            this.isCollapse = !this.isCollapse;
         },
     },
 };
 </script>
 <style lang="sass" scoped>
-    @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&display=swap)
+    @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&family=Open+Sans:wght@400;600&display=swap)
     $navyblue: #333D51
     $hnavyblue: #242b39
     $goldyellow: #D3AC2B
@@ -199,18 +221,19 @@ export default {
             width: 40%
             margin: 2% 30%
             text-align: center
+            h4
+                margin-bottom: 1%
+                text-align: left
+                width: 100%
             .buy-item-preview, .buyer-detail
-                width: 90%
-                padding: 2% 5%
+                padding: 2% 0%
+                width: 100%
             .buyer-detail
                 border-top: 1px solid $darkgray
             .buy-item-preview
                 text-align: center
                 border-top: 1px solid $darkgray
                 margin-bottom: 1%
-            .preview-title, .buyer-title
-                margin-bottom: 1%
-                text-align: left
                 span
                     padding: .5% 1%
                     color: $darkgrayn
@@ -218,6 +241,8 @@ export default {
                     font-weight: 700
             .preview-content
                 .buy-item
+                    border-bottom: 1px solid $darkgray
+                    margin-bottom: 1%
                     div
                         display: inline-block
                         width: 20%
@@ -226,16 +251,20 @@ export default {
                         img
                             display: block
                             width: 50%
-                    border-bottom: 1px solid $darkgray
-                    margin-bottom: 1%
                 .total
+                    display: flex
+                    align-items: center
+                    justify-content: center
                     width: 30%
                     padding: 1% 10%
                     margin: 0 25%
                     background: rgba(211, 172, 43, .5)
                     border: 1px dotted $darkgray
                     border-radius: 20px
+                    font-font-family: 'Noto Sans TC', sans serif
                     span
+                        display: inline-block
+                        font-font-family: 'Open Sans', sans serif
                         margin-left: 5%
             .row:nth-of-type(4)
                 label
@@ -277,11 +306,14 @@ export default {
                         box-shadow: 5px  5px 10px rgba(red, .5)
             .check-block
                 border-top: 1px solid $darkgray
+                display: flex
+                align-items: center
+                justify-content: center
                 button
-                    margin-top: 1%
-                    margin-left: 2%
+                    width: 15%
+                    margin: 1%
                     padding: 2%
-                    border: 0
+                    border: 1px solid $darkgray
                     border-radius: 5px
                     font-family: 'Noto Sans TC', sans serif
                     background: $lightgray
@@ -289,9 +321,23 @@ export default {
                     transition: .2s
                     background: $lightgray
                     color: $navyblue
+                    font-size: 14px
                     &:hover
                         background: $darkgrayn
                         color: $lightgray
+                    .txt.hide
+                        display: none
+                    .loading
+                        font-size: 18px
+                        width: 100%
+                        text-align: center
+                        display: none
+                        &.show
+                            display: block
+            .collapse
+                padding: 1% 2%
+                border: 0
+                background: #fff
             .warning
                 margin-left: 15%
                 display: block

@@ -1,10 +1,9 @@
 <template lang="pug">
     #product-list.product-list
         .container
-            h2 產品列表
             .item-list
                 .item(
-                    v-for="(item, index) in products"
+                    v-for="(item, index) in showProducts"
                     :data-id="item.id"
                     :key="index"
                     @click="showDetail"
@@ -43,7 +42,7 @@
             //-         :class="{hide: !pageOpen}"
             //-         :pageOpen.sync="pageOpen"
             //-     )
-            router-link(to="/shop-cart").shop-cart
+            router-link(to="/shopcart").shop-cart
                 .shop-container
                     .cart-count(v-if="shopcart.quantity") {{ shopcart.quantity }}
                     font-awesome-icon(icon="shopping-cart")
@@ -51,7 +50,7 @@
 </template>
 <script>
 // import product from './product.vue'
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import productCategories from '../components/product_categories.vue';
 import pagination from '../components/pagination.vue';
 import { getAllProducts, getCartQuantity, addCart } from '../apis/utils';
@@ -65,7 +64,6 @@ export default {
     data() {
         return {
             id: null,
-            products: [],
             pageOpen: false,
             shopcart: {
                 quantity: null,
@@ -84,30 +82,43 @@ export default {
                 const loader = this.$loading.show();
                 getAllProducts(cur)
                     .then((resp) => {
-                        this.products = [...resp.data.data].map((el) => {
+                        this.setProducts([...resp.data.data].map((el) => {
                             el.quantity = 1;
                             el.isLoading = false;
                             return el;
-                        });
+                        }));
                         loader.hide();
                     });
             },
         },
     },
+    computed: {
+        ...mapGetters(['products', 'category']),
+        showProducts() {
+            switch (this.category) {
+                case 'bed':
+                case 'curtain':
+                    return this.filterProduct(this.category);
+                case 'chair':
+                    return this.filterProduct(this.category, 'sofa');
+                case 'case':
+                    return this.filterProduct(this.category, 'table');
+                default:
+                    return this.products;
+            }
+        },
+    },
     methods: {
-        ...mapActions(['setMsg']),
+        ...mapActions(['setMsg', 'setProducts', 'setPagination']),
         getData() {
-            const loader = this.$loading.show({
-                container: this.$refs.preivew,
-                isFullPage: false,
-            });
+            const loader = this.$loading.show();
             getAllProducts()
                 .then((resp) => {
-                    this.products = [...resp.data.data].map((el) => {
+                    this.setProducts([...resp.data.data].map((el) => {
                         el.quantity = 1;
                         el.isLoading = false;
                         return el;
-                    });
+                    }));
                     this.pagination = resp.data.meta.pagination;
                     loader.hide();
                 })
@@ -160,11 +171,21 @@ export default {
                     });
             }
         },
-
+        filterProduct(...category) {
+            return (category.length > 1)
+                ? this.products.filter((el) => {
+                    const cat = el.category.toLowerCase();
+                    return cat.indexOf(category[0]) > -1 || cat.indexOf(category[1]) > -1;
+                })
+                : this.products.filter((el) => el.category
+                    .toLowerCase()
+                    .indexOf(category[0]) > -1);
+        },
     },
 };
 </script>
 <style lang="sass" scoped>
+    @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&family=Open+Sans:wght@400;600&display=swap)
     $navyblue: #333D51
     $hnavyblue: #242b39
     $goldyellow: #D3AC2B
@@ -192,16 +213,11 @@ export default {
         .container
             width: 100%
             max-width: 1080px
-            min-width: 900px
+            min-width: 1080px
             height: 100%
             display: flex
             flex-direction: row
             flex-wrap: wrap
-            h2
-                display: block
-                width: 100%
-                text-align: center
-                text-shadow: 5px 5px 10px $goldyellow
         .item-list
             width: 100%
             display: flex
@@ -267,7 +283,8 @@ export default {
                         width: 100%
                         text-align: left
                         padding: 1% 2%
-                        font-family: 'Raleway', sans-serif
+                        font-family: 'Open Sans', sans-serif
+                        font-weight: 500
                         span.strike
                             margin-left: 1%
                             font-size: 12px
