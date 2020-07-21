@@ -32,7 +32,7 @@ export default {
         left: 50%
         transition: .5s
         transform: scale(0)
-        z-index: 888
+        z-index: 1000
         &.show
             transform: scale(1)
         .message

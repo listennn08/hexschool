@@ -36,12 +36,7 @@
                             )
             template(v-if="pagination.current_page")
                 pagination(:pagination="pagination")
-            //- template(v-if="id")
-            //-     product(
-            //-         :id="id"
-            //-         :class="{hide: !pageOpen}"
-            //-         :pageOpen.sync="pageOpen"
-            //-     )
+            product
             router-link(to="/shopcart").shop-cart
                 .shop-container
                     .cart-count(v-if="shopcart.quantity") {{ shopcart.quantity }}
@@ -49,15 +44,17 @@
                     .txt 購物車
 </template>
 <script>
-// import product from './product.vue'
 import { mapGetters, mapActions } from 'vuex';
+import product from './product.vue';
 import productCategories from '../components/product_categories.vue';
 import pagination from '../components/pagination.vue';
-import { getAllProducts, getCartQuantity, addCart } from '../apis/utils';
+import {
+    getAllProducts, getDataDetail, getCartQuantity, addCart,
+} from '../apis/utils';
 
 export default {
     components: {
-        // product,
+        product,
         productCategories,
         pagination,
     },
@@ -109,7 +106,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['setMsg', 'setProducts', 'setPagination']),
+        ...mapActions(['setMsg', 'setProducts', 'setPagination', 'setTempProduct', 'toggleProductPage']),
         getData() {
             const loader = this.$loading.show();
             getAllProducts()
@@ -127,16 +124,21 @@ export default {
                 });
         },
         showDetail(e) {
-            const { className } = e.target.parentNode;
-            if (className !== 'action') {
-                const { id } = e.target.parentNode.parentNode.dataset
-                    || e.target.parentNode.dataset;
-                console.log(id);
-            }
-            // this.id = id;
-            // console.log(this.id);
-            // this.$nextTick(() => {});
-            // this.pageOpen = !this.pageOpen;
+            const { id } = e.target.parentNode.parentNode.dataset
+                || e.target.parentNode.dataset;
+            this.toggleProductPage();
+            const loader = this.$loading.show({
+                container: this.$refs.product,
+                isFullPage: false,
+            });
+            getDataDetail(id)
+                .then((resp) => {
+                    this.setTempProduct({
+                        ...resp.data.data,
+                        quantity: 1,
+                    });
+                    loader.hide();
+                });
         },
         getShopcartQuantity() {
             getCartQuantity()
@@ -157,8 +159,7 @@ export default {
             this.products[index].isLoading = true;
             if (id && quantity) {
                 addCart(id, quantity)
-                    .then((resp) => {
-                        console.log(resp);
+                    .then(() => {
                         this.getShopcartQuantity();
                         this.products[index].isLoading = false;
                     })

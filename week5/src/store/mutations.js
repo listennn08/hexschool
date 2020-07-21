@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import * as types from './types';
 
 const mutations = {
@@ -22,6 +23,28 @@ const mutations = {
     },
     [types.TOGGLE_LOADING](state) {
         state.loading = !state.loading;
+    },
+    [types.TOGGLE_PRODUCT_PAGE](state) {
+        state.productPage.open = !state.productPage.open;
+    },
+    [types.SET_TEMP_PRODUCT](state, data) {
+        state.tempProduct = { ...data };
+    },
+    [types.CLEAR_TEMP_PRODUCT](state) {
+        Vue.set(state, 'tempProduct', {
+            id: null,
+            title: null,
+            category: null,
+            content: null,
+            imageUrl: [],
+            enabled: null,
+            origin_price: null,
+            price: null,
+            unit: null,
+            options: {
+                store: null,
+            },
+        });
     },
 };
 

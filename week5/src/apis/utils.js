@@ -24,6 +24,9 @@ const api = {
 export function getAllProducts(p = 1) {
     return get(`${api.uuid}${api.product.allBase}?page=${p}`);
 }
+export function getDataDetail(id) {
+    return get(`${api.uuid}${api.product.base}/${id}`);
+}
 export function getCart() {
     return get(`${api.uuid}${api.shopcart.base}`);
 }

@@ -50,11 +50,16 @@ Vue.use(Loading, {
     height: 64,
     backgroundColor: '#888888',
     opacity: 0.8,
-    zIndex: 999,
+    zIndex: 9999,
 });
 
-Vue.filter('cash', (val) => `$${val.toString().replace(/\d{1,3}(?=(\d{3})+$)/g, '$&,')}`);
-Vue.filter('hideText', (text) => ((text.length > 10) ? `${text.substring(0, 9)}...` : text));
+Vue.filter('cash', (val) => (val ? `$${val.toString().replace(/\d{1,3}(?=(\d{3})+$)/g, '$&,')}` : ''));
+Vue.filter('hideText', (text) => {
+    if (text) {
+        return (text.length > 10) ? `${text.substring(0, 9)}...` : text;
+    }
+    return '';
+});
 Vue.filter('hideDescipt', (text) => ((text.length > 40) ? `${text.substring(0, 39)}...` : text));
 Vue.config.productionTip = false;
 

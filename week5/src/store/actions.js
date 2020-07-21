@@ -17,6 +17,15 @@ const actions = {
     setPagination({ commit }, data) {
         commit(types.SET_PAGINATION, data);
     },
+    setTempProduct({ commit }, data) {
+        commit(types.SET_TEMP_PRODUCT, data);
+    },
+    clearTempProduct({ commit }) {
+        commit(types.CLEAR_TEMP_PRODUCT);
+    },
+    toggleProductPage({ commit }) {
+        commit(types.TOGGLE_PRODUCT_PAGE);
+    },
     toggleLoading({ commit }) {
         commit(types.TOGGLE_LOADING);
     },
