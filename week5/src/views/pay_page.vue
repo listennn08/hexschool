@@ -277,21 +277,21 @@ export default {
                         img
                             display: block
                             width: 50%
-                .total
-                    display: flex
-                    align-items: center
-                    justify-content: center
-                    width: 30%
-                    padding: 1% 10%
-                    margin: 0 25%
-                    background: rgba(211, 172, 43, .5)
-                    border: 1px dotted $darkgray
-                    border-radius: 20px
-                    font-font-family: 'Noto Sans TC', sans serif
-                    span
-                        display: inline-block
-                        font-font-family: 'Open Sans', sans serif
-                        margin-left: 5%
+            .total
+                display: flex
+                align-items: center
+                justify-content: center
+                width: 30%
+                padding: 1% 10%
+                margin: 0 25%
+                background: rgba(211, 172, 43, .5)
+                border: 1px dotted $darkgray
+                border-radius: 20px
+                font-font-family: 'Noto Sans TC', sans serif
+                span
+                    display: inline-block
+                    font-font-family: 'Open Sans', sans serif
+                    margin-left: 5%
             .row:nth-of-type(4)
                 label
                     margin: 1% 0
