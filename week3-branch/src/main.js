@@ -6,7 +6,7 @@ import VueLodash from 'vue-lodash';
 import App from './App.vue';
 
 Vue.use(VueAxios, axios);
-Vue.use(VueLodash, { name: 'custom', lodash: lodash });
+Vue.use(VueLodash, { name: 'custom', lodash });
 Vue.config.productionTip = false;
 
 new Vue({

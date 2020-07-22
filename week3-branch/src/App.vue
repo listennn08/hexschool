@@ -7,62 +7,59 @@
                 :opacity=1
                 :is-full-page="loadingConfig.fullPage"
             )
-        #start.start-page.fill-page
+        #start.start-page.fill-page(v-if="questionNumber<0")
             h1.w-50.mt-auto {{ title.zh }}
             h2.w-50 {{ title.en }}
             p.w-50 {{ description }}
             .start-btn-block
-                a.start(href="#q1") 開始測驗
-        .fill-page.test-page(
-            v-for="(problem, index) in problemList"
-            :id="'q' + (index+1)"
-            :key="index"
-        )
-            .number Q{{ index+1 }}
-            .quesion: h1 {{ problem.problem }}
-            .check(
-                v-for="(option) in problem.options"
-                :key="option.id"
+                button.start(@click="nextQuesion()") 開始測驗
+        .fill-page.test-page(v-else-if="questionNumber>=0 && questionNumber < 10")
+            .number Q{{ questionNumber+1 }}
+            h1.quesion {{ currentQuestion.problem }}
+            label.check(
+                    :for="currentQuestion.id"
+                    v-for="(option) in currentQuestion.options"
+                    :key="option.id"
             )
                 input(
                     type="radio"
-                    :name="problem.id"
+                    :name="currentQuestion.id"
                     :value="option.fraction"
-                    v-model="problemCategorys[Math.floor(index/2)].score[index%2]"
+                    v-model="problemCategorys[Math.floor(questionNumber/2)].score[questionNumber%2]"
                 )
-                label(:for="problem.id") {{ captureStr(option.description, "。") + "。" }}
-                    small {{ "&nbsp;" + captureStr(option.description, "。", "r") }}
+                | {{ captureStr(option.description, "。") + "。" }}
+                small {{ "&nbsp;" + captureStr(option.description, "。", "r") }}
             .noChoiceMsg(:class="{hide: hasChoice}") 尚未選擇答案唷
             .btn
-                button(@click="nextQuesion(problem.id, index+1)" v-if="index != 9") 下一題
+                button(@click="nextQuesion()" v-if="questionNumber != 9") 下一題
                 button(@click="countResult" v-else) 看結果
-        template(v-if="showResult")
-            .fill-page.result-page(
-                v-for="(category, index) in problemCategorys"
-                :key="category.category"
-                :id="category.category"
-                )
-                h1 {{ getCategoryTextZh(category.category) }}
-                h2 {{ category.category }}
-                .score {{ category.score.reduce((pre, cur) => pre + cur, 0) }}
-                .w-50
-                    .detail {{ category.description.desc }}
-                .w-50
-                    .description(:class="{highlight: resultCheck[index].high}")
+        template(v-else)
+            .fill-page.result-page
+                header
+                    h1 {{ getCategoryTextZh(currentResult.category) }}
+                    h2 {{ currentResult.category }}
+                    .score {{ currentResult.score.reduce((pre, cur) => pre + cur, 0) }}
+                    .w-60
+                        p.detail {{ currentResult.description.desc }}
+                .w-80.result-content
+                    .description(:class="{highlight: resultCheck[resultIndex].high}")
                         .description-title 高
                             small （&ge; 7）
-                        | {{ category.description.high }}
-                    .description(:class="{highlight:resultCheck[index].middle}")
+                        | {{ currentResult.description.high }}
+                    .description(:class="{highlight:resultCheck[resultIndex].middle}")
                         .description-title 中
                             small  (&#61; 6)
-                        | {{ category.description.middle }}
-                    .description(:class="{highlight: resultCheck[index].low}")
+                        | {{ currentResult.description.middle }}
+                    .description(:class="{highlight: resultCheck[resultIndex].low}")
                         .description-title 低
                             small （&le; 5）
-                        | {{ category.description.low }}
+                        | {{ currentResult.description.low }}
                 .btn
-                    button(v-if="index != problemCategorys.length-1" @click="nextPage(index+1)") 下一頁
-                    button(v-else @click="nextPage") 再測一次
+                    button(
+                        v-if="resultIndex != problemCategorys.length-1"
+                        @click="nextPage()"
+                    ) 下一頁
+                    button(v-else @click="nextPage('reset')") 再測一次
 </template>
 <script>
 import Loading from 'vue-loading-overlay';
@@ -83,6 +80,10 @@ export default {
             description: '',
             problemCategorys: [],
             problemList: [],
+            currentQuestion: {},
+            questionNumber: -1,
+            currentResult: {},
+            resultIndex: -1,
             degree: {},
             traits: {},
             hasChoice: true,
@@ -111,12 +112,19 @@ export default {
             });
     },
     methods: {
-        nextQuesion(quesionID, index) {
-            if (document.querySelector(`[name="${quesionID}"]:checked`)) {
-                window.location.href = `#q${index + 1}`;
-                this.hasChoice = true;
-            } else {
+        nextQuesion() {
+            if (this.questionNumber < 0) {
+                this.questionNumber += 1;
+                this.currentQuestion = this.problemList[this.questionNumber];
+            } else if (this.questionNumber > -1
+                && !this.problemCategorys[Math.floor(this.questionNumber / 2)]
+                    .score[this.questionNumber % 2]
+            ) {
                 this.hasChoice = false;
+            } else {
+                this.hasChoice = true;
+                this.questionNumber += 1;
+                this.currentQuestion = this.problemList[this.questionNumber];
             }
         },
         captureStr(str, delimiter = '', direction = 'l') {
@@ -140,8 +148,10 @@ export default {
                 const checkObj = this.addCheckObject(intervalKey, scoreName);
                 this.resultCheck.push(checkObj);
             });
+            this.questionNumber += 1;
+            this.resultIndex += 1;
+            this.currentResult = { ...this.problemCategorys[this.resultIndex] };
             this.showResult = true;
-            setTimeout(() => { this.nextPage(0); }, 200);
         },
         findKey(o, v) {
             return Object.keys(o).find((k) => o[k] === v);
@@ -161,13 +171,15 @@ export default {
             return this.traits.zh[this.traits.en.indexOf(en)];
         },
         nextPage(i) {
-            if (typeof i === 'number') {
-                window.location.href = `#${this.problemCategorys[i].category}`;
+            if (i !== 'reset') {
+                this.resultIndex += 1;
+                this.currentResult = this.problemCategorys[this.resultIndex];
             } else {
                 this._.forEach(this.problemCategorys, (item, index) => {
                     this.problemCategorys[index].score = [0, 0];
                 });
-                window.location.href = '#start';
+                this.questionNumber = -1;
+                this.resultIndex = -1;
             }
         },
     },
@@ -204,32 +216,16 @@ export default {
             background: #345966
             .number, button
                 background: rgba(#BD8035, .8)
-            .quesion, p, .check, h1, h2, .description, .detail
+            .quesion, p, .check, h1, h2, .description
                 color: #eee
             .check
-                label
-                    small
-                        color: #aaa
+                small
+                    color: #aaa
             .score
                 color: orange
             .highlight
                 background: linear-gradient(-45deg, $pinko, $yellow)
                 color: #333
-        &:nth-of-type(odd)
-            background: linear-gradient(-45deg, $pinko, $yellow)
-            .number, button
-                background: rgba($blue, .8)
-            .quesion, p, .check, h1, h2, .description, .detail
-                color: #333
-            .check
-                label
-                    small
-                        color: #555
-            .score
-                color: #345966
-            .highlight
-                background: #345966
-                color: #ddd
         .number
             align-self: flex-start
             margin-right: auto
@@ -250,10 +246,10 @@ export default {
             display: inline-block
             width: 15%
             align-self: flex-start
-            label
-                small
-                    display: block
-                    padding: 0 8%
+            small
+                display: block
+                color: #ddd
+                padding: 0 8%
             input
                 margin-right: 1%
         .noChoiceMsg
@@ -286,6 +282,7 @@ export default {
                 border-radius: 15px
                 outline: 0
                 color: #eee
+                cursor: pointer
     .start-page
         background: linear-gradient(-45deg, $pinko, $yellow)
         flex-direction: column
@@ -312,9 +309,10 @@ export default {
         display: flex
         justify-content: center
         .start
-            width: 5%
+            width: 10%
             margin-top: 2%
             padding: 1%
+            border: 0
             border-radius: 15px
             color: #eee
             background: rgba($blue, .8)
@@ -325,7 +323,9 @@ export default {
             animation: startButton 3s 1s infinite linear forwards
             position: relative
             text-decoration: none
+            cursor: pointer
             position: relative
+            outline: none
             &::after
                 content: ''
                 position: absolute
@@ -339,32 +339,48 @@ export default {
                     right: 20%
                     left: 20%
     .result-page
+        flex-direction: column
         align-items: center
+        header
+            margin-top: auto
+            width: 50%
+            display: flex
+            flex-direction: column
+            align-items: center
         h1, h2, .score
             width: 100%
             text-align: center
-        h1
-            margin-top: auto
         .score
             font-family: 'Raleway', sans-serif
             font-size: 36px
             font-weight: 900
+        .w-80
+            width: 80%
+        .w-60
+            width: 60%
+            text-align: center
         .w-50
             width: 50%
             padding: 0 5%
             box-sizing: border-box
-            // margin: 0 25%
         .w-30
             width: 30%
             padding: 2%
             box-sizing: border-box
+        .result-content
+            margin-top: 1%
+            display: flex
+            flex-direction: row
+            justify-content: space-around
         .detail
             margin-top: auto
         .description-title
+            width: 100%
             font-size: 24px
             text-align: center
             font-weight: 700
         .description
+            width: 100%
             display: block
             text-align: center
             padding: 5% 1%
