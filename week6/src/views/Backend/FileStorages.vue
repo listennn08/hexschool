@@ -1,16 +1,11 @@
 <template lang="pug">
   div
-    navbar
-    router-view
+    h1 FileStorages
 </template>
 <script>
-import navbar from '@/components/backend/Navbar.vue';
-
 export default {
-  components: {
-    navbar,
-  },
 };
 </script>
 <style lang="sass" scoped>
+
 </style>

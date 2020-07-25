@@ -1,81 +1,110 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { getItem } from '../cookies';
+import store from '../store';
 
 Vue.use(VueRouter);
 
 const routes = [
-    {
-        path: '/',
-        name: 'Home',
-        component: () => import('../views/Home.vue'),
-    },
-    {
-        path: '/about',
-        name: 'About',
+  {
+    path: '/',
+    component: () => import('../views/Home.vue'),
+    children: [
+      {
+        path: 'about',
         component: () => import('../views/About.vue'),
-    },
-    {
-        path: '/login',
-        name: 'login',
+      },
+      {
+        path: 'login',
         component: () => import('../views/Login.vue'),
-    },
-    {
-        path: '/product-list',
-        name: 'product_list',
+      },
+      {
+        path: 'logout',
+        component: () => import('../views/Logout.vue'),
+      },
+      {
+        path: 'products',
         component: () => import('../views/Products.vue'),
-    },
-    {
-        path: '/discount',
-        name: 'discount',
-        component: () => import('../components/DiscountPanel.vue'),
-    },
-    {
-        path: '/shopcart',
-        name: 'shopcart',
+      },
+      {
+        path: 'coupons',
+        component: () => import('../components/Coupons.vue'),
+      },
+      {
+        path: 'shopcart',
         component: () => import('../views/Shopcart.vue'),
-    },
-    {
-        path: '/payment',
-        name: 'payment',
+      },
+      {
+        path: 'payment',
         component: () => import('../views/Payment.vue'),
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    component: () => import('../views/Backend/Home.vue'),
+    meta: {
+      requiresAuth: true,
     },
-    {
-        path: '/admin',
-        component: () => import('../views/Backend/Home.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('../views/Backend/Products.vue'),
         meta: {
-            requiresAuth: true,
+          requiresAuth: true,
         },
-        children: [
-            {
-                path: '/product-manage',
-                name: 'product_manage',
-                component: () => import('../views/Backend/ProductManage.vue'),
-            },
-        ],
-    },
-    {
-        path: '/*',
-        
-    }
+      },
+      {
+        path: 'products',
+        component: () => import('../views/Backend/Products.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: 'coupons',
+        component: () => import('../views/Backend/Coupons.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: 'orders',
+        component: () => import('../views/Backend/Orders.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: 'files',
+        component: () => import('../views/Backend/FileStorages.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+    ],
+  },
+  {
+    path: '/*',
+    redirect: '/login',
+  },
 ];
 
 const router = new VueRouter({
-    mode: 'history',
-    base: process.env.VUE_APP_BASE_URL,
-    routes,
+  mode: 'history',
+  base: process.env.VUE_APP_BASE_URL,
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth) {
-        const token = getItem('token');
-        if (token) {
-            next();
-        } else {
-            next({ path: '/login' });
-        }
+  if (to.meta.requiresAuth) {
+    const { token } = store.state.loginInfo;
+    if (token) {
+      next();
     } else {
-        next();
+      next({ path: '/login' });
     }
+  } else {
+    next();
+  }
 });
 export default router;

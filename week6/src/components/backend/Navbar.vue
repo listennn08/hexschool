@@ -2,20 +2,20 @@
   #navbar.navbar
     .container
       .navbar-header
-        h2: router-link(to="/") GAGU
+        h2: router-link(to="/admin") GAGU
+          small manage
       .navbar-context
         .navbar-list
-          router-link(to="/about") 關於我們
-          router-link(to="/coupons") 優惠活動
-          router-link(to="/products") 產品列表
-          router-link(to="/shopcart") 購物車
+          router-link(to="/admin/products") 商品管理
+          router-link(to="/admin/coupons") 優惠管理
+          router-link(to="/admin/orders") 訂單管理
+          router-link(to="/admin/files") 圖片管理
       .navbar-right
         .navbar-list
-          router-link(v-if="loginInfo.isLogin" to="/admin") 去後台
+          router-link(to="/") 去前台
           | &nbsp;|&nbsp;
           router-link(v-if="!loginInfo.isLogin" to="/login") 登入
           router-link(v-else to="/logout") 登出
-
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -43,7 +43,8 @@ $lightgray: #F4F3EA
 
 .navbar
   width: 100%
-  background-color: $lightgray
+  background-color: $navyblue
+  color: $lightgray
   .container
     width: 100%
     height: 50px
@@ -56,8 +57,11 @@ $lightgray: #F4F3EA
       text-align: left
       vertical-align: middle
       a
-        color: $navyblue
+        color: $lightgray
         text-decoration: none
+      small
+        margin-left: 1%
+        font-size: 16px
     .navbar-context, .navbar-right
       display: flex
       margin: auto
@@ -67,17 +71,17 @@ $lightgray: #F4F3EA
         transition: .5s
         a
           text-decoration: none
-          color: $navyblue
+          color: $lightgray
           position: relative
           &::after
             content: ''
             position: absolute
             height: 0
             bottom: 0
-            border-bottom: 1px solid $hnavyblue
+            border-bottom: 1px solid $lightgray
             transition: .3s
           &:hover
-            color: $hnavyblue
+            color: $lightgray
 
     .navbar-context
       width: 60%
@@ -96,8 +100,10 @@ $lightgray: #F4F3EA
       margin-right: 2%
       justify-content: flex-end
       .navbar-list
+        // width: 30%
+        // justify-content: flex-end
         a
-          // padding: 20% 2%
+          // padding: 0 5%
           &::after
             left: 0%
             right: 100%
