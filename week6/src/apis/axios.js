@@ -21,9 +21,10 @@ Request.interceptors.response.use(
   (error) => {
     const status = error.response ? error.response.status : null;
     if (status === 401) {
+      const { config } = error;
       if (cookies.getItem('token') && store.state.loginInfo.token) {
-        error.config.headers.Authorization = `Bearer ${cookies.getItem('token')}`;
-        return Request.request(error.config);
+        config.headers.Authorization = `Bearer ${cookies.getItem('token')}`;
+        return Request.request(config);
       }
     }
     return Promise.reject(error);

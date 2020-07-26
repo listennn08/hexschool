@@ -10,6 +10,7 @@ const getters = {
   sticky: (state) => state.sticky,
   files: (state) => state.files,
   orders: (state) => state.orders,
+  order: (state) => state.order,
   coupons: (state) => state.coupons,
 };
 

@@ -68,7 +68,6 @@ Vue.filter('hideText', (text) => {
   return '';
 });
 Vue.filter('hideContent', (text) => ((text.length > 25) ? `${text.substring(0, 24)}...` : text));
-Vue.config.productionTip = false;
 
 Vue.config.productionTip = false;
 

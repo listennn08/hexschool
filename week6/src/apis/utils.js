@@ -85,6 +85,13 @@ export function createOrder(data) {
     ...data,
   });
 }
+export function getOrder(id) {
+  return get(`${api.uuid}${api.order.base}/${id}`);
+}
+
+export function payOrder(id) {
+  return post(`${api.uuid}${api.order.base}/${id}/paying`);
+}
 /** Back-End Order api */
 export function getBackendOrders() {
   return get(`${api.uuid}${api.backend}${api.order.base}`);

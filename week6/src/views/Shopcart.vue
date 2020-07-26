@@ -15,7 +15,7 @@
         tbody(ref="preivew")
           tr(v-for="(item, index) in products" :key="item.product.id")
             td(scoped="row") {{ index+1 }}
-            td: img(:src="item.product.imageUrl")
+            td.pic(:style="{backgroundImage: `url(${item.product.imageUrl[0]})`}")
             td
               .item-name {{ item.product.title | hideText }}
             td
@@ -44,14 +44,14 @@
           td {{ countAll | cash }}
           td
       .shopcart-checkout
-        button.continueshop: router-link(to="/product-list") &lsaquo;&lsaquo;&nbsp;繼續購物
-        button.checkout: router-link(to="/payment") 去結帳 &rsaquo;&rsaquo;
+        button.continueshop: router-link(to="products") &lsaquo;&lsaquo;&nbsp;繼續購物
+        button.checkout: router-link(to="checkout") 去結帳 &rsaquo;&rsaquo;
     .container(v-else)
       .noItemAlert
         | 還沒有把喜愛的商品加入購物車唷
         | 趕快去購物吧！
       .shopcart-checkout
-        button.continueshop: router-link(to="/product-list") &lsaquo;&lsaquo;繼續購物
+        button.continueshop: router-link(to="/products") &lsaquo;&lsaquo;繼續購物
 </template>
 <script>
 import { getCart, updateCart, deleteCart } from '../apis/utils';
@@ -196,9 +196,11 @@ export default {
       margin-top: 1%
       float: right
       width: 50%
-    img
-      display: block
-      width: 100%
+    .pic
+      height: 200px
+      background-position: left
+      background-repeat: no-repeat
+      background-size: cover
     .price
       font-family: 'Open Sans', sans-serif
       color: $navyblue

@@ -32,6 +32,7 @@ const state = {
   sticky: false,
   files: [],
   orders: [],
+  order: {},
   coupons: [],
 };
 

@@ -30,11 +30,11 @@ export default {
     top: 50%
     right: 50%
     left: 50%
-    transition: .5s
-    transform: scale(0)
+    transition:  .5s
+    transform: scale(0) translate(-50%, -50%)
     z-index: 1000
     &.show
-      transform: scale(1)
+      transform: scale(1) translate(-50%, -50%)
     .message
       width: auto
       padding: 1%

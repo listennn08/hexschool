@@ -15,4 +15,5 @@ export const TOGGLE_LOADING = 'TOGGLELOADING';
 export const TOGGLE_PRODUCT_PAGE = 'TOGGLEPRODUCTPAGE';
 export const SET_FILES = 'SETFILES';
 export const SET_ORDERS = 'SETORDERS';
+export const SET_ORDER = 'SETORDER';
 export const SET_COUPONS = 'SETCOUPONS';

@@ -59,6 +59,9 @@ const actions = {
   setOrders({ commit }, data) {
     commit(types.SET_ORDERS, data);
   },
+  setOrder({ commit }, data) {
+    commit(types.SET_ORDER, data);
+  },
   setCoupons({ commit }, data) {
     commit(types.SET_COUPONS, data);
   },

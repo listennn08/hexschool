@@ -83,6 +83,9 @@ const mutations = {
   [types.SET_ORDERS](state, data) {
     Vue.set(state, 'orders', data);
   },
+  [types.SET_ORDER](state, data) {
+    Vue.set(state, 'order', { ...data });
+  },
   [types.SET_COUPONS](state, data) {
     Vue.set(state, 'coupons', data);
   },

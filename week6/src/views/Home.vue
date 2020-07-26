@@ -22,7 +22,7 @@ export default {
   methods: {
     ...mapActions(['toggleSticky']),
     handleScroll() {
-      if (window.scrollY > 200) {
+      if (window.scrollY > 180) {
         this.toggleSticky(true);
       } else {
         this.toggleSticky(false);

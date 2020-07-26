@@ -42,7 +42,11 @@ const routes = [
         component: () => import('../views/Shopcart.vue'),
       },
       {
-        path: 'payment',
+        path: 'checkout',
+        component: () => import('../views/Checkout.vue'),
+      },
+      {
+        path: 'payment/:id',
         component: () => import('../views/Payment.vue'),
       },
     ],
