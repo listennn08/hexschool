@@ -8,7 +8,4 @@ module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
     ? '/hexschool/week5/'
     : '/',
-  pluginOptions: {
-    sourceDir: "client"
-  }
 }

@@ -6,18 +6,14 @@
           v-for="(item, index) in showProducts"
           :data-id="item.id"
           :key="index"
-          @click="showDetail"
         )
           .cat {{ item.category }}
-          .pic
-            img(
-              :src="item.imageUrl[0]"
-              alt=""
-              srcset=""
-            )
+          .pic(:style="{backgroundImage: `url(${item.imageUrl[0]})`}")
           .detail
             .title(:title="item.title") {{ item.title | hideText }}
-            .descript {{ item.content | hideDescipt }}
+            .descript
+              | {{ item.content | hideContent }}
+            router-link.descript-link(:to="`/product/${item.id}`") 查看更多 &raquo;
             .price(v-if="item.price")
               | {{ item.price | cash }}
               span(
@@ -36,7 +32,7 @@
                 )
       template(v-if="pagination.current_page")
         pagination(:pagination="pagination")
-      product
+      //- product
       router-link(to="/shopcart").shop-cart
         .shop-container
           .cart-count(v-if="shopcart.quantity") {{ shopcart.quantity }}
@@ -45,7 +41,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import product from '../components/Product.vue';
+// import product from '../components/Product.vue';
 import productCategories from '../components/ProductCategories.vue';
 import pagination from '../components/Pagination.vue';
 import {
@@ -54,7 +50,7 @@ import {
 
 export default {
   components: {
-    product,
+    // product,
     productCategories,
     pagination,
   },
@@ -261,10 +257,9 @@ $lightgray: #F4F3EA
             display: flex
             align-items: center
             justify-content: center
-            img
-              display: block
-              border-radius: 13px 0 0 13px
-              width: 100%
+            background-position: left
+            background-repeat: no-repeat
+            background-size: cover
         .detail
           width: 50%
           display: flex
@@ -283,10 +278,27 @@ $lightgray: #F4F3EA
             text-align: left
           .descript
             text-align: left
-            max-height: 50px
+            max-height: 70px
             overflow: hidden
             text-overflow: ellipsis
             color: $darkgrayn
+          .descript-link
+            color: blue
+            margin-left: auto
+            position: relative
+            font-size: 14px
+              // &::after
+              //   content: ''
+              //   position: absolute
+              //   height: 0
+              //   bottom: 0
+              //   left: 0%
+              //   right: 100%
+              //   border-bottom: 1px solid blue
+              //   transition: .3s
+              // &:hover::after
+              //   right: 0%
+
           .price
             width: 100%
             text-align: left

@@ -5,7 +5,7 @@
         font-awesome-icon.fa-3x.fa-spin(:icon="['fa', 'spinner']")
       .row-100.row-title
         .page-title
-          span: h3 {{ !pid ? '新增' : '更新'}}商品
+          span: h3 {{ !tempProduct.id ? '新增' : '更新'}}商品
       .row
         label(for="title") 名稱
         input#title.required(type="text" v-model="tempProduct.title")
@@ -25,11 +25,16 @@
         label(for="price") 售價
         input#price(type="number" v-model="tempProduct.price")
       .row
-        label(for="imageUrl") 輸入圖片網址
+        label(for="imageUrl") 輸入圖片網址或上傳圖片
         input#imageUrl(type="text" v-model.lazy="tempProduct.imageUrl[0]")
-        //- input#uploadImg(type="file")
+        input#uploadImg(type="file")
         .img
-          img#preview(:src="tempProduct.imageUrl[0]" alt="")
+          img.preview(
+            v-for="image in tempProduct.imageUrl"
+            :key="image"
+            :src="image"
+            alt=""
+          )
       .row
         label(for="price") 庫存
         input#store(
@@ -59,24 +64,23 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { getBackendDataDetail, createData, updateData } from '@/apis/utils';
+import {
+  getBackendDataDetail, createData, updateData, uploadFile,
+} from '../../apis/utils';
 
 export default {
   name: 'productPage',
-  data() {
-    return {
-      tempProduct: {
-        imageUrl: [],
-        options: {
-          store: 0,
-        },
-      },
-    };
-  },
   props: {
     addNewItem: Boolean,
   },
-  computed: mapGetters(['pid', 'product', 'productPage', 'loading']),
+  data() {
+    return {
+      formData: new FormData(),
+    };
+  },
+  computed: {
+    ...mapGetters(['tempProduct', 'productPage', 'loading']),
+  },
   watch: {
     'productPage.open': {
       handler() {
@@ -89,26 +93,38 @@ export default {
       'setMsg', 'clearMsg', 'addProducts', 'editProduct', 'setTempProduct', 'clearTempProduct', 'toggleProductPage', 'toggleLoading',
     ]),
     loadProduct() {
-      if (this.pid) {
+      if (this.tempProduct.id) {
         this.toggleLoading();
-        getBackendDataDetail(this.pid)
+        getBackendDataDetail(this.tempProduct.id)
           .then((resp) => {
-            this.tempProduct = resp.data.data;
-            if (!this.tempProduct.options) {
-              this.tempProduct.options = {
+            const { data } = resp.data;
+            if (!data.options) {
+              data.options = {
                 store: null,
               };
             } else {
-              this.tempProduct.options = JSON.parse(this.tempProduct.options);
+              data.options = JSON.parse(data.options);
             }
+            this.setTempProduct(data);
             this.toggleLoading();
           });
-      } else {
-        this.tempProduct = this.product;
       }
     },
     edit(e) {
       const { action } = e.target.dataset;
+      const uFile = document.querySelector('#uploadImg').files[0];
+      this.formData.append('file', uFile);
+      if (uFile) {
+        uploadFile(this.formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then((resp) => {
+            console.log(resp.data.data.id, resp.data.data.path);
+            document.querySelector('#uploadImg').value = '';
+          });
+      }
       if (action === 'create') {
         this.toggleLoading();
         this.tempProduct.options = JSON.stringify(this.tempProduct.options);
@@ -178,7 +194,7 @@ export default {
     padding: 0
     list-style: none
     box-sizing: border-box
-  #newDataPage
+  .newDataPage
     z-index: 222
     position: fixed
     top: 0
@@ -231,12 +247,12 @@ export default {
         align-items: center
         .img
           width: 30%
-          #preview
+          .preview
             width: 100%
         #create.hide, #update.hide
           display: none
       label
-        width: 100px
+        width: 100%
         font-family: 'Noto Sans TC', sans-serif
         font-weight: 700
         color: $navyblue

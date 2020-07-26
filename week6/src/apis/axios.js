@@ -7,6 +7,10 @@ const Request = axios.create({
   baseURL: 'https://course-ec-api.hexschool.io/api/',
 });
 
+const header = {
+  'Content-Type': 'application/json',
+};
+
 Request.interceptors.request.use((request) => {
   request.headers.Authorization = `Bearer ${cookies.getItem('token')}`;
   return request;
@@ -29,8 +33,8 @@ Request.interceptors.response.use(
 export function get(url) {
   return Request.get(url);
 }
-export function post(url, data = {}) {
-  return Request.post(url, data);
+export function post(url, data = {}, headers = header) {
+  return Request.post(url, data, { headers });
 }
 export function patch(url, data = {}) {
   return Request.patch(url, data);

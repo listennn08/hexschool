@@ -3,42 +3,63 @@ import * as types from './types';
 
 const mutations = {
   [types.SET_LOGIN_INFO](state, { uuid, token }) {
-    state.loginInfo.uuid = uuid;
-    state.loginInfo.token = token;
-    state.loginInfo.isLogin = Boolean(token);
+    Vue.set(state, 'loginInfo', {
+      uuid,
+      token,
+      isLogin: Boolean(token),
+    });
   },
   [types.CLEAR_LOGIN_INFO](state) {
-    state.loginInfo.uuid = '';
-    state.loginInfo.token = '';
-    state.loginInfo.isLogin = false;
+    Vue.set(state, 'loginInfo', {
+      uuid: '',
+      token: '',
+      isLogin: false,
+    });
   },
   [types.SET_MSG](state, { msg, type }) {
-    state.msg.text = msg;
-    state.msg.type = type;
+    Vue.set(state, 'msg', {
+      text: msg,
+      type,
+    });
   },
   [types.CLEAR_MSG](state) {
-    state.msg.text = '';
+    Vue.set(state, 'msg', { text: '' });
   },
   [types.SET_CATEGORY](state, category) {
-    state.category = category;
+    Vue.set(state, 'category', category);
   },
   [types.SET_PRODUCTS](state, data) {
-    state.products = [...data];
+    Vue.set(state, 'products', [...data]);
+  },
+  [types.ADD_PRODUCTS](state, data) {
+    state.products.unshift(data);
+    Vue.set(state, 'products', state.products);
+  },
+  [types.EDIT_PRODUCT](state, { id, data }) {
+    state.products.forEach((prod, index) => {
+      if (prod.id === id) {
+        Vue.set(state.products, index, data);
+      }
+    });
+  },
+  [types.DEL_PRODUCT](state, index) {
+    state.products.splice(index, 1);
+    Vue.set(state, 'products', state.products);
   },
   [types.SET_PAGINATION](state, data) {
-    state.pagination = { ...data };
+    Vue.set(state, 'pagination', { ...data });
   },
   [types.TOGGLE_STICKY](state, data) {
-    state.sticky = data;
+    Vue.set(state, 'sticky', data);
   },
   [types.TOGGLE_LOADING](state) {
-    state.loading = !state.loading;
+    Vue.set(state, 'loading', !state.loading);
   },
   [types.TOGGLE_PRODUCT_PAGE](state) {
-    state.productPage.open = !state.productPage.open;
+    Vue.set(state.productPage, 'open', !state.productPage.open);
   },
   [types.SET_TEMP_PRODUCT](state, data) {
-    state.tempProduct = { ...data };
+    Vue.set(state, 'tempProduct', { ...data });
   },
   [types.CLEAR_TEMP_PRODUCT](state) {
     Vue.set(state, 'tempProduct', {
@@ -55,6 +76,15 @@ const mutations = {
         store: null,
       },
     });
+  },
+  [types.SET_FILES](state, data) {
+    Vue.set(state, 'files', data);
+  },
+  [types.SET_ORDERS](state, data) {
+    Vue.set(state, 'orders', data);
+  },
+  [types.SET_COUPONS](state, data) {
+    Vue.set(state, 'coupons', data);
   },
 };
 

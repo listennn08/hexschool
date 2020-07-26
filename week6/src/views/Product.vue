@@ -1,26 +1,21 @@
 <template lang="pug">
-  #product.product(
-    :class="{hide: !productPage.open}"
-    @click="toggle"
-  )
+  #product.product
     .product-container(ref="product")
-      button.cancel(@click="cancel()") &times;
+      a.prev(@click.prevent="$router.go(-1)") &laquo; 上一頁
+      //- button.cancel(@click="cancel()") &times;
       .category: small {{ tempProduct.category }}
       .item
-        .img(v-if="tempProduct.imageUrl")
-          img(:src="tempProduct.imageUrl[0]", alt="alt")
+        .img(:style="{backgroundImage: `url(${tempProduct.imageUrl[0]})`}")
         .detail
-
           h2.title  {{ tempProduct.title }}
           h4.title 產品說明
           p.content {{ tempProduct.content }}
           h4.title 產品資訊
           p.content {{ tempProduct.description }}
-          .item-price
-            .price-title 售價
-            .price {{ tempProduct.price | cash }}
-              span(:class="{strike: tempProduct.price}")
-                | {{ tempProduct.origin_price | cash }}
+          h4.title 售價
+          .price {{ tempProduct.price | cash }}
+            span(:class="{strike: tempProduct.price}")
+              | {{ tempProduct.origin_price | cash }}
           .buy-num
             button.btn-num-minus(type="button" @click="countQuantity('m')") &minus;
             input.num(type="number" v-model="tempProduct.quantity")
@@ -37,15 +32,27 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { addCart } from '../apis/utils';
+import { addCart, getDataDetail } from '../apis/utils';
 
 export default {
   name: 'product',
   computed: {
     ...mapGetters(['tempProduct', 'productPage', 'loading']),
   },
+  created() {
+    const loader = this.$loading.show();
+    const { id } = this.$route.params;
+    getDataDetail(id)
+      .then((resp) => {
+        this.setTempProduct({
+          ...resp.data.data,
+          quantity: 1,
+        });
+        loader.hide();
+      });
+  },
   methods: {
-    ...mapActions(['setMsg', 'toggleProductPage', 'clearTempProduct', 'toggleLoading']),
+    ...mapActions(['setMsg', 'setTempProduct', 'toggleProductPage', 'clearTempProduct', 'toggleLoading']),
     countQuantity(operate) {
       if (operate === 'm') {
         if (this.tempProduct.quantity > 1) {
@@ -84,6 +91,9 @@ export default {
       }
     },
   },
+  beforeDestroy() {
+    this.clearTempProduct();
+  },
 };
 </script>
 <style lang="sass" scoped>
@@ -98,6 +108,7 @@ export default {
     margin: 0
     list-style: none
   .product
+    margin-top: 1%
     width: 100%
     height: 100vh
     display: flex
@@ -113,6 +124,19 @@ export default {
       background:  $lightgray // #ffeaee
       position: relative
       // 右上取消按鍵
+      .prev
+        float: left
+        position: absolute
+        top: .5%
+        left: .5%
+        font-size: 14px
+        font-family: 'Noto Sans TC', sans-serif
+        border: 0
+        border-radius: 20px
+        background: none
+        transition: .5s
+        outline: 0
+        cursor: pointer
       .cancel
         float: right
         position: absolute
@@ -132,7 +156,7 @@ export default {
         width: 15%
         padding: 2px
         background: $goldyellow
-        border-radius: 5px
+        border-radius: 5px 5px 0 0
         font-family: 'Noto Sans TC', sans-serif
         text-transform: uppercase
         small
@@ -144,15 +168,14 @@ export default {
         // 產品圖片
         .img
           width: 50%
+          height: 500px
           margin-right: 2%
-          display: flex
-          align-items: center
-          img
-            display: block
-            width: 100%
+          background-position: left
+          background-repeat: no-repeat
+          background-size: cover
         // 產品資訊
         .detail
-          width: 50%
+          width: 48%
           display: flex
           flex-direction: column
           // 產品名稱
@@ -160,35 +183,31 @@ export default {
             font-family: 'Noto Sans TC', sans-serif
             text-align: left
           h4
-            margin-top: 1%
+            margin: 1% 0
             width: 100%
             background: linear-gradient(90deg, rgba($goldyellow, .8), transparent 50%)
           // 產品說明
           .content
-            margin-top: 3%
             // border: 1px solid #dda8cc
             font-family: 'Noto Sans TC', sans-serif
             text-align: left
             font-weight: 500
+            margin-bottom: auto
             .item-descript
               color: #555
               font-size: 14px
               font-weight: 300
           // 產品價格
-          .item-price
+          .price
             text-align: left
-            margin-top: auto
             font-family: 'Raleway', sans-serif
-            .price-title
-              font-family: 'Noto Sans TC', sans-serif
-            .price
-              margin-right: 1%
-              .strike
-                color: #888
-                text-decoration: line-through
-                font-size: 12px
+            .strike
+              color: #888
+              text-decoration: line-through
+              font-size: 12px
           // 購買數量
           .buy-num
+            width: 50%
             margin-top: 3%
             border: 1px double #ddd
             border-radius: 5px

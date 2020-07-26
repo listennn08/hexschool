@@ -28,14 +28,32 @@ const api = {
     allBase: '/ec/coupons',
     base: '/ec/coupon',
   },
+  file: '/storage',
 };
-/** Front-End Product API */
+/** Front-End Product api */
 export function getAllProducts(p = 1) {
   return get(`${api.uuid}${api.product.allBase}?page=${p}`);
 }
 export function getDataDetail(id) {
   return get(`${api.uuid}${api.product.base}/${id}`);
 }
+/** Back-End Product api */
+export function getBackendAllData(p = 1) {
+  return get(`${api.uuid}${api.backend}${api.product.allBase}?page=${p}`, true);
+}
+export function getBackendDataDetail(id) {
+  return get(`${api.uuid}${api.backend}${api.product.base}/${id}`, true);
+}
+export function createData(data) {
+  return post(`${api.uuid}${api.backend}${api.product.base}`, data);
+}
+export function updateData(id, data) {
+  return patch(`${api.uuid}${api.backend}${api.product.base}/${id}`, data, true);
+}
+export function deleteData(id) {
+  return del(`${api.uuid}${api.backend}${api.product.base}/${id}`);
+}
+
 /** Front-End Shopcart API */
 export function getCart() {
   return get(`${api.uuid}${api.shopcart.base}`);
@@ -67,8 +85,12 @@ export function createOrder(data) {
     ...data,
   });
 }
+/** Back-End Order api */
+export function getBackendOrders() {
+  return get(`${api.uuid}${api.backend}${api.order.base}`);
+}
 
-/** Login/Logout API */
+/** auth API */
 export function Login(data) {
   return post(`${api.auth.base}${api.auth.login}`, data);
 }
@@ -83,21 +105,9 @@ export function checkToken() {
   });
 }
 
-/** Back-End Product api */
-export function getBackendAllData(p = 1) {
-  return get(`${api.uuid}${api.backend}${api.product.allBase}?page=${p}`, true);
-}
-export function getBackendDataDetail(id) {
-  return get(`${api.uuid}${api.backend}${api.product.base}/${id}`, true);
-}
-export function createData(data) {
-  return post(`${api.uuid}${api.backend}${api.product.base}`, data);
-}
-export function updateData(id, data) {
-  return patch(`${api.uuid}${api.backend}${api.product.base}/${id}`, data, true);
-}
-export function deleteData(id) {
-  return del(`${api.uuid}${api.backend}${api.product.base}/${id}`);
+/** Front-End coupon  api */
+export function searchCupons(data) {
+  return post(`${api.uuid}${api.coupon.base}/search`, data);
 }
 /** Back-End coupon  api */
 export function getBackendAllCupons() {
@@ -112,6 +122,17 @@ export function createCupon(data) {
 export function updateCupon(id, data) {
   return patch(`${api.uuid}${api.backend}${api.coupon.base}/${id}`, data);
 }
-export function deleteCupon(id, data) {
-  return del(`${api.uuid}${api.backend}${api.coupon.base}/${id}`, data);
+export function deleteCupon(id) {
+  return del(`${api.uuid}${api.backend}${api.coupon.base}/${id}`);
+}
+
+/** Back-End file api */
+export function getFile() {
+  return get(`${api.uuid}${api.backend}${api.file}`);
+}
+export function uploadFile(data) {
+  return post(`${api.uuid}${api.backend}${api.file}`, data);
+}
+export function deleteFile(id) {
+  return del(`${api.uuid}${api.backend}${api.file}/${id}`);
 }

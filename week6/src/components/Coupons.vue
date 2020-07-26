@@ -9,6 +9,27 @@
         span.day 1
         | 天
 </template>
+<script>
+import { mapGetters, mapActions } from 'vuex';
+// import { getAllCupons } from '../apis/utils';
+
+export default {
+  created() {
+    // const loader = this.$loading.show();
+    // getAllCupons()
+    //   .then((resp) => {
+    //     this.setCoupons(resp.data.data);
+    //     loader.hide();
+    //   });
+  },
+  computed: {
+    ...mapGetters(['coupons']),
+  },
+  methods: {
+    ...mapActions(['setCoupons']),
+  },
+};
+</script>
 <style lang="sass" scoped>
   @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&display=swap)
   *

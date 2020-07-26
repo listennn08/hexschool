@@ -30,6 +30,9 @@ const state = {
   pagination: {},
   category: '',
   sticky: false,
+  files: [],
+  orders: [],
+  coupons: [],
 };
 
 export default state;

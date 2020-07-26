@@ -21,9 +21,8 @@
         th.col 分類
         th.col 圖片
         th.col 標題
-        th.col 說明
         th.col 描述
-        th.col 是否啟用
+        th.col 啟用狀態
         th.col 原價
         th.col 售價
         th.col 庫存
@@ -36,14 +35,11 @@
       )
         td.col
           .text {{ item.category }}
-        td.col
-          img(:src="item.imageUrl")
+        td.col(:style="{backgroundImage: `url(${item.imageUrl[0]})`}")
         td.col
           .text {{ item.title }}
         td.col
           .text {{ item.content }}
-        td.col
-          .text {{ item.description }}
         td.col
           font-awesome-icon(
             :class="item.enabled ? 'check' : 'times'"
@@ -71,8 +67,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import pagination from '@/components/Pagination.vue';
-import { getBackendAllData, getBackendDataDetail, deleteData } from '@/apis/utils';
+import pagination from '../../components/Pagination.vue';
+import { getBackendAllData, deleteData } from '../../apis/utils';
 import productPage from './Product.vue';
 
 export default {
@@ -120,10 +116,6 @@ export default {
                   ? JSON.parse(tmpEl.options)
                   : { store: null };
               }
-              getBackendDataDetail(tmpEl.id)
-                .then((r) => {
-                  tmpEl.description = r.data.data.description;
-                });
               return tmpEl;
             });
             this.setProducts(products);
@@ -154,10 +146,6 @@ export default {
                 ? JSON.parse(tmpEl.options)
                 : { store: null };
             }
-            getBackendDataDetail(tmpEl.id)
-              .then((r) => {
-                tmpEl.description = r.data.data.description;
-              });
             return tmpEl;
           });
           this.setProducts(products);
@@ -271,7 +259,6 @@ $lightgray: #F4F3EA
     width: 100%
     border-collapse: collapse
     border-right: 1px solid $navyblue
-
     .title
       background: $navyblue
       color: $lightgray
@@ -291,6 +278,10 @@ $lightgray: #F4F3EA
       td.col
         border: 1px solid $navyblue
         width: 10%
+        height: 200px
+        background-position: left
+        background-repeat: no-repeat
+        background-size: cover
         max-width: 100px
         white-space: nowrap
         &:first-of-type, &:nth-of-type(7), &:nth-of-type(8),  &:nth-of-type(9)

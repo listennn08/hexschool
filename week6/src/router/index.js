@@ -10,6 +10,10 @@ const routes = [
     component: () => import('../views/Home.vue'),
     children: [
       {
+        path: '',
+        component: () => import('../views/HomePage.vue'),
+      },
+      {
         path: 'about',
         component: () => import('../views/About.vue'),
       },
@@ -24,6 +28,10 @@ const routes = [
       {
         path: 'products',
         component: () => import('../views/Products.vue'),
+      },
+      {
+        path: 'product/:id',
+        component: () => import('../views/Product.vue'),
       },
       {
         path: 'coupons',

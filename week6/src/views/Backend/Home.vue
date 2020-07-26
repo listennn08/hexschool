@@ -4,7 +4,7 @@
     router-view
 </template>
 <script>
-import navbar from '@/components/backend/Navbar.vue';
+import navbar from '../../components/backend/Navbar.vue';
 
 export default {
   components: {

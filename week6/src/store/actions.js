@@ -23,6 +23,18 @@ const actions = {
   setProducts({ commit }, data) {
     commit(types.SET_PRODUCTS, data);
   },
+  addProducts({ commit }, data) {
+    commit(types.ADD_PRODUCTS, data);
+  },
+  editProduct({ commit }, { id, data }) {
+    commit(types.EDIT_PRODUCT, {
+      id,
+      data,
+    });
+  },
+  delProduct({ commit }, index) {
+    commit(types.DEL_PRODUCT, index);
+  },
   setPagination({ commit }, data) {
     commit(types.SET_PAGINATION, data);
   },
@@ -40,6 +52,15 @@ const actions = {
   },
   toggleSticky({ commit }, data) {
     commit(types.TOGGLE_STICKY, data);
+  },
+  setFiles({ commit }, data) {
+    commit(types.SET_FILES, data);
+  },
+  setOrders({ commit }, data) {
+    commit(types.SET_ORDERS, data);
+  },
+  setCoupons({ commit }, data) {
+    commit(types.SET_COUPONS, data);
   },
 };
 
