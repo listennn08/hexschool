@@ -1,5 +1,5 @@
 <template lang="pug">
-  .wrap
+  #home-page.wrap
     .text-block
       .text
         | 用心打造，最舒適的家居
@@ -51,31 +51,31 @@ export default {
   $darkgray: #CBD0D8
   $darkgrayn: #46505e
   $lightgray: #F4F3EA
-  // @keyframes fontAnimation
-  //  0%
-  //    margin-top: -3%
-  //    opacity: 0
-  //  100%
-  //    margin-top: 1%
-  //    opacity: 1
+  @keyframes fontAnimation
+    0%
+      margin-top: -3%
+      opacity: 0
+    100%
+      margin-top: 1%
+      opacity: 1
 
   *
     margin: 0
     padding: 0
     list-style: none
   .wrap
-    width: 1200px
+    width: 100%
     height: 100vh
-    margin: 0 15%
     .text-block
       margin-top: 1%
       text-align: center
       .text
         margin-top: 1%
-        // animation: fontAnimation 3s 1 alternate
+        animation: fontAnimation 3s 1 alternate
     .container
-      margin: 1% 15%
-      width: 70%
+      margin: 1% 25%
+      width: 50%
+      max-width: 1280px
       display: flex
       flex-wrap: wrap
       border: 5px solid $navyblue
