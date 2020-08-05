@@ -104,9 +104,7 @@ export default {
   $darkgray: #CBD0D8
   $lightgray: #F4F3EA
   *
-    padding: 0
-    margin: 0
-    list-style: none
+    font-family: 'Noto Sans TC', sans serif
   .product
     margin-top: 1%
     width: 100%

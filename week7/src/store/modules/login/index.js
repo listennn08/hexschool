@@ -1,7 +1,9 @@
+import { Login } from '@/api/utils';
 export default {
   namespace: true,
   state: () => ({
-
+    token: null,
+    isLogin: false,
   }),
   getters: {
 
@@ -12,6 +14,16 @@ export default {
       if (!email) {
         return;
       }
+      if(!password) {
+        return;
+      }
+      Login({
+        email,
+        password,
+      })
+        .then((resp) => {
+
+        })
     },
     setLoginInfo({ commit }, { uuid, token }) {
       commit(types.SET_LOGIN_INFO, {

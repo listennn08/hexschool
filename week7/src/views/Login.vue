@@ -103,9 +103,9 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $darkgrayn: #46505e
 $lightgray: #F4F3EA
-
 .container
   height: 90vh
+  font-family: 'Noto Sans TC', sans serif
 .login
   box-shadow: 2px 2px 5px $navyblue
 .logo

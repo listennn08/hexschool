@@ -102,7 +102,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&family=Open+Sans:wght@400;600&display=swap)
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&family=Open+Sans:wght@400;600&display=swap)
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B
@@ -117,9 +117,7 @@ $lightgray: #F4F3EA
   100%
     transform: translateY(20%)
 *
-  margin: 0
-  padding: 0
-  list-style: none
+  font-family: 'Noto Sans TC', sans serif
 .container
   width: 40%
   margin: 2% 30%

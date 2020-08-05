@@ -212,7 +212,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Raleway:wght@700;900&family=Open+Sans:wght@400;600&display=swap)
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&display=swap)
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B
@@ -292,7 +292,7 @@ $lightgray: #F4F3EA
       font-font-family: 'Noto Sans TC', sans serif
       span
         display: inline-block
-        font-font-family: 'Open Sans', sans serif
+        font-font-family: 'Raleway', sans serif
         margin-left: 5%
     .row:nth-of-type(4)
       label

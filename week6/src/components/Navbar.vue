@@ -23,6 +23,9 @@ import { mapGetters } from 'vuex';
 export default {
   computed: {
     ...mapGetters(['loginInfo']),
+    currentPage() {
+      return this.$route.param;
+    },
   },
 };
 </script>

@@ -45,93 +45,92 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-  $navyblue: #333D51
-  $hnavyblue: #242b39
-  $goldyellow: #D3AC2B
-  $darkgray: #CBD0D8
-  $darkgrayn: #46505e
-  $lightgray: #F4F3EA
-  @keyframes fontAnimation
-    0%
-      margin-top: -3%
-      opacity: 0
-    100%
-      margin-top: 1%
-      opacity: 1
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+$navyblue: #333D51
+$hnavyblue: #242b39
+$goldyellow: #D3AC2B
+$darkgray: #CBD0D8
+$darkgrayn: #46505e
+$lightgray: #F4F3EA
+@keyframes fontAnimation
+  0%
+    margin-top: -3%
+    opacity: 0
+  100%
+    margin-top: 1%
+    opacity: 1
 
-  *
-    margin: 0
-    padding: 0
-    list-style: none
-  .wrap
-    width: 100%
-    height: 100vh
-    .text-block
+*
+  font-family: 'Noto Sans TC', sans serif
+.wrap
+  width: 100%
+  height: 100vh
+  .text-block
+    margin-top: 1%
+    text-align: center
+    .text
       margin-top: 1%
-      text-align: center
-      .text
-        margin-top: 1%
-        animation: fontAnimation 3s 1 alternate
-    .container
-      margin: 1% 25%
-      width: 50%
-      max-width: 1280px
+      animation: fontAnimation 3s 1 alternate
+  .container
+    margin: 1% 25%
+    width: 50%
+    max-width: 1280px
+    display: flex
+    flex-wrap: wrap
+    border: 5px solid $navyblue
+    box-sizing: border-box
+    .row
+      width: 100%
+      height: 300px
       display: flex
       flex-wrap: wrap
-      border: 5px solid $navyblue
-      box-sizing: border-box
-      .row
-        width: 100%
-        height: 300px
-        display: flex
-        flex-wrap: wrap
-        border-bottom: 5px solid $navyblue
-        &:last-of-type
-          border-bottom: 0
-        .img
-          box-sizing: border-box
-          width: 50%
-          background-position: center center
-          background-repeat: no-repeat
-          background-size: cover
-          position: relative
-          &.border-right
-            border-right: 5px solid $navyblue
-          .txt
-            position: absolute
-            padding: 20px
-            top: 0
-            right: 0
-            bottom: 0
-            left: 0
-            display: flex
-            justify-content: center
-            align-items: center
-            flex-direction: column
-            background: rgba(0, 0, 0, .6)
-            opacity: 0
-            transition: opacity 1s
-            &:hover
-              opacity: 1
-            h2
-              color: $goldyellow
-              position: relative
-              width: 90%
-              padding: 5% 0
-              // width: 100%
-              &:after
-                content: ''
-                position: absolute
-                left: 50%
-                right: 50%
-                height: 2px
-                display: block
-                // margin: 1px
-                background: $goldyellow
-                transition: .5s
-            &:hover h2:after
-              left: 0%
-              right: 0%
-            p
-              color: $lightgray
+      border-bottom: 5px solid $navyblue
+      &:last-of-type
+        border-bottom: 0
+      .img
+        box-sizing: border-box
+        width: 50%
+        background-position: center center
+        background-repeat: no-repeat
+        background-size: cover
+        position: relative
+        &.border-right
+          border-right: 5px solid $navyblue
+        .txt
+          position: absolute
+          padding: 20px
+          top: 0
+          right: 0
+          bottom: 0
+          left: 0
+          display: flex
+          justify-content: center
+          align-items: center
+          flex-direction: column
+          background: rgba(0, 0, 0, .6)
+          opacity: 0
+          transition: opacity 1s
+          &:hover
+            opacity: 1
+          h2
+            color: $goldyellow
+            position: relative
+            width: 90%
+            padding: 5% 0
+            // width: 100%
+            &:after
+              content: ''
+              position: absolute
+              left: 50%
+              right: 50%
+              height: 2px
+              display: block
+              // margin: 1px
+              background: $goldyellow
+              transition: .5s
+          &:hover h2:after
+            left: 0%
+            right: 0%
+          p
+            color: $lightgray
 </style>

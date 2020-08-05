@@ -18,6 +18,7 @@ export const SET_ORDERS = 'SETORDERS';
 export const SET_ORDER = 'SETORDER';
 export const SET_COUPONS = 'SETCOUPONS';
 export const SET_COUPON = 'SETCOUPON';
+export const ADD_COUPON = 'ADDCOUPON';
 export const UPDATE_COUPON = 'UPDATECOUPON';
 export const DELETE_COUPON = 'DELETECOUPON';
 export const CLEAR_TEMP_COUPON = 'CLEARTEMPCOUPON';

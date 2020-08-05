@@ -1,5 +1,5 @@
 <template lang="pug">
-  nav.hero-head.has-text-weight-bold
+  nav.hero-head
     .columns.is-mobile.is-marginless
       .column.left
         h1.is-size-2.has-text-weight-bold: router-link.logo(to="/admin") GAGU
@@ -71,6 +71,7 @@ $lightgray: #F4F3EA
 
 .hero-head
   background: $navyblue
+  font-family: 'Noto Sans TC', sans serif
   .router-link-exact-active:not(.logo)
     color: $goldyellow
   .column

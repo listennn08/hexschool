@@ -1,5 +1,5 @@
 <template lang="pug">
-  nav.hero-head.has-text-weight-bold(:class="{'is-fixed-top': sticky}")
+  nav.hero-head(:class="{'is-fixed-top': sticky}")
     .columns.is-mobile.is-marginless
       .column.left
         h1.is-size-2.has-text-weight-bold: router-link.logo(to="/") GAGU
@@ -66,6 +66,8 @@ $hnavyblue: #242b39
 $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $lightgray: #F4F3EA
+*
+  font-family: 'Noto Sans TC', sans serif
 .is-fixed-top
   width: 100%
   position: fixed

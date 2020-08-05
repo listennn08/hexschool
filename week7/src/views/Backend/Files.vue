@@ -22,6 +22,8 @@
           ) 上傳
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -30,13 +32,23 @@ export default {
       inputLen: 1,
     };
   },
+  computed: mapGetters(['page']),
   methods: {
+    ...mapActions(['togglePage']),
     onFileChange(e) {
       const file = e.target.files[0];
       const { i } = e.target.dataset;
       this.url[i] = URL.createObjectURL(file);
       this.$forceUpdate();
     },
+    cancel() {
+      this.togglePage();
+    },
   },
 };
 </script>
+<style lang="sass" scoped>
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+*
+  font-family: 'Noto Sans TC', sans serif
+</style>

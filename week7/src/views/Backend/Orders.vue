@@ -104,7 +104,8 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $darkgrayn: #46505e
 $lightgray: #F4F3EA
-
+*
+  font-family: 'Noto Sans TC', sans serif
 .is-cus-primary
   background: $navyblue
   color: $lightgray
