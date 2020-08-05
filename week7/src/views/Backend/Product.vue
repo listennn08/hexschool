@@ -47,10 +47,14 @@
             .control
               input#unit.input(type="text" v-model="tempProduct.unit")
             label(for="imageUrl") 輸入圖片網址或上傳圖片
+            .control(v-for=" (img, index) in tempProduct.imageUrl" :key="img")
+              input.input(
+                :id="`imageUrl-${index}`"
+                type="text"
+                v-model.lazy="tempProduct.imageUrl[index]")
             .control
-              input#imageUrl.input(type="text" v-model.lazy="tempProduct.imageUrl[0]")
               input#uploadImg.input(type="file")
-            section.section(v-if="tempProduct.imageUrl")
+            section.section(v-if="showImagePreview(tempProduct.imageUrl)")
               carousel(:images="tempProduct.imageUrl")
       footer.modal-card-foot
         button.button.is-cus-primary(
@@ -88,12 +92,12 @@ export default {
   data() {
     return {
       formData: new FormData(),
-      loading: false,
     };
   },
   computed: {
     ...mapGetters(['tempProduct', 'page', 'loading']),
     checkEnabled: () => (enabled) => (enabled ? '啟用' : '未啟用'),
+    showImagePreview: () => (item) => (item.length > 0),
   },
   watch: {
     'page.open': {
@@ -126,7 +130,6 @@ export default {
     },
     async uploadImage() {
       const uFile = document.querySelector('#uploadImg').files[0];
-      console.log(uFile);
       this.formData.append('file', uFile);
       if (!uFile) return null;
       try {
@@ -143,15 +146,14 @@ export default {
       }
     },
     async edit(e) {
-      this.loading = true;
+      this.toggleLoading();
       const { action } = e.target.dataset;
       const uploadImagePath = await this.uploadImage();
-      console.log(uploadImagePath);
       if (uploadImagePath) {
         this.tempProduct.imageUrl.push(uploadImagePath);
       }
+      this.tempProduct.imageUrl = this.tempProduct.imageUrl.filter((el) => el);
       if (action === 'create') {
-        this.toggleLoading();
         this.tempProduct.options = JSON.stringify(this.tempProduct.options);
         createData(this.tempProduct)
           .then(() => {
@@ -167,7 +169,7 @@ export default {
               msg: `上傳${this.tempProduct.title || ''}失敗`,
               type: false,
             });
-            this.loading = false;
+            this.toggleLoading();
           });
       } else if (action === 'update') {
         this.tempProduct.options = JSON.stringify(this.tempProduct.options);
@@ -181,9 +183,9 @@ export default {
               id: prod.id,
               data: prod,
             });
+            this.toggleLoading();
             this.clearTempProduct();
             this.togglePage();
-            this.loading = false;
           })
           .catch(() => {
             this.tempProduct.options = JSON.parse(this.tempProduct.options);
@@ -191,7 +193,7 @@ export default {
               msg: `更新${this.tempProduct.title}失敗`,
               type: false,
             });
-            this.loading = false;
+            this.toggleLoading();
           });
       }
     },

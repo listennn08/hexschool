@@ -80,6 +80,10 @@ const mutations = {
   [types.SET_FILES](state, data) {
     Vue.set(state, 'files', data);
   },
+  [types.DEL_FILES](state, index) {
+    state.files.splice(index, 1);
+    Vue.set(state, 'files', state.files);
+  },
   [types.SET_ORDERS](state, data) {
     Vue.set(state, 'orders', data);
   },

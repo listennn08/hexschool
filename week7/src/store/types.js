@@ -14,6 +14,7 @@ export const TOGGLE_STICKY = 'TOGGLESTICKY';
 export const TOGGLE_LOADING = 'TOGGLELOADING';
 export const TOGGLE_PAGE = 'TOGGLEPAGE';
 export const SET_FILES = 'SETFILES';
+export const DEL_FILE = 'DELFILE';
 export const SET_ORDERS = 'SETORDERS';
 export const SET_ORDER = 'SETORDER';
 export const SET_COUPONS = 'SETCOUPONS';

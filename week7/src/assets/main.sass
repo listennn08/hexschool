@@ -55,8 +55,9 @@ $scheme-main: $navyblue
 @import '~bulma/sass/layout/hero.sass'
 @import '~bulma/sass/layout/section.sass'
 // Import Extensions
-@import '~bulma-switch';
-@import "~bulma-carousel"
+@import '~bulma-switch'
+@import '~bulma-carousel'
+
 
 /* navbar */
 .center, .center-column, .top, .right, .bottom, .left
@@ -73,8 +74,10 @@ $scheme-main: $navyblue
   justify-content: flex-end
 .bottom 
   align-items: flex-end
-.left   
+.left
   justify-content: flex-start
+.vc-btn.left
+  justify-content: center
 
 .single-spaced, .single-spaced * 
   line-height: 1
@@ -112,3 +115,10 @@ $scheme-main: $navyblue
 .has-cus-background-dark
   background-color: $navyblue 
   color: $lightgray
+
+.pagination-link,
+.pagination-previous,
+.pagination-previous[disabled],
+.pagination-next,
+.pagination-next[disabled]
+  justify-content: center

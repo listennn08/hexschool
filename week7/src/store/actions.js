@@ -56,6 +56,9 @@ const actions = {
   setFiles({ commit }, data) {
     commit(types.SET_FILES, data);
   },
+  delFile({ commit }, data) {
+    commit(types.DEL_FILE, data);
+  },
   setOrders({ commit }, data) {
     commit(types.SET_ORDERS, data);
   },

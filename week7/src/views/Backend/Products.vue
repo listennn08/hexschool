@@ -1,11 +1,18 @@
 <template lang="pug">
   .container.is-fluid
-    button.button.is-cus-primary.is-pulled-right(
-      data-action="add"
-      @click="openPage()"
-    )
-      span.icon.is-small: font-awesome-icon(:icon="['fas', 'plus']")
-      span 新增
+    .buttons.is-pulled-right.my-2
+      button.button.is-cus-primary(
+        data-action="add"
+        @click="openPage()"
+      )
+        span.icon.is-small: font-awesome-icon(:icon="['fas', 'plus']")
+        span 新增
+      button.button.is-outlined.is-danger(
+        data-action="add"
+        @click="delCheckProduct()"
+      )
+        span.icon.is-small: font-awesome-icon(:icon="['fas', 'trash-alt']")
+        span 刪除已選項目
     button.button.circle(
       title="新增商品"
       data-action="add"
@@ -16,6 +23,7 @@
       font-awesome-icon(:icon="['fas', 'plus']")
     table.table.is-fullwidth
       tr.has-cus-background-dark
+        th.has-text-light 勾選
         th.has-text-light 分類
         th.has-text-light 圖片
         th.has-text-light 標題
@@ -31,6 +39,15 @@
         :data-id="item.id"
         :data-index="index"
       )
+        td.col
+          .field
+            .control
+              input.checkbox(
+                :id="item.id"
+                type="checkbox"
+                :value="index"
+                v-model="checkProduct"
+              )
         td.col
           .text {{ item.category }}
         td.col
@@ -84,10 +101,13 @@ export default {
   data() {
     return {
       loading: false,
-      pagination: {},
+      pagination: {
+        current_page: 1,
+      },
       windowTop: null,
       addShow: false,
       addNewItem: false,
+      checkProduct: [],
     };
   },
   created() {
@@ -189,6 +209,20 @@ export default {
         },
       });
     },
+    delCheckProduct() {
+      const delArray = [];
+      const unDelArray = [];
+      this.checkProduct.forEach((el) => {
+        const { id, title } = this.products[el];
+        deleteData(id)
+          .then(() => {
+            delArray.push(title);
+          })
+          .catch(() => {
+            unDelArray.push(title);
+          });
+      });
+    },
     onScroll() {
       this.windowTop = window.top.scrollY; /* or: e.target.documentElement.scrollTop */
       if (this.windowTop > 200) {
@@ -266,7 +300,7 @@ $lightgray: #F4F3EA
   background-size: cover
   max-width: 100px
   white-space: nowrap
-  &:first-of-type, &:nth-of-type(6), &:nth-of-type(7),  &:nth-of-type(8)
+  &:nth-of-type(2), &:nth-of-type(6), &:nth-of-type(7),  &:nth-of-type(8)
     text-transform: uppercase
     font-family: 'Raleway', sans-serif
   .text

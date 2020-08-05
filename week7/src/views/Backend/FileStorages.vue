@@ -18,7 +18,10 @@
         :data-id="item.id"
         :data-index="index"
       )
-        td.col(:style="{backgroundImage: `url(${item.path})`}")
+        td.col
+          .is-cus-centered
+            figure.image.is-128x128
+              img(:src="item.path")
         td.col
           .text {{ item.id }}
         td.col
@@ -26,15 +29,16 @@
         td.col
             button.button(
               :class="{'is-loading': loading}"
-              @click="deleteFile(index)"
+              @click="removeFile(index)"
             )
               span.icon.is-small: font-awesome-icon(:icon="['fas', 'trash-alt']")
               span 刪除
     Files(:class="{'is-active': page.open}")
+    vue-confirm-dialog
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { getFile } from '../../apis/utils';
+import { getFile, deleteFile } from '../../apis/utils';
 import Files from './Files.vue';
 
 export default {
@@ -58,9 +62,44 @@ export default {
     ...mapGetters(['files', 'page']),
   },
   methods: {
-    ...mapActions(['setFiles', 'togglePage']),
-    deleteFile(index) {
-      console.log(index);
+    ...mapActions(['setFiles', 'togglePage', 'delFile']),
+    removeFile(index) {
+      const { id } = this.files[index];
+      this.$confirm({
+        title: '刪除',
+        message: '確認刪除？\r\n（刪除後無法復原）',
+        button: {
+          no: '取消',
+          yes: '刪除',
+        },
+        callback: (confirm) => {
+          if (confirm) {
+            this.loading = true;
+            deleteFile(id)
+              .then((resp) => {
+                if (resp) {
+                  this.delFile(index);
+                  this.$confirm({
+                    message: '已刪除',
+                    button: {
+                      no: 'OK',
+                    },
+                  });
+                }
+                this.loading = false;
+              })
+              .catch(() => {
+                this.$confirm({
+                  message: '刪除失敗',
+                  button: {
+                    no: 'OK',
+                  },
+                });
+                this.loading = false;
+              });
+          }
+        },
+      });
     },
     openPage() {
       this.togglePage();
@@ -126,9 +165,6 @@ $lightgray: #F4F3EA
   border: 1px solid $navyblue
   width: 8%
   height: 200px
-  background-position: left
-  background-repeat: no-repeat
-  background-size: cover
   max-width: 100px
   white-space: nowrap
   &:first-of-type, &:nth-of-type(6), &:nth-of-type(7),  &:nth-of-type(8)
@@ -144,6 +180,10 @@ $lightgray: #F4F3EA
     color: green
   .times
     color: red
+.is-cus-centered
+  display: flex
+  justify-content: center
+  align-items: center
 </style>
 
 </style>
