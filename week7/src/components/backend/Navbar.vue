@@ -11,7 +11,7 @@
           router-link.navbar-item(to="/admin/files") 圖片管理
       .column.right
         router-link.navbar-item.desktop(to="/") 去前台
-        router-link.navbar-item.desktop(v-if="!loginInfo.isLogin" to="/login") 登入
+        router-link.navbar-item.desktop(v-if="!isLogin" to="/login") 登入
         router-link.navbar-item.desktop(v-else to="/logout") 登出
         .dropdown.is-right.mobile(:class="{'is-active': hide}")
           .dropdown-trigger(@click="toggleDrop")
@@ -27,7 +27,7 @@
               router-link.navbar-item(to="/admin/files") 圖片管理
               hr.dropdown-divider
               router-link.navbar-item(to="/") 去前台
-              router-link.dropdown-item(v-if="!hasLogin" to="/login") 登入
+              router-link.dropdown-item(v-if="!isLogin" to="/login") 登入
               router-link.dropdown-item(v-else to="/logout") 登出
 </template>
 <script>
@@ -40,13 +40,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loginInfo']),
+    ...mapGetters({
+      isLogin: 'login/isLogin',
+    }),
     hasLogin() {
-      return this.loginInfo.isLogin;
-    },
-    active(el) {
-      console.log(el);
-      return this.$route.query;
+      return this.isLogin;
     },
     hide() {
       return this.drop;

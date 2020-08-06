@@ -11,17 +11,19 @@ export default {
     this.doLogout();
   },
   computed: {
-    ...mapGetters(['loginInfo']),
+    ...mapGetters({
+      token: 'login/token',
+    }),
   },
   methods: {
-    ...mapActions(['clearLoginInfo']),
+    ...mapActions({
+      clearLoginInfo: 'login/clearLoginInfo',
+    }),
     doLogout() {
-      if (this.loginInfo.token) {
+      if (this.token) {
         Logout().then(() => {
           this.clearLoginInfo();
           cookies.removeItem('token');
-          cookies.removeItem('uuid');
-          console.log(cookies.getItem('token'), cookies.getItem('uuid'));
           this.$router.push('/');
         });
       }

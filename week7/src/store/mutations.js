@@ -2,20 +2,20 @@ import Vue from 'vue';
 import * as types from './types';
 
 const mutations = {
-  [types.SET_LOGIN_INFO](state, { uuid, token }) {
-    Vue.set(state, 'loginInfo', {
-      uuid,
-      token,
-      isLogin: Boolean(token),
-    });
-  },
-  [types.CLEAR_LOGIN_INFO](state) {
-    Vue.set(state, 'loginInfo', {
-      uuid: '',
-      token: '',
-      isLogin: false,
-    });
-  },
+  // [types.SET_LOGIN_INFO](state, { uuid, token }) {
+  //   Vue.set(state, 'loginInfo', {
+  //     uuid,
+  //     token,
+  //     isLogin: Boolean(token),
+  //   });
+  // },
+  // [types.CLEAR_LOGIN_INFO](state) {
+  //   Vue.set(state, 'loginInfo', {
+  //     uuid: '',
+  //     token: '',
+  //     isLogin: false,
+  //   });
+  // },
   [types.SET_MSG](state, { msg, type }) {
     Vue.set(state, 'msg', {
       text: msg,
@@ -80,7 +80,7 @@ const mutations = {
   [types.SET_FILES](state, data) {
     Vue.set(state, 'files', data);
   },
-  [types.DEL_FILES](state, index) {
+  [types.DEL_FILE](state, index) {
     state.files.splice(index, 1);
     Vue.set(state, 'files', state.files);
   },

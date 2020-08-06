@@ -16,12 +16,12 @@
     .collapse
       .horizon(v-if="!isCollapse") ⋯
       button.collapse__btn(
-            :class="isCollapse? 'up' : 'down'"
-            @click="toggleCollapse()"
-          )
-            font-awesome-icon(
-              :icon="['fas', isCollapse?'angle-double-up' : 'angle-double-down']"
-            )
+        :class="isCollapse? 'up' : 'down'"
+        @click="toggleCollapse()"
+      )
+        font-awesome-icon(
+          :icon="['fas', isCollapse?'angle-double-up' : 'angle-double-down']"
+        )
     h4
       font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
       | &nbsp; 訂單資訊

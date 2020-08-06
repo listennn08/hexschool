@@ -1,15 +1,15 @@
 import * as types from './types';
 
 const actions = {
-  setLoginInfo({ commit }, { uuid, token }) {
-    commit(types.SET_LOGIN_INFO, {
-      uuid,
-      token,
-    });
-  },
-  clearLoginInfo({ commit }) {
-    commit(types.CLEAR_LOGIN_INFO);
-  },
+  // setLoginInfo({ commit }, { uuid, token }) {
+  //   commit(types.SET_LOGIN_INFO, {
+  //     uuid,
+  //     token,
+  //   });
+  // },
+  // clearLoginInfo({ commit }) {
+  //   commit(types.CLEAR_LOGIN_INFO);
+  // },
   setMsg({ commit }, { msg, type }) {
     commit(types.SET_MSG, {
       msg,

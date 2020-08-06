@@ -1,6 +1,6 @@
 import axios from 'axios';
-import cookies from '../cookies';
-import store from '../store';
+import cookies from '@/cookies';
+import store from '@/store';
 
 const Request = axios.create({
   timeout: 30000,
@@ -23,7 +23,7 @@ Request.interceptors.response.use(
     const status = error.response ? error.response.status : null;
     if (status === 401) {
       const { config } = error;
-      if (cookies.getItem('token') && store.state.loginInfo.token) {
+      if (cookies.getItem('token') && store.state.login.token) {
         config.headers.Authorization = `Bearer ${cookies.getItem('token')}`;
         return Request.request(config);
       }

@@ -56,7 +56,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['toggleLoading', 'setLoginInfo', 'setMsg']),
+    ...mapActions({
+      toggleLoading: 'toggleLoading',
+      setLoginInfo: 'login/setLoginInfo',
+      setMsg: 'setMsg',
+    }),
     loginFn() {
       this.toggleLoading(true);
       const email = document.querySelector('#email').value;
@@ -73,12 +77,8 @@ export default {
       }
       Login({ email, password })
         .then((resp) => {
-          cookies.setItem('uuid', resp.data.uuid, new Date(resp.data.expire * 1000), '/');
           cookies.setItem('token', resp.data.token, new Date(resp.data.expire * 1000), '/');
-          this.setLoginInfo({
-            uuid: cookies.getItem('uuid'),
-            token: cookies.getItem('token'),
-          });
+          this.setLoginInfo(cookies.getItem('token'));
           this.setMsg({ msg: '登入成功！', type: true });
           this.toggleLoading(false);
           setTimeout(() => {

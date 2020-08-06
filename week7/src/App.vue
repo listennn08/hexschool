@@ -21,7 +21,9 @@ export default {
       .catch(() => {});
   },
   methods: {
-    ...mapActions(['setLoginInfo']),
+    ...mapActions({
+      setLoginInfo: 'login/setLoginInfo',
+    }),
   },
 };
 </script>

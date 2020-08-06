@@ -283,7 +283,7 @@ $lightgray: #F4F3EA
       display: flex
       align-items: center
       justify-content: center
-      width: 30%
+      width: 34%
       padding: 1% 10%
       margin: 1% 25%
       background: rgba(211, 172, 43, .5)

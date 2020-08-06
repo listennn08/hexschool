@@ -22,7 +22,7 @@
               figure.image.is-128x128
                 img(:src="item.product.imageUrl[0]")
             td
-              .item-name {{ item.product.title | hideText }}
+              .item-name {{ item.product.title | hideTitle }}
             td
               .price(v-if="item.product.price")
                 | {{ item.product.price | cash }}
@@ -31,19 +31,19 @@
             td
               .field.has-addons.has-addons-centered
                 .control
-                  button.button.is-left(@click="countQuantity(index, 'm')") &minus;
+                  button.button.is-left.is-small(@click="countQuantity(index, 'm')") &minus;
                 .control
-                  input.input.has-text-centered(
+                  input.input.has-text-centered.is-small(
                     type="number"
                     v-model="item.quantity"
                     @change="updateCartData(index)"
                   )
                 .control
-                  button.button.is-right(@click="countQuantity(index, 'p')") &plus;
+                  button.button.is-right.is-small(@click="countQuantity(index, 'p')") &plus;
             td.item-total {{ getItemTotal(index) | cash }}
             td
               button.button.is-text.is-underlineless.remove(
-                :class="{removing: item.removing}"
+                :class="{'is-loading': item.removing}"
                 @click="deleteCartData(index)"
               ) &times;
         tr.total
@@ -51,15 +51,20 @@
           td(colspan=4)
           td {{ countAll | cash }}
           td
-      .shopcart-checkout
-        button.continueshop: router-link(to="products") &lsaquo;&lsaquo;&nbsp;繼續購物
-        button.checkout: router-link(to="checkout") 去結帳 &rsaquo;&rsaquo;
+      .shopcart-checkout.buttons.is-pulled-right
+        button.button.is-outline.is-cus-primary.continueshop(
+          @click="$router.push('products')"
+        ) &lsaquo;&lsaquo;&nbsp;繼續購物
+        button.button.is-cus-primary.checkout(
+          @click="$router.push('checkout')"
+        ) 去結帳 &rsaquo;&rsaquo;
     .container(v-else)
       .noItemAlert
         | 還沒有把喜愛的商品加入購物車唷
         | 趕快去購物吧！
       .shopcart-checkout
-        button.button.continueshop: router-link(to="/products") &lsaquo;&lsaquo;繼續購物
+        button.button.is-cus-primary.continueshop(
+          @click="$router.push('products')" ) &lsaquo;&lsaquo;繼續購物
 </template>
 <script>
 import { getCart, updateCart, deleteCart } from '../apis/utils';
@@ -160,128 +165,35 @@ $lightgray: #F4F3EA
     transform: translateX(-20%)
   100%
     transform: translateX(-30%)
-@keyframes removeBtnAnimation
-  0%
-    transform: scale(1, 1)
-  100%
-    transform: scale(1.5, 1.5)
-@keyframes removing
-  0%
-    transform: rotate(0)
-  100%
-    transform: rotate(360deg)
+
 *
   font-family: 'Noto Sans TC', sans serif
 .table
   td
-    width: 10%
+    width: 15%
     padding: 1rem
     text-align: center
     vertical-align: middle
-// .container
-//   width: 80%
-//   margin: 0 10%
-//   .removeAll
-//     float: right
-//     padding: 1%
-//     border: 1px solid rgba(red, .8)
-//     background: #fff
-//     color: rgba(red, .8)
-//     border-radius: 10px
-//     margin: 2% 0
-//     transition: .5s
-//     outline: none
-//     &:hover
-//       background: rgba(red, .8)
-//       color: #fff
-//   table
-//     width: 100%
-//     border-collapse: collapse
-//     th
-//       border-bottom: 1px solid #ddd
-//     tr
-//       width: 100%
-//       td
-//         width: 13%
-//         border-bottom: 2px dotted #ddd
-//   .shopcart-checkout
-//     margin-top: 1%
-//     float: right
-//     width: 50%
-//   .pic
-//     height: 200px
-//     background-position: left
-//     background-repeat: no-repeat
-//     background-size: cover
-//   .price
-//     font-family: 'Open Sans', sans-serif
-//     color: $navyblue
-//     .strike
-//       margin-left: 3px
-//       text-decoration: line-through
-//       font-size: 12px
-//       color: #888
-//   .num-control
-//     width: 100%
-//     display: flex
-//     border: 1px solid $darkgray
-//     border-radius: 5px
-//     .num-minus, .num-plus, .num-input
-//       border: none
-//       outline: none
-//       font-size: 18px
-//       padding: 2%
-//       text-align: center
-//     .num-minus, .num-plus
-//       width: 25%
-//       background: $lightgray
-//       &:hover
-//         background: $navyblue
-//         color: $lightgray
-//     .num-minus
-//       border-radius: 5px 0 0 5px
-//     .num-plus
-//       border-radius: 0 5px 5px 0
-//     .num-input
-//       width: 50%
-//       &::-webkit-outer-spin-button, &::-webkit-inner-spin-button
-//         -webkit-appearance: none
-//         margin: 0
-//   .item-total, .total
-//     font-family: 'Open Sans', sans-serif
-//   .total
-//     td
-//       padding: 1% 0
-//   .remove
-//     border: 0px
-//     background: transparent
-//     font-size: 24px
-//     outline: none
-//     transform-origin: center
-//     &:hover
-//       animation: removeBtnAnimation 1s infinite linear forwards
-//     &.removing
-//       animation: removing 1s infinite linear forwards
-//   .checkout, .continueshop
-//     padding: 1% 2%
-//     margin: 1%
-//     font-size: 16px
-//     border: 0
-//     background: $darkgray
-//     transition: .5s
-//     outline: none
-//     border-radius: 5px
-//     a
-//       color: $navyblue
-//       text-decoration: none
-//   .noItemAlert
-//     margin: 5% 10%
-//   .checkout
-//     &:hover
-//       background: $hnavyblue
-//       animation: checkBtnAnimation 2s .1s infinite linear forwards
-//     &:hover a
-//       color: $lightgray
+.price
+  width: 100%
+  text-align: left
+  font-family: 'Raleway', sans-serif
+  font-weight: 500
+  span.strike
+    margin-left: 1%
+    font-size: 12px
+    text-decoration: line-through
+    color: #888
+  &.in-bottom
+    margin-top: auto
+.item-total
+  font-family: 'Raleway', sans-serif
+.checkout
+  &:hover
+    background: $hnavyblue
+    animation: checkBtnAnimation 2s .1s infinite linear forwards
+  &:hover a
+    color: $lightgray
 .continueshop
   &:hover
     background: $hnavyblue

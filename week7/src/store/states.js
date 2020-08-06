@@ -1,9 +1,9 @@
 const state = {
-  loginInfo: {
-    uuid: null,
-    token: null,
-    isLogin: false,
-  },
+  // loginInfo: {
+  //   uuid: null,
+  //   token: null,
+  //   isLogin: false,
+  // },
   msg: {
     text: '',
     type: false,

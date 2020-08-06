@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    component: () => import('../views/Home.vue'),
+    component: () => import('../layout/Home.vue'),
     children: [
       {
         path: '',
@@ -53,42 +53,42 @@ const routes = [
   },
   {
     path: '/admin',
-    component: () => import('../views/Backend/Home.vue'),
+    component: () => import('../layout/backend/Home.vue'),
     meta: {
       requiresAuth: true,
     },
     children: [
       {
         path: '',
-        component: () => import('../views/Backend/Products.vue'),
+        component: () => import('../views/backend/Products.vue'),
         meta: {
           requiresAuth: true,
         },
       },
       {
         path: 'products',
-        component: () => import('../views/Backend/Products.vue'),
+        component: () => import('../views/backend/Products.vue'),
         meta: {
           requiresAuth: true,
         },
       },
       {
         path: 'coupons',
-        component: () => import('../views/Backend/Coupons.vue'),
+        component: () => import('../views/backend/Coupons.vue'),
         meta: {
           requiresAuth: true,
         },
       },
       {
         path: 'orders',
-        component: () => import('../views/Backend/Orders.vue'),
+        component: () => import('../views/backend/Orders.vue'),
         meta: {
           requiresAuth: true,
         },
       },
       {
         path: 'files',
-        component: () => import('../views/Backend/FileStorages.vue'),
+        component: () => import('../views/backend/FileStorages.vue'),
         meta: {
           requiresAuth: true,
         },
@@ -109,7 +109,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    const { token } = store.state.loginInfo;
+    const { token } = store.state.login;
     if (token) {
       next();
     } else {

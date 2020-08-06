@@ -1,5 +1,5 @@
 const getters = {
-  loginInfo: (state) => state.loginInfo,
+  // loginInfo: (state) => state.loginInfo,
   msg: (state) => state.msg,
   category: (state) => state.category,
   tempProduct: (state) => state.tempProduct,

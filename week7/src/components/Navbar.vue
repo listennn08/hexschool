@@ -39,13 +39,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loginInfo', 'sticky']),
+    ...mapGetters({
+      isLogin: 'login/isLogin',
+      sticky: 'sticky',
+    }),
     hasLogin() {
-      return this.loginInfo.isLogin;
-    },
-    active(el) {
-      console.log(el);
-      return this.$route.query;
+      return this.isLogin;
     },
     hide() {
       return this.drop;

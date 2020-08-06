@@ -1,5 +1,5 @@
-export const SET_LOGIN_INFO = 'SETLOGININFO';
-export const CLEAR_LOGIN_INFO = 'CLEARLOGININFO';
+// export const SET_LOGIN_INFO = 'SETLOGININFO';
+// export const CLEAR_LOGIN_INFO = 'CLEARLOGININFO';
 export const SET_MSG = 'SETMSG';
 export const CLEAR_MSG = 'CLEARMSG';
 export const SET_CATEGORY = 'SETCATEGORY';
