@@ -42,6 +42,7 @@
             button.button(
               data-action="update"
               @click="openPage(index)"
+              disabled
             )
               span.icon.is-small: font-awesome-icon(:icon="['fas', 'edit']")
               span 修改
