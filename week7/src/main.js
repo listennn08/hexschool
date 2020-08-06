@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './assets/main.sass';
-import './plugins/Loading';
+import './plugins/loading';
 import './plugins/confirm';
 import './plugins/fontawesome';
 import './plugins/vee-validate';
