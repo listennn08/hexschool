@@ -12,10 +12,7 @@ export default {
     checkToken()
       .then((resp) => {
         if (resp.data.success) {
-          this.setLoginInfo({
-            uuid: cookies.getItem('uuid') || '',
-            token: cookies.getItem('token') || '',
-          });
+          this.setLoginInfo(cookies.getItem('token') || '');
         }
       })
       .catch(() => {});
