@@ -11,7 +11,7 @@
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-loading-overlay": "^3.3.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "lodash": "^4.17.15",
     "vue-axios": "^2.1.5",
     "vue-lodash": "^2.1.2"
