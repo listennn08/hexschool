@@ -162,7 +162,6 @@ export default {
     },
 
     nextQuesion() {
-      console.log(this.questionNumber);
       if (this.questionNumber === 9) { this.countResult(); }
       if (this.questionNumber > -1) {
         const { score } = this.problemCategorys[Math.floor(this.questionNumber / 2)];
